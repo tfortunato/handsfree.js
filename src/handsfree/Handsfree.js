@@ -1,5 +1,3 @@
-const {trimStart} = require('lodash')
-
 class Handsfree {
   constructor (opts = {}) {
     // Flags
@@ -85,7 +83,7 @@ class Handsfree {
       } else {
         this.trackFaces()
       }
-    }).catch(err => this.throwError('There are no cameras available.'))
+    }).catch(() => this.throwError('There are no cameras available.'))
   }
 
   /**

@@ -15,7 +15,7 @@ document.querySelectorAll('.handsfree-simple-keyboard').forEach($el => {
   $el.appendChild($input)
   $el.appendChild($keyboard)
 
-  let keyboard = new Keyboard({
+  new Keyboard({
     onChange: input => {
       $input.value = input
     }

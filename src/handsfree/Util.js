@@ -22,6 +22,7 @@ module.exports = Handsfree => {
    * @param  {String} msg The message to display
    */
   Handsfree.prototype.throwError = function (msg) {
+    // eslint-disable-next-line no-console
     console.error(msg)
     alert(msg)
     throw new Error(msg)

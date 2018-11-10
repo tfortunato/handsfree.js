@@ -29,7 +29,7 @@ module.exports = Handsfree => {
    * Called once per frame, after calculations
    */
   Handsfree.prototype.onFrameHooks = function (faces) {
-    forEach(this.plugin, (config, name) => {
+    forEach(this.plugin, (config) => {
       if (config.onFrame) {
         const newFaces = config.onFrame.call(config, faces, this)
         if (newFaces) this.faces = newFaces

@@ -1,32 +1,59 @@
 {
   "name": "handsfree",
-  "version": "1.0.0",
-  "description": "A platform for creating handsfree user interfaces, tools, games, and experiences for the web and IoT 🤯",
-  "author": "Oz Ramos <labofoz@gmail.com>",
-  "private": true,
+  "version": "0.1.0",
   "scripts": {
-    "dev": "nuxt",
-    "build": "nuxt build",
-    "start": "nuxt start",
-    "generate": "nuxt generate"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "handsfree": "vue-cli-service build --target lib --name handsfree src/handsfree/Handsfree.js"
   },
+
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "eslintIgnore": ["src/handsfree/libs/brf_wasm/**/*"],
+
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  
   "dependencies": {
-    "vuetify-loader": "^1.0.5",
-    "nuxt": "^2.2.0",
-    "vuetify": "^1.3.6"
+    "simple-keyboard": "^2.8.0"
   },
+  
   "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.0.5",
+    "@vue/cli-plugin-eslint": "^3.0.5",
+    "@vue/cli-service": "^3.0.5",
+    "arraybuffer-loader": "^1.0.7",
     "babel-eslint": "^10.0.1",
-    "babel-plugin-transform-imports": "^1.5.1",
-    "eslint": "^5.7.0",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-loader": "^2.1.1",
-    "eslint-plugin-html": "^4.0.6",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-node": "^7.0.1",
-    "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-standard": "^4.0.0",
+    "eslint": "^5.8.0",
+    "eslint-plugin-vue": "^5.0.0-0",
     "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.2"
+    "stylus-loader": "^3.0.1",
+    "vue": "^2.5.17",
+    "vue-cli-plugin-vuetify": "^0.4.5",
+    "vue-template-compiler": "^2.5.17",
+    "vuetify": "^1.3.0",
+    "vuetify-loader": "^1.0.5"
   }
 }

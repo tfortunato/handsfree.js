@@ -27,22 +27,18 @@
 - [NodeJS](https://nodejs.org/en/)
 
 
-## Build Setup
+## Development
 Run the following from projects root directory:
 
 ``` bash
-# install dependencies
-$ npm install
+# Install dependencies
+npm install
 
-# launch a local development server with hot-reload at localhost:3000
-$ npm run dev
+# Start a server with hot-reload at localhost:3000
+npm run serve
 
-# build for production and launch server
-$ npm run build
-$ npm start
-
-# generate static project
-$ npm run generate
+# Build for production
+npm run build
 ```
 
 For detailed explanation on how things work, check out the [Nuxt.js](https://github.com/nuxt/nuxt.js) and [Vuetify.js](https://vuetifyjs.com/) documentation.
