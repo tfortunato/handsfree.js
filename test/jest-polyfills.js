@@ -12,11 +12,12 @@ window.alert = function () {}
  */
 window.consoleError = console.error
 console.error = function (message, ...args) {
-  switch (message) {
-    case 'ERROR: This browser does not support webcams, please try another browser...like Google Chrome!':
-    break
-    default:
-      window.consoleError(message, ...args)
+  if (message.startsWith('ERROR: This browser does not support webcams, please try another browser...like Google Chrome!')
+    || message.startsWith('Unexpected character')
+    ) {
+    console.warning('Uncaught Error', ...args)
+  } else {
+    window.consoleError(message, ...args)
   }
 }
 

@@ -1,16 +1,52 @@
 <div align="center">
-  <img src="/assets/handsfree-2.0-readme-cover.gif" alt="handsfree.js 2.0">
-  <blockquote>A drop-in library for adding face-controlled mouse pointers via computer vision</blockquote>
-  <img src="https://img.shields.io/npm/v/handsfree.svg">
-  <img src="https://img.shields.io/github/last-commit/BrowseHandsfree/handsfreeJS.svg">
+  <img src="https://media.giphy.com/media/5aY2YXbhIG7j13gnCq/giphy.gif" alt="handsfree.js 2.0">
+  <h1>HandsfreeJS</h1>
+  <p>A platform for creating handsfree user interfaces, tools, games, and experiences for the web and IoT 🤯</p>
+<p>
+  <img class="mr-1" src="https://img.shields.io/github/release-pre/browsehandsfree/handsfreejs.svg"> <img class="mr-1" src="https://img.shields.io/github/last-commit/browsehandsfree/handsfreejs.svg"> <img class="mr-1" src="https://img.shields.io/github/commits-since/browsehandsfree/handsfreejs/0.0.1.svg">
+  <img src="https://img.shields.io/github/repo-size/browsehandsfree/handsfreejs.svg">
+</p>
+<p>
+  <img class="mr-1" src="https://img.shields.io/github/issues-raw/browsehandsfree/handsfreejs.svg"> <img class="mr-1" src="https://img.shields.io/github/issues/browsehandsfree/handsfreejs/✨ enhancement.svg"> <img src="https://img.shields.io/github/issues-pr-raw/browsehandsfree/handsfreejs.svg">
+</p>
+<p>
+  <img class="mr-1" src="https://img.shields.io/github/issues/browsehandsfree/handsfreejs/🐞 bug.svg"> <img src="https://img.shields.io/github/issues/browsehandsfree/handsfreejs/👷 help wanted.svg">
+</p>
+<p>
   <img src="https://travis-ci.org/BrowseHandsfree/handsfreeJS.svg?branch=master">
   <img src="https://img.shields.io/codecov/c/github/BrowseHandsfree/handsfreeJS/master.svg?style=flat">
-
+</p>
+<p>
+  <a href="https://patreon.com/browsehandsfree">
+    <img src="static/patreon-button.png" alt="Support this project on Patron"/>
+  </a>
+</p>
 </div>
 
-## Important Note 10/29
-> I refactored the package down from 86Mb to 13Mb. Problem is that the library loads this 13Mb chunk all at once so it can take a minute or two on slower connections. This will be fixed in the next few days. If you're demoing from CDN, just keep using https://unpkg.com/handsfree@2.0.3. Happy browsing!
-~ Ozzy
+## Prereqs
+- [NodeJS](https://nodejs.org/en/)
+
+
+## Build Setup
+Run the following from projects root directory:
+
+``` bash
+# install dependencies
+$ npm install
+
+# launch a local development server with hot-reload at localhost:3000
+$ npm run dev
+
+# build for production and launch server
+$ npm run build
+$ npm start
+
+# generate static project
+$ npm run generate
+```
+
+For detailed explanation on how things work, check out the [Nuxt.js](https://github.com/nuxt/nuxt.js) and [Vuetify.js](https://vuetifyjs.com/) documentation.
+
 
 ## Quickstart
 
