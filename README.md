@@ -27,7 +27,7 @@
 - [NodeJS](https://nodejs.org/en/)
 
 
-## Development
+## Scripts
 Run the following from projects root directory:
 
 ``` bash
@@ -41,7 +41,7 @@ npm run serve
 npm run build
 ```
 
-For detailed explanation on how things work, check out the [Nuxt.js](https://github.com/nuxt/nuxt.js) and [Vuetify.js](https://vuetifyjs.com/) documentation.
+For detailed explanation on how things work, check out the [Vuetify.js](https://vuetifyjs.com/) and [CLI Plugin](https://github.com/vuetifyjs/vue-cli-plugin-vuetify) documentation.
 
 
 ## Quickstart
@@ -59,6 +59,7 @@ npm i handsfree
 then
 
 ```js
+// If using node: import Handsfree from 'handsfree'
 const handsfree = new Handsfree({debug: true})
 handsfree.start()
 ```
@@ -75,31 +76,13 @@ handsfree.start()
 
 ![](https://i.giphy.com/YkBbkI90xxyDM7u8jc.gif)
 
-
-## Scripts
-
-### With Yarn...
-```bash
-yarn init  # To update the package with your own labels
-yarn       # and yarn --only=dev if you have a global NODE_ENV=production, the default on Windows.
-yarn dev   # Development mode with SASS, templates, and hot-reload on localhost:8080
-yarn build # Build the library
-```
-
-### ...or with NPM
-
-```bash
-npm init       # To update the package with your own labels
-npm install    # and npm install --only=dev if you have a global NODE_ENV=production, the default on Windows.
-npm run dev    # Development mode with SASS, templates, and hot-reload on localhost:8080
-npm run build  # Build the library
-```
-
 ## Development
 
-The actual library is built with `/lib/Handsfree.js` as the starting point. When people `npm install handsfree` and `import handsfree from 'handsfree'`, they'll be loading this file.
+The actual library is built with `/lib/Handsfree.js` as the starting point. When people `npm install handsfree` and `import Handsfree from 'handsfree'`, they'll be loading this file.
 
-The `/sandbox/` scripts are used when developing with `yarn dev` and are there to aid in developing `/lib/Handsfree.js` and for documentation. `handsfree.js` and `/sandbox/index.js` are automatically injected into `/sandbox/index.pug`. When you run `yarn build`, these files are included in the `/dist/` folder which allows you to quickly deploy documentation with examples!
+Everything in `/src/` is for the documentation site (which are hosted at https://handsfree.js.org) and is what's shown when you `npm run serve`. If you're going to work on the Handsfree.js core library, these files are what you would edit.
+
+Finally, if you want to just experiment then take a peek inside `/starters/`.
 
 ## Usage
 
