@@ -1,13 +1,12 @@
 {
   "name": "handsfree",
-  "version": "0.1.0",
+  "version": "2.2.0",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "handsfree": "vue-cli-service build --target lib --name handsfree src/handsfree/Handsfree.js"
+    "handsfree": "vue-cli-service build --target lib --name handsfree lib/Handsfree.js"
   },
-
   "eslintConfig": {
     "root": true,
     "env": {
@@ -22,24 +21,23 @@
       "parser": "babel-eslint"
     }
   },
-  "eslintIgnore": ["src/handsfree/libs/brf_wasm/**/*"],
-
+  "eslintIgnore": [
+    "lib/libs/brf_wasm/**/*"
+  ],
   "postcss": {
     "plugins": {
       "autoprefixer": {}
     }
   },
-  
   "browserslist": [
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
   ],
-  
   "dependencies": {
+    "idempotent-babel-polyfill": "^7.0.0",
     "simple-keyboard": "^2.8.0"
   },
-  
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.5",
     "@vue/cli-plugin-eslint": "^3.0.5",

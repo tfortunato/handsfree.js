@@ -65,7 +65,7 @@ handsfree.start()
 
 ## Core Plugins
 ### Typing
-**See:** `/src/plugins/SimpleKeyboard.js`
+**See:** `/lib/plugins/SimpleKeyboard.js`
 
 ![](https://i.giphy.com/495ysDE36USvobWE0y.gif)
 
@@ -97,9 +97,9 @@ npm run build  # Build the library
 
 ## Development
 
-The actual library is built with `/src/Handsfree.js` as the starting point. When people `npm install handsfree` and `import handsfree from 'handsfree'`, they'll be loading this file.
+The actual library is built with `/lib/Handsfree.js` as the starting point. When people `npm install handsfree` and `import handsfree from 'handsfree'`, they'll be loading this file.
 
-The `/sandbox/` scripts are used when developing with `yarn dev` and are there to aid in developing `/src/Handsfree.js` and for documentation. `handsfree.js` and `/sandbox/index.js` are automatically injected into `/sandbox/index.pug`. When you run `yarn build`, these files are included in the `/dist/` folder which allows you to quickly deploy documentation with examples!
+The `/sandbox/` scripts are used when developing with `yarn dev` and are there to aid in developing `/lib/Handsfree.js` and for documentation. `handsfree.js` and `/sandbox/index.js` are automatically injected into `/sandbox/index.pug`. When you run `yarn build`, these files are included in the `/dist/` folder which allows you to quickly deploy documentation with examples!
 
 ## Usage
 
@@ -226,12 +226,12 @@ window.addEventListener('handsfree-injectDebugger', (ev) => {
 The document body contains `.handsfree-stopped` when handsfree is stopped (this includes when it's been initialized but not started), and `.handsfree-started` when it's on. This lets you style any page on the page!
 
 ## Further learning
-The best way to learn how everything works is to check out `/sandbox/index.js` which contains everything you need to start (notice how few lines it has)! Then, take a peek at the plugins in `/src/plugins/*.js` to understand how various plugins work.
+The best way to learn how everything works is to check out `/sandbox/index.js` which contains everything you need to start (notice how few lines it has)! Then, take a peek at the plugins in `/lib/plugins/*.js` to understand how various plugins work.
 
 In order of complexity, you'll want to peek at:
-- `/src/plugins/Scrolling.js`
-- `/src/plugins/SimpleKeyboard.js` (this one doesn't even use the handsfree API!)
-- `/src/plugins/SmileClick.js`
+- `/lib/plugins/Scrolling.js`
+- `/lib/plugins/SimpleKeyboard.js` (this one doesn't even use the handsfree API!)
+- `/lib/plugins/SmileClick.js`
 
 ## Roadmap
 - Enabled/disable plugins
