@@ -1,6 +1,6 @@
 <template lang="pug">
   v-container
-    v-layout(text-xs-center wrap)
+    v-layout(justify-center text-xs-center wrap)
       v-flex(xs12)
         v-img(
           :src='require("../assets/logo.svg")'
@@ -8,46 +8,15 @@
           contain
           height='200')
 
-      v-flex(mb-4)
-        h1.display-2.font-weight-bold.mb-3 Welcome to Vuetify
-        p.subheading.font-weight-regular
-          | For help and collaboration with other Vuetify developers,
-          br
-          | please join our online
-          a(href='https://community.vuetifyjs.com' target='_blank') Discord Community
-
-      v-flex(mb-5 xs12)
-        h2.headline.font-weight-bold.mb-3 What's next?
-
-        v-layout(justify-center)
-          a(
-            v-for='(next, i) in whatsNext'
-            :key='i'
-            :href='next.href'
-            class='subheading mx-3'
-            target='_blank') {{ next.text }}
-
-      v-flex(xs12 mb-5)
-        h2.headline.font-weight-bold.mb-3 Important Links
-
-        v-layout(justify-center)
-          a(
-            v-for='(link, i) in importantLinks'
-            :key='i'
-            :href='link.href'
-            class='subheading mx-3'
-            target='_blank') {{ link.text }}
-
-      v-flex(xs12 mb-5)
-        h2.headline.font-weight-bold.mb-3 Ecosystem
-
-        v-layout(justify-center)
-          a(
-            v-for='(eco, i) in ecosystem'
-            :key='i'
-            :href='eco.href'
-            class='subheading mx-3'
-            target='_blank') {{ eco.text }}
+      v-flex(mb-4 xs12 md6)
+        h1.display-2.font-weight-bold.mb-3 Handsfree.js
+        p
+          img.mr-2(src='https://img.shields.io/npm/v/handsfree.svg')
+          img.mr-2(src='https://img.shields.io/github/last-commit/BrowseHandsfree/handsfreeJS.svg')
+          img.mr-2(src='https://travis-ci.org/BrowseHandsfree/handsfreeJS.svg?branch=master')
+          img(src='https://img.shields.io/codecov/c/github/BrowseHandsfree/handsfreeJS/master.svg?style=flat')
+        p.subheading.font-weight-regular.text-xs-left
+          | A JavaScript drop-in library for adding handsfree interfaces to any website, service, and Internet of Thing, and also for creating handsfree games and experiences. Runs on any device that supports <a href="https://caniuse.com/#feat=stream">getUserMedia()</a>.
 </template>
 
 <script>

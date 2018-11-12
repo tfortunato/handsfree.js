@@ -2,26 +2,22 @@
   v-app
     v-toolbar(app)
       v-toolbar-title.headline.text-uppercase
-        span Vuetify
-        span.font-weight-light MATERIAL DESIGN
+        span.mr-3 Handsfree.js
       v-spacer
-      v-btn(
-        flat
-        href='https://github.com/vuetifyjs/vuetify/releases/latest'
-        target='_blank')
-        span.mr-2 Latest Release
+      a(href='https://github.com/BrowseHandsfree/handsfreeJS/releases')
+        img(src='https://img.shields.io/github/release-pre/browsehandsfree/handsfreejs.svg')
 
     v-content
-      HelloWorld
+      Home
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
+import Home from './components/Home'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Home
   },
   data () {
     return {
