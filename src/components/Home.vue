@@ -18,14 +18,13 @@
       v-flex(xs12 md8)
         v-card(light)
           v-card-title(primary-title)
-            div
-              h2.headline.mb-0 Installation
+            h2.headline.mb-0 Installation
           v-card-text
             h3 With HTML:
             p This is how we encourage you to use Handsfree.js when using standard web technologies or when experimenting on sites like <a href="https://glitch.com">Glitch.com</a> and <a href="https://codepen.com">CodePen</a>:
             pre 
               code.xml. 
-                &lt;script src="https://unpkg.com/handsfree@2"&gt;&lt;/script&gt;
+               &lt;script src="https://unpkg.com/handsfree@2"&gt;&lt;/script&gt;
                 &lt;script&gt;
                   handsfree = new Handsfree()
                   handsfree.start()
@@ -39,9 +38,98 @@
             div then:
             pre 
               code.javascript.
-                import Handsfree from 'handsfree'
+               import Handsfree from 'handsfree'
                 const handsfree = new Handsfree()
                 handsfree.start()
+
+    v-layout(justify-center style='margin-top: 200px')
+      v-flex(xs12 md8)
+        v-card(light)
+          v-card-title(primary-title)
+            h2.headline.mb-0 Adding Plugins
+          v-card-text
+            p Handsfree.js is built around plugins. Plugins have several callbacks that hook into different events, and are added with <code>handsfree.use(config)</code>.
+            p Each callback receives two arguments, <code>(faces, instance)</code>. <code>instance</code> refers to the <code>new Handsfree</code> instance you created. <code>faces</code> contains the following:
+            pre
+              code.javascript.
+                {
+                  cursor: {
+                    // Where on the screen the user is pointed at
+                    x: 0,
+                    y: 0,
+                    
+                    // The target currently under the mouse
+                    $target: 0,
+                    
+                    // Mouse states for this face
+                    state: {
+                      // The first frame of a click
+                      mouseDown: false,
+                      // Every subsequent frame of a click
+                      mouseDrag: false,
+                      // When the click is finally released
+                      mouseUp: false
+                    }
+                  },
+                  
+                  // A list of all 64 landmarks
+                  points: [{x, y}, ...],
+                
+                  // The head's pitch (facing up/down)
+                  rotationX: 0,
+                  // The head's yaw (facing left/right)
+                  rotationY: 0,
+                  // The head's roll (as if doing a cartwheel while facing straight ahead)
+                  rotationZ: 0,
+                
+                  // The heads overall size within the camera
+                  scale: 0,
+                
+                  // Where the head is relative to the left edge of the video feed
+                  translationX: 0,
+                  // Where the head is relative to the top edge of the video feed
+                  translationY: 0
+                }
+                
+            p Here are the landmark points, with #27 being the reference point for rotation/translation:
+            p
+              img(src='../assets/img/brfv4_landmarks.jpg')
+                
+            p Here's what our page scrolling plugin looks like:
+            pre
+              code.javascript.
+                handsfree.use({
+                  // Required. The unique name for this plugin.
+                  // If it's not unique, then it overwrites the previous version of the plugin.
+                  name: 'scrolling',
+                
+                  // The multiplier to scroll the page by
+                  // Adjust with this.scrollSpeed or handsfree.plugin.scrolling.scrollSpeed
+                  scrollSpeed: 0.1,
+                
+                  /**
+                    * Scrolls the page when the cursor is above/below the screen
+                    * @param {Array}     faces    The array of face objects
+                    * @param {Handsfree} instance The handsfree instance
+                    */
+                  onFrame (faces, instance) {
+                    faces.forEach(face => {
+                      let x = face.cursor.x
+                      let y = face.cursor.y
+                
+                      // Then add the points to the cursor!
+                      instance.cursor.$el.style.left = x + 'px'
+                      instance.cursor.$el.style.top = y + 'px'
+                
+                      // Scroll the page
+                      if (y < 0)
+                        window.scrollTo(0, window.scrollY + y * this.scrollSpeed)
+                      else if (y > window.innerHeight)
+                        window.scrollTo(0, window.scrollY + (y - window.innerHeight) * this.scrollSpeed)
+                    })
+                  }
+                })
+
 </template>
 
 <script>
