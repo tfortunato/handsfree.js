@@ -127,7 +127,13 @@ handsfree.use({
   onUse: () => {},
   // Called once per frame, after calculations, along with the detected face object
   // To overwrite/modify the properties of faces for use within other plugins, return the faces object
-  onFrame: (faces, handsfree) => {}
+  onFrame: (faces, handsfree) => {},
+
+  // Called after Handsfree.start() is called
+  onStart: (handsfree) => {},
+
+  // Called after Handsfree.stop() is called
+  onStop: (handsfree) => {}
 })
 ```
 

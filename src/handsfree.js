@@ -6,7 +6,7 @@ const OzWinkyFace = require('./store/faces/oz-winky-face.json')
 
 document.addEventListener('DOMContentLoaded', () => {
   // eslint-disable-next-line
-  window.handsfree = new Handsfree({debug: true})
+  window.handsfree = new Handsfree()
   const handsfree = window.handsfree
 
   /**
@@ -137,6 +137,16 @@ document.addEventListener('DOMContentLoaded', () => {
       this.offset.y = -OzWinkyFace[0].translationY / 4
     },
 
+    onStop () {
+      console.log('plugin: onStop');
+      
+      handsfree.faces = OzWinkyFace
+    },
+
+    onStart () {
+      console.log('onStart Called')
+    },
+
     /**
      * Creates the 64 initial boids in a "face" position
      */
@@ -196,14 +206,14 @@ document.addEventListener('DOMContentLoaded', () => {
         this.vy = Math.max(this.vy, -4.0)
       }
       
-      // Repel from mouse
+      // Fly towards point
       if (handsfree.isTracking) {
         // > Repel
         // this.vx = this.vx * 0.9 - (OzWinkyFace[0].points[this.id].x - this.pos.x ) * 0.002
         // this.vy = this.vy * 0.9 - (OzWinkyFace[0].points[this.id].y - this.pos.y ) * 0.002
         // > Attract
-        this.vx = this.vx * 0.9 - (this.pos.x - OzWinkyFace[0].points[this.id].x - BoidsDebugger.offset.x) * 0.025
-        this.vy = this.vy * 0.9 - (this.pos.y - OzWinkyFace[0].points[this.id].y - BoidsDebugger.offset.y) * 0.025
+        this.vx = this.vx * 0.9 - (this.pos.x - handsfree.faces[0].points[this.id].x - BoidsDebugger.offset.x) * 0.025
+        this.vy = this.vy * 0.9 - (this.pos.y - handsfree.faces[0].points[this.id].y - BoidsDebugger.offset.y) * 0.025
       }
       
       //////////////////////////////////////
