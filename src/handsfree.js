@@ -36,6 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
     rateOfChange: 0.01,
     // How much extra time to wait before flying back
     extraFlyBackWaitTime: 3000,
+    // When a Boid is deleted, it's ID is added here for reuse
+    // Id's match a corresponding face landmark
+    freedIDs: [],
     
     // The point boids return to
     returnPoint: {
@@ -48,9 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Collection of boid instances
     boids: [],
 
-    // Boid Colors
-    colors: ['#FF5722', '#FF9800', '#FF9800', '#FF9800', '#FF9800', '#B71C1C', '#00BCD4', '#00BCD4', '#009688'],
-    
     /**
      * Setup the canvas and boids
      */
@@ -97,9 +97,17 @@ document.addEventListener('DOMContentLoaded', () => {
       this.canvas[1].ctx.fill()
 
       // Draw Boids
-      this.boids.length < this.maxBoids && this.boids.push(new Boid())
+      if (this.boids.length < this.maxBoids) {
+        const boid = new Boid()
+        boid.id = this.freedIDs.pop()
+        boid.color = handsfree.getPointColor(boid.id)
+        this.boids.push(boid)
+      }
       this.canvas[0].ctx.clearRect(0, 0, this.canvas[0].$.width, this.canvas[0].$.height)
       this.canvas[0].ctx.globalAlpha = 0.1
+
+      // Remove any boids who's update method returns false,
+      // meaning it was out of bounds
       this.boids = this.boids.filter(p => p.update())
     },
 
@@ -126,7 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
     createInitialBoids () {
       const xOffset = window.innerWidth / 2 - OzWinkyFace[0].translationX
       const yOffset = -OzWinkyFace[0].translationY / 4
-      console.log(xOffset, yOffset)
       
       for(let i = 0; i < 65; i++) {
         const boid = new Boid()
@@ -134,6 +141,8 @@ document.addEventListener('DOMContentLoaded', () => {
           x: OzWinkyFace[0].points[i].x + xOffset,
           y: OzWinkyFace[0].points[i].y + yOffset
         }
+        boid.color = handsfree.getPointColor(i)
+        boid.id = i
         this.boids.push(boid)
       }
     }
@@ -152,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
     this.step = Math.random() * 400
     this.vx = Math.random() * this.speed / 4 - this.speed / 8
     this.vy = Math.random() * this.speed / 4 - this.speed / 8
-    this.colIndex = Math.floor(Math.random() * BoidsDebugger.colors.length)
+    this.color = '#ff0'
     this.history = []
     
     this.update = function () {
@@ -208,8 +217,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         // BoidsDebugger.canvas[1].ctx.fillStyle = `hsla(${Math.sin( this.step / 300) * 70 + 70},${99}%,${50}%,1)`
         // BoidsDebugger.canvas[1].ctx.strokeStyle = `hsla(${Math.sin( this.step / 300) * 70 + 70},${99}%,${50}%,0.5)`
-        BoidsDebugger.canvas[1].ctx.fillStyle = BoidsDebugger.colors[this.colIndex] 
-        BoidsDebugger.canvas[1].ctx.strokeStyle = BoidsDebugger.colors[this.colIndex] 
+        BoidsDebugger.canvas[1].ctx.fillStyle = this.color
+        BoidsDebugger.canvas[1].ctx.strokeStyle = this.color
         BoidsDebugger.canvas[1].ctx.fill()
         BoidsDebugger.canvas[1].ctx.lineWidth = 2
         BoidsDebugger.canvas[1].ctx.lineJoin = "round"
@@ -219,18 +228,21 @@ document.addEventListener('DOMContentLoaded', () => {
         // orb
         BoidsDebugger.canvas[0].ctx.beginPath()
         BoidsDebugger.canvas[0].ctx.fillStyle = `rgba(250,250,250,0.05)`
-        BoidsDebugger.canvas[0].ctx.fillStyle = BoidsDebugger.colors[this.colIndex]
+        BoidsDebugger.canvas[0].ctx.fillStyle = this.color
         
         BoidsDebugger.canvas[0].ctx.arc(this.history[4].x ,this.history[4].y , 13.4, 0, 2 * Math.PI)
         BoidsDebugger.canvas[0].ctx.fill()
       }
       
-      //////////////////////////////////////
+      // Delete the boid if it goes out of bounds
       if (this.pos.x > BoidsDebugger.canvas[0].$.width || this.pos.x < 0 || this.pos.y > BoidsDebugger.canvas[0].$.height || this.pos.y < 0) {
+        BoidsDebugger.freedIDs.push(this.id)
         delete this.pos
         delete this.history
         return false
       }
+
+      // The boid is still in bounds, lets update its history
       this.history.push({
         x: this.pos.x,
         y: this.pos.y
