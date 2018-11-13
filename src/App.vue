@@ -1,6 +1,6 @@
 <template lang="pug">
   v-app(dark)
-    v-toolbar(app)
+    v-toolbar(light app)
       v-toolbar-title.headline.text-uppercase
         span.mr-3 Handsfree.js
       v-spacer

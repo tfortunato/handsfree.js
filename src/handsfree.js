@@ -1,7 +1,7 @@
 /**
  * Sets up handsfree.js
  */
-require('./assets/handsfree.styl')
+require('./assets/styles/handsfree.styl')
 const OzWinkyFace = require('./store/faces/oz-winky-face.json')
 
 document.addEventListener('DOMContentLoaded', () => {
