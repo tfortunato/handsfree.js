@@ -210,8 +210,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (handsfree.isTracking && BoidsDebugger.isReady) {
         this.speed = 0.05
 
-        this.vx = this.vx * BoidsDebugger.trackingSpeedMod - (this.pos.x - handsfree.faces[0].points[this.id].x) * 0.512
-        this.vy = this.vy * BoidsDebugger.trackingSpeedMod - (this.pos.y - handsfree.faces[0].points[this.id].y) * 0.512
+        this.vx = this.vx * BoidsDebugger.trackingSpeedMod - (this.pos.x - handsfree.faces[0].points[this.id].x - BoidsDebugger.offset.x) * 0.512
+        this.vy = this.vy * BoidsDebugger.trackingSpeedMod - (this.pos.y - handsfree.faces[0].points[this.id].y - BoidsDebugger.offset.y) * 0.512
         // BoidsDebugger.canvas[0].ctx.globalAlpha = 0.35
       // Do their own thing
       } else {
