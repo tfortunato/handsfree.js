@@ -32,6 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // The element containing the canvases
     $wrap: null,
     
+    // How fast to move by
+    rateOfChange: 0.01,
+    // How much extra time to wait before flying back
+    extraFlyBackWaitTime: 3000,
+    
     // The point boids return to
     returnPoint: {
       x: 0,
@@ -75,6 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Start boid loop
       setTimeout(() => this.createInitialBoids(), 0)
+      setTimeout(() => {
+        this.rateOfChange = 0.98
+        this.extraFlyBackWaitTime = 0
+      }, 3000)
     },
     
     /**
@@ -115,7 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
      * Creates the 64 initial boids in a "face" position
      */
     createInitialBoids () {
-      console.log(OzWinkyFace[0])
       const xOffset = window.innerWidth / 2 - OzWinkyFace[0].translationX
       const yOffset = -OzWinkyFace[0].translationY / 4
       console.log(xOffset, yOffset)
@@ -154,16 +162,18 @@ document.addEventListener('DOMContentLoaded', () => {
       if (this.history.length > 5){
         this.history.shift()
       }
-      // this.pos.x += this.vx
-      // this.pos.y += this.vy
-      this.vx = this.vx * 0.98 + (Math.random() * this.speed * 2 - this.speed) * 0.12
-      this.vy = this.vy * 0.98 + (Math.random() * this.speed * 2 - this.speed) * 0.12
+      this.pos.x += this.vx
+      this.pos.y += this.vy
+      this.vx = this.vx * BoidsDebugger.rateOfChange + (Math.random() * this.speed * 2 - this.speed) * 0.12
+      this.vy = this.vy * BoidsDebugger.rateOfChange + (Math.random() * this.speed * 2 - this.speed) * 0.12
+      // this.vx = this.vx * 0.3 + (Math.random() * this.speed * 2 - this.speed) * 0.12
+      // this.vy = this.vy * 0.3 + (Math.random() * this.speed * 2 - this.speed) * 0.12
       
       var dx = BoidsDebugger.returnPoint.x - this.pos.x 
       var dy = BoidsDebugger.returnPoint.y - this.pos.y 
 
       // After some time, "fly back home"
-      if(this.step > 365) {
+      if(this.step > 365 + this.extraFlyBackWaitTime) {
         //mouse
         this.vx = this.vx * 0.9 + dx * 0.004
         this.vy = this.vy * 0.9 + dy * 0.004
