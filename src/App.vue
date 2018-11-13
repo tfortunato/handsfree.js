@@ -1,6 +1,6 @@
 <template lang="pug">
-  v-app
-    v-toolbar(app)
+  v-app(dark)
+    v-toolbar(app dark)
       v-toolbar-title.headline.text-uppercase
         span.mr-3 Handsfree.js
       v-spacer
@@ -8,6 +8,7 @@
         img(src='https://img.shields.io/github/release-pre/browsehandsfree/handsfreejs.svg')
 
     v-content
+      .handsfree-debug-wrap
       Home
 </template>
 
@@ -26,3 +27,18 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="stylus">
+  body
+    background: rgb(18, 10, 34)
+
+  div.theme--dark.application,
+  div.theme--light.application
+    background: none
+    position: relative
+    z-index: 1
+    
+  .application--wrap > .v-toolbar
+    top: auto
+    bottom: 0
+</style>
