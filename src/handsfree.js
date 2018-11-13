@@ -31,11 +31,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // The element containing the canvases
     $wrap: null,
+
+    // The offset to move boids to
+    offset: {
+      x: 0,
+      y: 0
+    },
     
     // How fast to move by
     rateOfChange: 0.01,
     // How much extra time to wait before flying back
-    extraFlyBackWaitTime: 3000,
+    doYourOwnThingTimer: 3000,
     // When a Boid is deleted, it's ID is added here for reuse
     // Id's match a corresponding face landmark
     freedIDs: [],
@@ -82,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => this.createInitialBoids(), 0)
       setTimeout(() => {
         this.rateOfChange = 0.98
-        this.extraFlyBackWaitTime = 0
+        this.doYourOwnThingTimer = 0
       }, 3000)
     },
     
@@ -126,20 +132,20 @@ document.addEventListener('DOMContentLoaded', () => {
       this.resize(this.$wrap)
       this.resize(this.canvas[0].$)
       this.resize(this.canvas[1].$)
+
+      this.offset.x = window.innerWidth / 2 - OzWinkyFace[0].translationX
+      this.offset.y = -OzWinkyFace[0].translationY / 4
     },
 
     /**
      * Creates the 64 initial boids in a "face" position
      */
     createInitialBoids () {
-      const xOffset = window.innerWidth / 2 - OzWinkyFace[0].translationX
-      const yOffset = -OzWinkyFace[0].translationY / 4
-      
       for(let i = 0; i < 65; i++) {
         const boid = new Boid()
         boid.pos = {
-          x: OzWinkyFace[0].points[i].x + xOffset,
-          y: OzWinkyFace[0].points[i].y + yOffset
+          x: OzWinkyFace[0].points[i].x + this.offset.x,
+          y: OzWinkyFace[0].points[i].y + this.offset.y
         }
         boid.color = handsfree.getPointColor(i)
         boid.id = i
@@ -175,14 +181,12 @@ document.addEventListener('DOMContentLoaded', () => {
       this.pos.y += this.vy
       this.vx = this.vx * BoidsDebugger.rateOfChange + (Math.random() * this.speed * 2 - this.speed) * 0.12
       this.vy = this.vy * BoidsDebugger.rateOfChange + (Math.random() * this.speed * 2 - this.speed) * 0.12
-      // this.vx = this.vx * 0.3 + (Math.random() * this.speed * 2 - this.speed) * 0.12
-      // this.vy = this.vy * 0.3 + (Math.random() * this.speed * 2 - this.speed) * 0.12
       
-      var dx = BoidsDebugger.returnPoint.x - this.pos.x 
-      var dy = BoidsDebugger.returnPoint.y - this.pos.y 
+      var dx = OzWinkyFace[0].points[this.id].x - this.pos.x 
+      var dy = OzWinkyFace[0].points[this.id].y - this.pos.y 
 
       // After some time, "fly back home"
-      if(this.step > 365 + this.extraFlyBackWaitTime) {
+      if(this.step > 365 + this.doYourOwnThingTimer) {
         //mouse
         this.vx = this.vx * 0.9 + dx * 0.004
         this.vy = this.vy * 0.9 + dy * 0.004
@@ -190,22 +194,16 @@ document.addEventListener('DOMContentLoaded', () => {
         this.vx = Math.max(this.vx, -4.0)
         this.vy = Math.min(this.vy,  4.0)
         this.vy = Math.max(this.vy, -4.0)
-        // center
-        // this.vx = this.vx * 0.9 + (canvas.width/2 - this.pos.x ) * 0.002
-        // this.vy = this.vy * 0.9 + (canvas.height/2 - this.pos.y ) * 0.002
       }
       
-      // Change direction
-      if(this.step > 100 && this.step < 110) {
-        //mouse
-        var d = dx * dx + dy * dy
-        if (d < (BoidsDebugger.canvas[0].$.height/8 * BoidsDebugger.canvas[0].$.height/8)){
-          this.vx = this.vx * 0.9 - (BoidsDebugger.returnPoint.x - this.pos.x ) * 0.002
-          this.vy = this.vy * 0.9 - (BoidsDebugger.returnPoint.y - this.pos.y ) * 0.002
-        }
-        // center
-        // this.vx = this.vx * 0.9 + (canvas.width/2 - this.pos.x ) * 0.002
-        // this.vy = this.vy * 0.9 + (canvas.height/2 - this.pos.y ) * 0.002
+      // Repel from mouse
+      if (handsfree.isTracking) {
+        // > Repel
+        // this.vx = this.vx * 0.9 - (OzWinkyFace[0].points[this.id].x - this.pos.x ) * 0.002
+        // this.vy = this.vy * 0.9 - (OzWinkyFace[0].points[this.id].y - this.pos.y ) * 0.002
+        // > Attract
+        this.vx = this.vx * 0.9 - (this.pos.x - OzWinkyFace[0].points[this.id].x - BoidsDebugger.offset.x) * 0.025
+        this.vy = this.vy * 0.9 - (this.pos.y - OzWinkyFace[0].points[this.id].y - BoidsDebugger.offset.y) * 0.025
       }
       
       //////////////////////////////////////
