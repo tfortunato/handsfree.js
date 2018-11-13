@@ -45,6 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // When a Boid is deleted, it's ID is added here for reuse
     // Id's match a corresponding face landmark
     freedIDs: [],
+    trackingSpeedMod: 0.9,
+    isReady: false,
     
     // The point boids return to
     returnPoint: {
@@ -57,6 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Collection of boid instances
     boids: [],
 
+    orbSize: 7,
+
     /**
      * Setup the canvas and boids
      */
@@ -68,13 +72,13 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.appendChild(this.$wrap)
 
       // Add the canvas
-      for (let i = 0; i < 2; i++) {
+      for (let i = 1; i > -1; i--) {
         this.canvas[i].$ = document.createElement('canvas')
         this.canvas[i].ctx = this.canvas[i].$.getContext('2d')
         this.$wrap.appendChild(this.canvas[i].$)
       }
       this.canvas[0].$.classList.add('handsfree-boids-debugger-primary-canvas')
-      this.canvas[0].$.classList.add('handsfree-boids-debugger-secondary-canvas')
+      this.canvas[1].$.classList.add('handsfree-boids-debugger-secondary-canvas')
 
       // Reponsive
       setInterval(() => this.animateBoids(), 1000/29.9)
@@ -91,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         this.doYourOwnThingTimer = 0
       }, 3000)
     },
-    
+
     /**
      * Animates the boids
      */
@@ -137,14 +141,24 @@ document.addEventListener('DOMContentLoaded', () => {
       this.offset.y = -OzWinkyFace[0].translationY / 4
     },
 
+    onFrame () {
+      this.trackingSpeedMod += 0.0001
+      this.trackingSpeedMod = Math.min(this.trackingSpeedMod, 0.8)
+    },
+    
+    /**
+     * Reset the faces to whatever the start scene is
+     */
     onStop () {
-      console.log('plugin: onStop');
-      
       handsfree.faces = OzWinkyFace
     },
 
     onStart () {
-      console.log('onStart Called')
+      this.trackingSpeedMod = 0.009
+      this.isReady = false
+      setTimeout(() => {
+        this.isReady = true
+      }, 1000)
     },
 
     /**
@@ -192,32 +206,22 @@ document.addEventListener('DOMContentLoaded', () => {
       this.vx = this.vx * BoidsDebugger.rateOfChange + (Math.random() * this.speed * 2 - this.speed) * 0.12
       this.vy = this.vy * BoidsDebugger.rateOfChange + (Math.random() * this.speed * 2 - this.speed) * 0.12
       
-      var dx = OzWinkyFace[0].points[this.id].x - this.pos.x 
-      var dy = OzWinkyFace[0].points[this.id].y - this.pos.y 
-
-      // After some time, "fly back home"
-      if(this.step > 365 + this.doYourOwnThingTimer) {
-        //mouse
-        this.vx = this.vx * 0.9 + dx * 0.004
-        this.vy = this.vy * 0.9 + dy * 0.004
-        this.vx = Math.min(this.vx,  4.0)
-        this.vx = Math.max(this.vx, -4.0)
-        this.vy = Math.min(this.vy,  4.0)
-        this.vy = Math.max(this.vy, -4.0)
-      }
-      
       // Fly towards point
-      if (handsfree.isTracking) {
-        // > Repel
-        // this.vx = this.vx * 0.9 - (OzWinkyFace[0].points[this.id].x - this.pos.x ) * 0.002
-        // this.vy = this.vy * 0.9 - (OzWinkyFace[0].points[this.id].y - this.pos.y ) * 0.002
-        // > Attract
-        this.vx = this.vx * 0.9 - (this.pos.x - handsfree.faces[0].points[this.id].x - BoidsDebugger.offset.x) * 0.025
-        this.vy = this.vy * 0.9 - (this.pos.y - handsfree.faces[0].points[this.id].y - BoidsDebugger.offset.y) * 0.025
+      if (handsfree.isTracking && BoidsDebugger.isReady) {
+        this.speed = 0.05
+
+        this.vx = this.vx * BoidsDebugger.trackingSpeedMod - (this.pos.x - handsfree.faces[0].points[this.id].x) * 0.512
+        this.vy = this.vy * BoidsDebugger.trackingSpeedMod - (this.pos.y - handsfree.faces[0].points[this.id].y) * 0.512
+        // BoidsDebugger.canvas[0].ctx.globalAlpha = 0.35
+      // Do their own thing
+      } else {
+        BoidsDebugger.canvas[0].ctx.globalAlpha = 0.1
+        this.speed = 6
       }
       
       //////////////////////////////////////
-      if (this.history.length > 4){
+      if (this.history.length > 4) {
+        // Boid Body
         BoidsDebugger.canvas[1].ctx.beginPath()
         BoidsDebugger.canvas[1].ctx.moveTo(this.pos.x ,this.pos.y)
         for (var i = this.history.length-1; i >= 0;  i--){
@@ -233,12 +237,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // BoidsDebugger.canvas[1].ctx.closePath()
         BoidsDebugger.canvas[1].ctx.stroke()
         
-        // orb
+        // Boid orb
         BoidsDebugger.canvas[0].ctx.beginPath()
         BoidsDebugger.canvas[0].ctx.fillStyle = `rgba(250,250,250,0.05)`
         BoidsDebugger.canvas[0].ctx.fillStyle = this.color
-        
-        BoidsDebugger.canvas[0].ctx.arc(this.history[4].x ,this.history[4].y , 13.4, 0, 2 * Math.PI)
+        BoidsDebugger.canvas[0].ctx.arc(this.history[4].x ,this.history[4].y , BoidsDebugger.orbSize, 0, 2 * Math.PI)
         BoidsDebugger.canvas[0].ctx.fill()
       }
       
