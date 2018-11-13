@@ -115,9 +115,17 @@ document.addEventListener('DOMContentLoaded', () => {
      * Creates the 64 initial boids in a "face" position
      */
     createInitialBoids () {
+      console.log(OzWinkyFace[0])
+      const xOffset = window.innerWidth / 2 - OzWinkyFace[0].translationX
+      const yOffset = -OzWinkyFace[0].translationY / 4
+      console.log(xOffset, yOffset)
+      
       for(let i = 0; i < 65; i++) {
         const boid = new Boid()
-        boid.pos = OzWinkyFace[0].points[i]
+        boid.pos = {
+          x: OzWinkyFace[0].points[i].x + xOffset,
+          y: OzWinkyFace[0].points[i].y + yOffset
+        }
         this.boids.push(boid)
       }
     }
@@ -146,8 +154,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (this.history.length > 5){
         this.history.shift()
       }
-      this.pos.x += this.vx
-      this.pos.y += this.vy
+      // this.pos.x += this.vx
+      // this.pos.y += this.vy
       this.vx = this.vx * 0.98 + (Math.random() * this.speed * 2 - this.speed) * 0.12
       this.vy = this.vy * 0.98 + (Math.random() * this.speed * 2 - this.speed) * 0.12
       
@@ -168,6 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // this.vy = this.vy * 0.9 + (canvas.height/2 - this.pos.y ) * 0.002
       }
       
+      // Change direction
       if(this.step > 100 && this.step < 110) {
         //mouse
         var d = dx * dx + dy * dy

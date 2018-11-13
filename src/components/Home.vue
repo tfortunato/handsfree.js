@@ -1,6 +1,6 @@
 <template lang="pug">
-  v-container.mt-5
-    v-layout.mt-5(justify-center text-xs-center wrap)
+  v-container(style='margin-top: 300px')
+    v-layout(justify-center text-xs-center wrap)
       v-flex(mb-4 xs12 md6)
         h1.display-2.font-weight-bold.mb-3 Handsfree.js
         p
