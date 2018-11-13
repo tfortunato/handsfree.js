@@ -2,6 +2,7 @@
  * Sets up handsfree.js
  */
 require('./assets/handsfree.styl')
+const OzWinkyFace = require('./store/faces/oz-winky-face.json')
 
 document.addEventListener('DOMContentLoaded', () => {
   // eslint-disable-next-line
@@ -31,7 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // The element containing the canvases
     $wrap: null,
     
-    mouse: {
+    // The point boids return to
+    returnPoint: {
       x: 0,
       y: 0
     },
@@ -60,13 +62,19 @@ document.addEventListener('DOMContentLoaded', () => {
         this.canvas[i].ctx = this.canvas[i].$.getContext('2d')
         this.$wrap.appendChild(this.canvas[i].$)
       }
-
       this.canvas[0].$.classList.add('handsfree-boids-debugger-primary-canvas')
       this.canvas[0].$.classList.add('handsfree-boids-debugger-secondary-canvas')
 
+      // Reponsive
       setInterval(() => this.animateBoids(), 1000/29.9)
       window.addEventListener('resize', () => this.onResize())
       this.onResize()
+
+      // update point to where the mouse cursor is
+      document.onmousemove = e => this.returnPoint = {x: e.pageX, y: e.pageY}
+      
+      // Start boid loop
+      setTimeout(() => this.createInitialBoids(), 0)
     },
     
     /**
@@ -101,6 +109,17 @@ document.addEventListener('DOMContentLoaded', () => {
       this.resize(this.$wrap)
       this.resize(this.canvas[0].$)
       this.resize(this.canvas[1].$)
+    },
+
+    /**
+     * Creates the 64 initial boids in a "face" position
+     */
+    createInitialBoids () {
+      for(let i = 0; i < 65; i++) {
+        const boid = new Boid()
+        boid.pos = OzWinkyFace[0].points[i]
+        this.boids.push(boid)
+      }
     }
   })
 
@@ -119,6 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
     this.vy = Math.random() * this.speed / 4 - this.speed / 8
     this.colIndex = Math.floor(Math.random() * BoidsDebugger.colors.length)
     this.history = []
+    
     this.update = function () {
       //////////////////////////////////////
       this.step ++
@@ -131,8 +151,10 @@ document.addEventListener('DOMContentLoaded', () => {
       this.vx = this.vx * 0.98 + (Math.random() * this.speed * 2 - this.speed) * 0.12
       this.vy = this.vy * 0.98 + (Math.random() * this.speed * 2 - this.speed) * 0.12
       
-      var dx = BoidsDebugger.mouse.x - this.pos.x 
-      var dy = BoidsDebugger.mouse.y - this.pos.y 
+      var dx = BoidsDebugger.returnPoint.x - this.pos.x 
+      var dy = BoidsDebugger.returnPoint.y - this.pos.y 
+
+      // After some time, "fly back home"
       if(this.step > 365) {
         //mouse
         this.vx = this.vx * 0.9 + dx * 0.004
@@ -150,8 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
         //mouse
         var d = dx * dx + dy * dy
         if (d < (BoidsDebugger.canvas[0].$.height/8 * BoidsDebugger.canvas[0].$.height/8)){
-          this.vx = this.vx * 0.9 - (BoidsDebugger.mouse.x - this.pos.x ) * 0.002
-          this.vy = this.vy * 0.9 - (BoidsDebugger.mouse.y - this.pos.y ) * 0.002
+          this.vx = this.vx * 0.9 - (BoidsDebugger.returnPoint.x - this.pos.x ) * 0.002
+          this.vy = this.vy * 0.9 - (BoidsDebugger.returnPoint.y - this.pos.y ) * 0.002
         }
         // center
         // this.vx = this.vx * 0.9 + (canvas.width/2 - this.pos.x ) * 0.002
@@ -182,7 +204,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         BoidsDebugger.canvas[0].ctx.arc(this.history[4].x ,this.history[4].y , 13.4, 0, 2 * Math.PI)
         BoidsDebugger.canvas[0].ctx.fill()
-        
       }
       
       //////////////////////////////////////
