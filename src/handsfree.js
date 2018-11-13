@@ -45,7 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // When a Boid is deleted, it's ID is added here for reuse
     // Id's match a corresponding face landmark
     freedIDs: [],
+    // The amount to modify acceleration
     trackingSpeedMod: 0.9,
+    // Whether we're ready
     isReady: false,
     
     // The point boids return to
@@ -79,6 +81,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       this.canvas[0].$.classList.add('handsfree-boids-debugger-primary-canvas')
       this.canvas[1].$.classList.add('handsfree-boids-debugger-secondary-canvas')
+      document.body.addEventListener('mousedown', () => {
+        this.mouseDown = true
+        this.trackingSpeedMod = 0.009
+      })
+      document.body.addEventListener('mouseup', () => {
+        this.mouseDown = false
+      })
 
       // Reponsive
       setInterval(() => this.animateBoids(), 1000/29.9)
@@ -137,8 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
       this.resize(this.canvas[0].$)
       this.resize(this.canvas[1].$)
 
-      this.offset.x = window.innerWidth / 2 - OzWinkyFace[0].translationX
-      this.offset.y = -OzWinkyFace[0].translationY / 4
+      this.offset.x = window.innerWidth / 2 - OzWinkyFace[0].translationX + 70
+      this.offset.y = -OzWinkyFace[0].translationY / 4 + 40
     },
 
     onFrame () {
@@ -209,10 +218,14 @@ document.addEventListener('DOMContentLoaded', () => {
       // Fly towards point
       if (handsfree.isTracking && BoidsDebugger.isReady) {
         this.speed = 0.05
-
         this.vx = this.vx * BoidsDebugger.trackingSpeedMod - (this.pos.x - handsfree.faces[0].points[this.id].x - BoidsDebugger.offset.x) * 0.512
-        this.vy = this.vy * BoidsDebugger.trackingSpeedMod - (this.pos.y - handsfree.faces[0].points[this.id].y - BoidsDebugger.offset.y) * 0.512
+        this.vy = this.vy * BoidsDebugger.trackingSpeedMod - (this.pos.y - handsfree.faces[0].points[this.id].y) * 0.512
         // BoidsDebugger.canvas[0].ctx.globalAlpha = 0.35
+      // Fly towards start point
+      } else if (!handsfree.isTracking && BoidsDebugger.mouseDown) {
+        this.speed = 0.05
+        this.vx = this.vx * BoidsDebugger.trackingSpeedMod - (this.pos.x - OzWinkyFace[0].points[this.id].x - BoidsDebugger.offset.x - Math.random() * 1) * 0.512
+        this.vy = this.vy * BoidsDebugger.trackingSpeedMod - (this.pos.y - OzWinkyFace[0].points[this.id].y - BoidsDebugger.offset.y - Math.random() * 1) * 0.512
       // Do their own thing
       } else {
         BoidsDebugger.canvas[0].ctx.globalAlpha = 0.1

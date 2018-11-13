@@ -1,6 +1,6 @@
 <template lang="pug">
   v-app(dark)
-    v-toolbar(app dark)
+    v-toolbar(app)
       v-toolbar-title.headline.text-uppercase
         span.mr-3 Handsfree.js
       v-spacer
@@ -37,8 +37,4 @@ export default {
     background: none
     position: relative
     z-index: 1
-    
-  .application--wrap > .v-toolbar
-    top: auto
-    bottom: 0
 </style>
