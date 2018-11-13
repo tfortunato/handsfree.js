@@ -13,7 +13,7 @@
             | A JavaScript drop-in library for adding handsfree interfaces to any website, service, and Internet of Thing. Runs on any device that supports <a href="https://caniuse.com/#feat=stream">getUserMedia()</a>.
           p.text-xs-center
             v-btn.primary.handsfree-show-when-stopped(large @click='startWebcam') Start Webcam
-            v-btn.primary.handsfree-show-when-started.hidden(large @click='stopWebcam') Stop Webcam
+            v-btn.primary.handsfree-show-when-started.hidden(large color='error' @click='stopWebcam') Stop Webcam
       
       v-layout(justify-center style='margin-top: 200px')
         v-flex(xs12 md8)
@@ -191,6 +191,47 @@
               p The <code>SimpleKeyboard</code> plugin adds a simple keyboard to the page. The keyboard is rendered into any element with <code>.handsfree-simple-keyboard</code>, allowing you to inject it into modals or hide the keyboard until it's needed. <strong>Click with a smile gesture :)</strong>
 
     .handsfree-simple-keyboard(style='width: 100%; color: #000')
+
+    v-container(style='margin-top: 200px')
+      v-layout(justify-center)
+        v-flex(xs12 md8)
+          v-card(light)
+            v-card-title(primary-title)
+              h2.headline.mb-0 <strong>Demo:</strong> Drawing
+            v-card-text
+              p Here we demo the use of <code>face.cursor.state</code>'s. Each face has it's own "state" which you can use within the <code>onFrame</code> callback of a plugin. For instance:
+              pre
+                code.javascript.
+                  handsfree.use({
+                    name: 'PaperDraw',
+                  
+                    onFrame (faces) {
+                      faces.forEach(face => {
+                        // Only catch events when the cursor is over the $canvas
+                        if (face.cursor.$target === $canvas) {
+                          // Called once when the user first clicks
+                          if (face.cursor.state.mouseDown) {
+                            // ...
+                          }
+                          
+                          // Called when the user is still holding a click
+                          if (face.cursor.state.mouseDrag) {
+                            // ...
+                          }
+                  
+                          // Called after the user releases a click
+                          if (face.cursor.state.mouseUp) {
+                            // ...
+                          }
+                        }
+                      })
+                    }
+                  })
+
+      .v-layout(style='margin-top: 20px')
+        v-flex(xs12)
+          v-card(light)
+            canvas#paperjs(style="width: 100%; height: 100%; box-shadow: 0 0 3px rgba(0,0,0,0.35)")
 </template>
 
 <script>
@@ -200,6 +241,7 @@ export default {
   mounted () {
     window.hljs = hljs
     hljs.initHighlighting()
+    require('../demo/paper.js')
   },
 
   methods: {
