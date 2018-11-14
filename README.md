@@ -18,7 +18,7 @@
 </p>
 <p>
   <a href="https://patreon.com/browsehandsfree">
-    <img src="static/patreon-button.png" alt="Support this project on Patron"/>
+    <img src="public/become_a_patron_button.png" height=40 alt="Support this project on Patron"/>
   </a>
 </p>
 </div>
