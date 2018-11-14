@@ -1,6 +1,5 @@
 <div align="center">
-  <img src="https://media.giphy.com/media/5aY2YXbhIG7j13gnCq/giphy.gif" alt="handsfree.js 2.0">
-  <h1>HandsfreeJS</h1>
+  <img src="https://media.giphy.com/media/PoJPCYGuWmOfP7losq/giphy.gif" alt="handsfree.js">
   <p>A platform for creating handsfree user interfaces, tools, games, and experiences for the web and IoT 🤯</p>
 <p>
   <img class="mr-1" src="https://img.shields.io/github/release-pre/browsehandsfree/handsfreejs.svg"> <img class="mr-1" src="https://img.shields.io/github/last-commit/browsehandsfree/handsfreejs.svg"> <img class="mr-1" src="https://img.shields.io/github/commits-since/browsehandsfree/handsfreejs/0.0.1.svg">
