@@ -1,6 +1,5 @@
 <div align="center">
-  <img src="https://media.giphy.com/media/5aY2YXbhIG7j13gnCq/giphy.gif" alt="handsfree.js 2.0">
-  <h1>HandsfreeJS</h1>
+  <img src="https://media.giphy.com/media/PoJPCYGuWmOfP7losq/giphy.gif" alt="handsfree.js">
   <p>A platform for creating handsfree user interfaces, tools, games, and experiences for the web and IoT 🤯</p>
 <p>
   <img class="mr-1" src="https://img.shields.io/github/release-pre/browsehandsfree/handsfreejs.svg"> <img class="mr-1" src="https://img.shields.io/github/last-commit/browsehandsfree/handsfreejs.svg"> <img class="mr-1" src="https://img.shields.io/github/commits-since/browsehandsfree/handsfreejs/0.0.1.svg">
@@ -18,7 +17,7 @@
 </p>
 <p>
   <a href="https://patreon.com/browsehandsfree">
-    <img src="static/patreon-button.png" alt="Support this project on Patron"/>
+    <img src="public/become_a_patron_button.png" height=40 alt="Support this project on Patron"/>
   </a>
 </p>
 </div>
@@ -51,17 +50,19 @@ For detailed explanation on how things work, check out the [Vuetify.js](https://
 
 
 ## Quickstart
-Install with an HTML tag...
+Install with an HTML `<script>` tag anywhere after the open `<body>` tag...
 
 ```html
-<!-- Use exaclty 2.2.0 (Recommended for production) -->
-<script src="https://unpkg.com/handsfree@2.2.0"></script>
+<body>
+  <!-- Latest with bug fixes (Recommended for production) -->
+  <script src="https://unpkg.com/handsfree@<3.1/dist/handsfree.js"></script>
 
-<!-- or use any minor version before 2.3 (Recommended for development) -->
-<script src="https://unpkg.com/handsfree@<2.3"></script>
+  <!-- Latest with bug fixes and new features (Recommended for development) -->
+  <script src="https://unpkg.com/handsfree@<4/dist/handsfree.js"></script>
 
-<!-- or use the latest (Recommended for testers) -->
-<script src="https://unpkg.com/handsfree"></script>
+  <!-- Latest with potential backwards incompatability (Recommended for testers) -->
+  <script src="https://unpkg.com/handsfree/dist/handsfree.js"></script>
+</body>
 ```
 
 ...or with Node.

@@ -24,12 +24,20 @@
               h3 With HTML:
               p This is how we encourage you to use Handsfree.js when using standard web technologies or when experimenting on sites like <a href="https://glitch.com">Glitch.com</a> and <a href="https://codepen.com">CodePen</a>:
               pre 
-                code.xml. 
-                 &lt;script src="https://unpkg.com/handsfree@2"&gt;&lt;/script&gt;
+                code.xml.
+                 &lt;!-- Latest with bug fixes (Recommended for production) --&gt;
+                  &lt;script src="https://unpkg.com/handsfree@&lt;3.1/dist/handsfree.js">&lt;/script&gt;
+
+                  &lt;!-- Latest with bug fixes and new features (Recommended for development) --&gt;
+                  &lt;script src="https://unpkg.com/handsfree@&lt;4/dist/handsfree.js">&lt;/script&gt;
+
+                  &lt;!-- Latest with potential backwards incompatability (Recommended for testers) --&gt;
+                  &lt;script src="https://unpkg.com/handsfree/dist/handsfree.js">&lt;/script&gt;
+
                   &lt;script&gt;
                     handsfree = new Handsfree()
                     handsfree.start()
-                  &lt;/script&gt;
+                  &lt;/script>
               
               h3 With Node:
               p When developing for the Internet of Things or non-browser based environments, we encourage you to use the below method:
