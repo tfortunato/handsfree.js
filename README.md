@@ -37,6 +37,9 @@ npm install
 # Start a server with hot-reload at localhost:3000
 npm run serve
 
+# Test the library (not the documentation site)
+npm run test
+
 # Build for production
 npm run build
 
