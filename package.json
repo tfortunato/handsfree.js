@@ -1,9 +1,8 @@
 {
   "name": "handsfree",
-  "version": "3.0.0",
+  "version": "3.0.2",
   "description": "A library for creating head-controlled, handsfree user interfaces via computer vision just...like...✨...that!",
   "main": "dist/handsfree.js",
-  "files": ["dist/"],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -44,7 +43,7 @@
     "coverageDirectory": "coverage",
     "testURL": "http://localhost",
     "transformIgnorePatterns": [
-      "./src/libs/brf_wasm/"
+      "/public/brf/"
     ],
     "setupFiles": [
       "./test/jest-setup.js"

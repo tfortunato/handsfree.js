@@ -51,17 +51,19 @@ For detailed explanation on how things work, check out the [Vuetify.js](https://
 
 
 ## Quickstart
-Install with an HTML tag...
+Install with an HTML `<script>` tag anywhere after the open `<body>` tag...
 
 ```html
-<!-- Use exaclty 2.2.0 (Recommended for production) -->
-<script src="https://unpkg.com/handsfree@2.2.0"></script>
+<body>
+  <!-- Latest with bug fixes (Recommended for production) -->
+  <script src="https://unpkg.com/handsfree@<3.1/dist/handsfree.js"></script>
 
-<!-- or use any minor version before 2.3 (Recommended for development) -->
-<script src="https://unpkg.com/handsfree@<2.3"></script>
+  <!-- Latest with bug fixes and new features (Recommended for development) -->
+  <script src="https://unpkg.com/handsfree@<4/dist/handsfree.js"></script>
 
-<!-- or use the latest (Recommended for testers) -->
-<script src="https://unpkg.com/handsfree"></script>
+  <!-- Latest with potential backwards incompatability (Recommended for testers) -->
+  <script src="https://unpkg.com/handsfree/dist/handsfree.js"></script>
+</body>
 ```
 
 ...or with Node.

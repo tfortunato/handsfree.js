@@ -1,4 +1,10 @@
 <!DOCTYPE html>
 <body>
-  <script src="http://unpkg.com/handsfree"></script>
+  <button class="handsfree-show-when-stopped" onclick="handsfree.start()">Start</button>
+  <button class="handsfree-show-when-stopped" onclick="handsfree.stop()">Stop</button>
+
+  <script src="https://unpkg.com/handsfree/dist/handsfree.js"></script>
+  <script>
+    handsfree = new Handsfree()
+  </script>
 </body>
