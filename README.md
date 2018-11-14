@@ -48,24 +48,41 @@ For detailed explanation on how things work, check out the [Vuetify.js](https://
 
 
 ## Quickstart
+Install with an HTML tag...
 
 ```html
-<script src="https://unpkg.com/handsfree@2.0.3"></script>
+<!-- Use exaclty 2.2.0 (Recommended for production) -->
+<script src="https://unpkg.com/handsfree@2.2.0"></script>
+
+<!-- or use any minor version before 2.3 (Recommended for development) -->
+<script src="https://unpkg.com/handsfree@<2.3"></script>
+
+<!-- or use the latest (Recommended for testers) -->
+<script src="https://unpkg.com/handsfree"></script>
 ```
 
-or
+...or with Node.
 
-```js
+```javascript
+// Fromt the terminal in the project root
 npm i handsfree
+
+// Then in your script
+const Handsfree = require('handsfree')
 ```
 
-then
+Then **in both cases** add the following to your scripts:
 
 ```js
-// If using node: import Handsfree from 'handsfree'
-const handsfree = new Handsfree({debug: true})
+handsfree = new Handsfree()
 handsfree.start()
 ```
+
+That will inject handsfree into the page, including the required components (video and canvas elements), initialize models, and start tracking a single face. This setup includes the minimal plugins necessary to operate a web page, including:
+
+- Scrolling
+- Clicking
+- Virtual Keyboard
 
 ## Core Plugins
 ### Typing
@@ -81,10 +98,10 @@ handsfree.start()
 
 ## Development
 
-The following is our directory sturcture
+The following is our directory sturcture. [In brackets] are 
 
 ```
-/- public	        -| Files in available to the library and documentation site
+/- public         -| Files available to both the library and documentation site
 
 /- starters       -| [DEVELOPERS] Standalone projects to get you started
 
@@ -108,7 +125,7 @@ You can instantiate Handsfree with the following config (defaults are shown):
 
 ```js
 const handsfree = new Handsfree({
-  // Whether to show the debugger or not
+  // Whether to show (true) the debugger (face mask over video) or not (false)
   debug: false
 })
 ```
@@ -116,7 +133,7 @@ const handsfree = new Handsfree({
 ### API
 
 ```js
-// Starts tracking faces and shows the webcam if debug is on
+// Starts tracking faces and shows the webcam stream if debug is on
 handsfree.start()
 // Stops the webcam
 handsfree.stop()
@@ -127,7 +144,7 @@ handsfree.toggleDebugger(true|false|null)
 
 ### Visual Debugging
 
-The debugger is loaded into the first element in the DOM with the `.handsfree-debug-wrap`. If one doesn't exist, then it's added as the last root element of `body`.
+The debugger is loaded into the first element in the DOM with the `.handsfree-debug-wrap`. If one doesn't exist, then it's added as the last root element of `body`. You should rarely need to debug visually, and it's preferred that you don't draw into this canvas at all.
 
 ### Plugins
 Handsfree is built around a plugin architecture, which allows us to easily add and share functionality. We can even disable them!
@@ -142,14 +159,15 @@ handsfree.use({
 
   // Called once when the use method is called and after the plugin is added to the instance
   onUse: () => {},
+
   // Called once per frame, after calculations, along with the detected face object
   // To overwrite/modify the properties of faces for use within other plugins, return the faces object
   onFrame: (faces, handsfree) => {},
 
-  // Called after Handsfree.start() is called
+  // Called any time Handsfree.start() is called
   onStart: (handsfree) => {},
 
-  // Called after Handsfree.stop() is called
+  // Called any time Handsfree.stop() is called
   onStop: (handsfree) => {}
 })
 ```
@@ -160,19 +178,19 @@ The `onFrame` recieves a `faces` array, which contains an object for each tracke
 ```js
 {
   cursor: {
-    // Where on the screen the user is pointed at
+    // Where the main cursor is drawn (also the point the user is facing)
     x: 0,
     y: 0,
-    // The target currently under the mouse
+    // The HTML element currently under the mouse
     $target: 0,
 
-    // Mouse states for this face
+    // "Mouse" states for this face
     state: {
-      // The first frame of a click
+      // True during the first frame of a click, false after (even if still held)
       mouseDown: false,
-      // Every subsequent frame of a click
+      // True after the first frame of a click and every frame after until release
       mouseDrag: false,
-      // When the click is finally released
+      // True on the last frame of a click, immediately after the click is released
       mouseUp: false
     }
   },
@@ -184,10 +202,10 @@ The `onFrame` recieves a `faces` array, which contains an object for each tracke
   rotationX: 0,
   // The head's yaw (facing left/right)
   rotationY: 0,
-  // The head's roll (as if doing a cartwheel while facing straight ahead)
+  // The head's roll (think of an airplane doing a barrel roll)
   rotationZ: 0,
 
-  // The heads overall size within the camera
+  // Not really sure...the heads overall size within the camera?
   scale: 0,
 
   // Where the head is relative to the left edge of the video feed
@@ -196,6 +214,11 @@ The `onFrame` recieves a `faces` array, which contains an object for each tracke
   translationY: 0
 }
 ```
+
+There are 64 landmark points, reflected in the following image: 
+![image from BRFv4](src/assets/img/brfv4_landmarks.jpg)
+
+27 is where the cursor's screen vectors are estimated from.
 
 ## Events
 ### handsfree-trackFaces
@@ -230,3 +253,28 @@ window.addEventListener('handsfree-injectDebugger', (ev) => {
 
 ## Classes
 The document body contains `.handsfree-stopped` when handsfree is stopped (this includes when it's been initialized but not started), and `.handsfree-started` when it's on. This lets you style any page on the page!
+
+## More coming soon
+
+- [@Labofoz](https://twitter.com/labofoz)
+- [BrowseHandsfree.com](https://browsehandsfree.com)
+- [labofoz.com](https://labofoz.com)
+
+---
+
+## Thanks for your support!
+
+This is the most fun and rewarding thing I have ever had making something, and it wouldn't have been possible without the many people. Some of these people include:
+
+> @Todo reach out to everyone and ask where they would like to be linked (use Twitter as fallback if OK)
+
+If you like where we're headed, check out our Patreon:
+
+<a href="https://patreon.com/browsehandsfree">
+  <img src="static/patreon-button.png" alt="Support this project on Patron"/>
+</a>
+
+# Thanks for trying out Handsfree.js!
+**March 4th 2018**: https://twitter.com/LabOfOz/status/970556829125165056
+
+![](https://media.giphy.com/media/4HvjGXt2Jjwz5LG71Z/giphy.gif)
