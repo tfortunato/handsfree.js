@@ -11,19 +11,6 @@ module.exports = {
       filename: `[name].js`,
       library: 'Handsfree',
       libraryTarget: 'umd'
-    },
-    
-    module: {
-      rules: [
-        /**
-         * WASM
-         */
-        {
-          test: /\.wasm$/,
-          type: 'javascript/auto',
-          loaders: ['arraybuffer-loader']
-        }
-      ]
     }
   }
 }
