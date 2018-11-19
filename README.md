@@ -1,6 +1,7 @@
 <div align="center">
   <img src="https://media.giphy.com/media/PoJPCYGuWmOfP7losq/giphy.gif" alt="handsfree.js">
   <p>A platform for creating handsfree user interfaces, tools, games, and experiences for the web and IoT 🤯</p>
+  <p>Made possible by <a href="https://github.com/Tastenkunst/brfv4_javascript_examples">BRFv4</a></p>
 <p>
   <img class="mr-1" src="https://img.shields.io/github/release-pre/browsehandsfree/handsfreejs.svg"> <img class="mr-1" src="https://img.shields.io/github/last-commit/browsehandsfree/handsfreejs.svg"> <img class="mr-1" src="https://img.shields.io/github/commits-since/browsehandsfree/handsfreejs/0.0.1.svg">
   <img src="https://img.shields.io/github/repo-size/browsehandsfree/handsfreejs.svg">
@@ -15,12 +16,10 @@
   <img src="https://travis-ci.org/BrowseHandsfree/handsfreeJS.svg?branch=master">
   <img src="https://img.shields.io/codecov/c/github/BrowseHandsfree/handsfreeJS/master.svg?style=flat">
 </p>
-<p>
-  <a href="https://patreon.com/browsehandsfree">
-    <img src="public/become_a_patron_button.png" height=40 alt="Support this project on Patron"/>
-  </a>
-</p>
 </div>
+
+## License
+> Please read the EULA ([eula.txt](eula.txt)) carefully before using Handsfree.js, which depends on [BRFv4](https://www.beyond-reality-face.com/). Once you decide to use handsfree.js commercially, you will need a separate license agreement from them that you must agree to. You can try the handsfree.js free of charge to evaluate if it fits your projects' needs. Once you decided to use BRFv4 in your project, contact Taskenkunst for a commercial license: [http://www.tastenkunst.com/#/contact](http://www.tastenkunst.com/#/contact)
 
 ## Prereqs
 - [NodeJS](https://nodejs.org/en/)
@@ -263,20 +262,6 @@ The document body contains `.handsfree-stopped` when handsfree is stopped (this 
 - [@Labofoz](https://twitter.com/labofoz)
 - [BrowseHandsfree.com](https://browsehandsfree.com)
 - [labofoz.com](https://labofoz.com)
-
----
-
-## Thanks for your support!
-
-This is the most fun and rewarding thing I have ever had making something, and it wouldn't have been possible without the many people. Some of these people include:
-
-> @Todo reach out to everyone and ask where they would like to be linked (use Twitter as fallback if OK)
-
-If you like where we're headed, check out our Patreon:
-
-<a href="https://patreon.com/browsehandsfree">
-  <img src="static/patreon-button.png" alt="Support this project on Patron"/>
-</a>
 
 # Thanks for trying out Handsfree.js!
 **March 4th 2018**: https://twitter.com/LabOfOz/status/970556829125165056
