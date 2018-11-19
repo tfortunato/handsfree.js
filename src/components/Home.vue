@@ -6,7 +6,7 @@
           h1.text-xs-center.display-2.font-weight-bold.mb-3 Handsfree.js
           p.text-xs-center
             strong
-              a(style='color: #ff5252' href='https://github.com/BrowseHandsfree/handsfreeJS') https://github.com/BrowseHandsfree/handsfreeJS
+              a(style='color: #ff5252' href='https://github.com/BrowseHandsfree/handsfreeJS') Fork this project on GitHub
           p.text-xs-center
             a(href='https://www.npmjs.com/package/handsfree')
               img.mr-2(src='https://img.shields.io/npm/v/handsfree.svg')
@@ -17,10 +17,12 @@
             a(href='https://codecov.io/gh/BrowseHandsfree/handsfreeJS')
               img(src='https://img.shields.io/codecov/c/github/BrowseHandsfree/handsfreeJS/master.svg?style=flat')
           p.subheading.font-weight-regular
-            | A JavaScript drop-in library for adding handsfree interfaces to any website, service, and Internet of Thing. Runs on any device that supports <a href="https://caniuse.com/#feat=stream">getUserMedia()</a>.
+            | A JavaScript drop-in library for adding handsfree interfaces to any website, service, and Internet of Thing. Runs on any device that supports <a href="https://caniuse.com/#feat=stream" style='color: #ff5252'>getUserMedia()</a>.
           p.text-xs-center
             v-btn.primary.handsfree-show-when-stopped(large @click='startWebcam') Start Webcam
             v-btn.primary.handsfree-show-when-started.hidden(large color='error' @click='stopWebcam') Stop Webcam
+          p.text-xs-center
+            | Made possible by <a style='color: #ff5252' href="https://github.com/Tastenkunst/brfv4_javascript_examples">BRFv4</a>
       
       v-layout(justify-center style='margin-top: 200px')
         v-flex(xs12 md8)
