@@ -2,11 +2,8 @@
   div
     v-container(grid-list-md style='margin-top: 300px')
       v-layout.mb-5(justify-center wrap)
-        v-flex(mb-4 xs12 md6)
+        v-flex(mb-4 xs12 md8 lg6)
           h1.text-xs-center.display-2.font-weight-bold.mb-3 Handsfree.js
-          p.text-xs-center
-            strong
-              a(style='color: #ff5252' href='https://github.com/BrowseHandsfree/handsfreeJS') Fork this project on GitHub
           p.text-xs-center
             a(href='https://www.npmjs.com/package/handsfree')
               img.mr-2(src='https://img.shields.io/npm/v/handsfree.svg')
@@ -15,7 +12,8 @@
             a(href='https://travis-ci.org/BrowseHandsfree/handsfreeJS')
               img.mr-2(src='https://travis-ci.org/BrowseHandsfree/handsfreeJS.svg?branch=master')
             a(href='https://codecov.io/gh/BrowseHandsfree/handsfreeJS')
-              img(src='https://img.shields.io/codecov/c/github/BrowseHandsfree/handsfreeJS/master.svg?style=flat')
+              img.mr-2(src='https://img.shields.io/codecov/c/github/BrowseHandsfree/handsfreeJS/master.svg?style=flat')
+            a.github-button(href='https://github.com/browsehandsfree/handsfreejs' data-show-count='true' aria-label='Star browsehandsfree/handsfreejs on GitHub' data-icon='octicon-star') GitHub
           p.subheading.font-weight-regular
             | A JavaScript drop-in library for adding handsfree interfaces to any website, service, and Internet of Thing. Runs on any device that supports <a href="https://caniuse.com/#feat=stream" style='color: #ff5252'>getUserMedia()</a>.
           p.text-xs-center
