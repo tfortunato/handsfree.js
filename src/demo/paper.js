@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
               brightness: 1
             }
             path.strokeJoin = 'round'
-            path.strokeWidth = 10
+            path.strokeWidth = face.scale / 10
             path.moveTo(this.lastPoint[faceIndex])
           }
 
@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const newPoint = this.getPoint(face)
 
             if (newPoint.getDistance(this.getLastPoint(faceIndex)) > tool.minDistance) {
+              path.strokeWidth = Math.max(face.scale / 2 - 50, 1)
               path.lineTo(new paper.Point(
                 face.cursor.x - $canvas.getBoundingClientRect().left,
                 face.cursor.y - $canvas.getBoundingClientRect().top

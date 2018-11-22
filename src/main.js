@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import './plugins/vuetify'
 import App from './App.vue'
+import router from './plugins/router'
 import './handsfree.js'
 require('./assets/styles/main.styl')
 
@@ -14,5 +15,6 @@ hljs.registerLanguage('javascript', require('highlight.js/lib/languages/javascri
 // Setup Vue
 Vue.config.productionTip = false
 new Vue({
+  router,
   render: h => h(App),
 }).$mount('#app')

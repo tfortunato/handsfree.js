@@ -1,12 +1,11 @@
 <template lang="pug">
   div
-    v-container(grid-list-md style='margin-top: 300px')
+    v-container(grid-list-md)
       v-layout.mb-5(justify-center wrap)
-        v-flex(mb-4 xs12 md6)
+        v-flex(mb-4 xs12 md6 style='margin-top: 300px')
           h1.text-xs-center.display-2.font-weight-bold.mb-3 Handsfree.js
           p.text-xs-center
-            strong
-              a(style='color: #ff5252' href='https://github.com/BrowseHandsfree/handsfreeJS') Fork this project on GitHub
+            | Made possible by <a href="https://github.com/Tastenkunst/brfv4_javascript_examples">BRFv4</a> and <a href="https://js.tensorflow.org/">TensorFlow.js</a>
           p.text-xs-center
             a(href='https://www.npmjs.com/package/handsfree')
               img.mr-2(src='https://img.shields.io/npm/v/handsfree.svg')
@@ -15,14 +14,21 @@
             a(href='https://travis-ci.org/BrowseHandsfree/handsfreeJS')
               img.mr-2(src='https://travis-ci.org/BrowseHandsfree/handsfreeJS.svg?branch=master')
             a(href='https://codecov.io/gh/BrowseHandsfree/handsfreeJS')
-              img(src='https://img.shields.io/codecov/c/github/BrowseHandsfree/handsfreeJS/master.svg?style=flat')
+              img.mr-2(src='https://img.shields.io/codecov/c/github/BrowseHandsfree/handsfreeJS/master.svg?style=flat')
+            a.github-button(href='https://github.com/browsehandsfree/handsfreejs' data-show-count='true' aria-label='Star browsehandsfree/handsfreejs on GitHub' data-icon='octicon-star') GitHub
           p.subheading.font-weight-regular
-            | A JavaScript drop-in library for adding handsfree interfaces to any website, service, and Internet of Thing. Runs on any device that supports <a href="https://caniuse.com/#feat=stream" style='color: #ff5252'>getUserMedia()</a>.
+            | A JavaScript drop-in library for adding handsfree interfaces to any website, service, and Internet of Thing. Runs on any device that supports <a href="https://caniuse.com/#feat=stream">getUserMedia()</a>
           p.text-xs-center
             v-btn.primary.handsfree-show-when-stopped(large @click='startWebcam') Start Webcam
             v-btn.primary.handsfree-show-when-started.hidden(large color='error' @click='stopWebcam') Stop Webcam
-          p.text-xs-center
-            | Made possible by <a style='color: #ff5252' href="https://github.com/Tastenkunst/brfv4_javascript_examples">BRFv4</a>
+
+        v-flex(mb-4 xs12 md6)
+          v-card(light)
+            v-card-title(primary-title)
+              h2.headline.mb-0 Drawing Canvas
+            v-card-text
+              p 😊 Smiles activate clicks. Lean in and back to adjust brush size. Give it a try by drawing shapes in the canvas below 🎨
+              canvas#paperjs(style="width: 100%; height: 400px; box-shadow: 0 0 3px rgba(0,0,0,0.35)")
 
       v-layout(style='margin-top: 200px' wrap)
         v-flex(xs12)
@@ -48,13 +54,13 @@
               h2.headline.mb-0 Installation
             v-card-text
               h3 With HTML:
-              p This is how we encourage you to use Handsfree.js when using standard web technologies or when experimenting on sites like <a href="https://glitch.com">Glitch.com</a> and <a href="https://codepen.com">CodePen</a>:
+              p This is how we encourage you to use Handsfree.js when using standard web technologies or when experimenting on sites like <a href="https://glitch.com/~handsfree-starter">Glitch.com (check out the Handsfree Starter!)</a>:
               pre 
                 code.xml.
-                 &lt;!-- Latest with bug fixes (Recommended for production) --&gt;
+                 &lt;!-- Latest with version patches (Recommended for production) --&gt;
                   &lt;script src="https://unpkg.com/handsfree@&lt;3.1/dist/handsfree.js">&lt;/script&gt;
 
-                  &lt;!-- Latest with bug fixes and new features (Recommended for development) --&gt;
+                  &lt;!-- Latest with new features (Recommended for development) --&gt;
                   &lt;script src="https://unpkg.com/handsfree@&lt;4/dist/handsfree.js">&lt;/script&gt;
 
                   &lt;!-- Latest with potential backwards incompatability (Recommended for testers) --&gt;
@@ -226,46 +232,27 @@
 
     .handsfree-simple-keyboard(style='width: 100%; color: #000')
 
-    v-container(style='margin-top: 200px')
+    v-container(style='margin-top: 200px; margin-bottom: 200px')
       v-layout(justify-center)
         v-flex(xs12 md8)
           v-card(light)
-            v-card-title(primary-title)
-              h2.headline.mb-0 <strong>Demo:</strong> Drawing
             v-card-text
-              p Here we demo the use of <code>face.cursor.state</code>'s. Each face has it's own "state" which you can use within the <code>onFrame</code> callback of a plugin. For instance:
-              pre
-                code.javascript.
-                  handsfree.use({
-                    name: 'PaperDraw',
-                  
-                    onFrame (faces) {
-                      faces.forEach(face => {
-                        // Only catch events when the cursor is over the $canvas
-                        if (face.cursor.$target === $canvas) {
-                          // Called once when the user first clicks
-                          if (face.cursor.state.mouseDown) {
-                            // ...
-                          }
-                          
-                          // Called when the user is still holding a click
-                          if (face.cursor.state.mouseDrag) {
-                            // ...
-                          }
-                  
-                          // Called after the user releases a click
-                          if (face.cursor.state.mouseUp) {
-                            // ...
-                          }
-                        }
-                      })
-                    }
-                  })
+              p.text-xs-center
+                img(src='/favicon.png' width=100)
+              h2.text-xs-center.headline.mb-5 <strong>Going Further:</strong> Try the Handsfree Starter
+              p <a href="https://glitch.com/~handsfree-starter">The Handsfree Starter on Glitch</a> is a slimmed down version of this site, designed to help you prototype quickly. If you'd rather work on something locally, here's the bare minimum you need:
 
-      .v-layout(style='margin-top: 20px')
-        v-flex(xs12)
-          v-card(light)
-            canvas#paperjs(style="width: 100%; height: 100%; box-shadow: 0 0 3px rgba(0,0,0,0.35)")
+              pre 
+                code.xml.
+                 &lt;!DOCTYPE html>
+                  &lt;body>
+                    &lt;button onclick="handsfree.start()">&lt;/button>
+                    
+                    &lt;script src="https://unpkg.com/handsfree@&lt;4/dist/handsfree.js">&lt;/script&gt;
+                    &lt;script>
+                      handsfree = new Handsfree()
+                    &lt;/script>
+                  &lt;/body>
 </template>
 
 <script>
