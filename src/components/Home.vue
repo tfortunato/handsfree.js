@@ -57,10 +57,10 @@
               p This is how we encourage you to use Handsfree.js when using standard web technologies or when experimenting on sites like <a href="https://glitch.com/~handsfree-starter">Glitch.com (check out the Handsfree Starter!)</a>:
               pre 
                 code.xml.
-                 &lt;!-- Latest with bug fixes (Recommended for production) --&gt;
+                 &lt;!-- Latest with version patches (Recommended for production) --&gt;
                   &lt;script src="https://unpkg.com/handsfree@&lt;3.1/dist/handsfree.js">&lt;/script&gt;
 
-                  &lt;!-- Latest with bug fixes and new features (Recommended for development) --&gt;
+                  &lt;!-- Latest with new features (Recommended for development) --&gt;
                   &lt;script src="https://unpkg.com/handsfree@&lt;4/dist/handsfree.js">&lt;/script&gt;
 
                   &lt;!-- Latest with potential backwards incompatability (Recommended for testers) --&gt;
@@ -232,41 +232,27 @@
 
     .handsfree-simple-keyboard(style='width: 100%; color: #000')
 
-    v-container(style='margin-top: 200px')
+    v-container(style='margin-top: 200px; margin-bottom: 200px')
       v-layout(justify-center)
         v-flex(xs12 md8)
           v-card(light)
-            v-card-title(primary-title)
-              h2.headline.mb-0 <strong>Demo:</strong> Drawing
             v-card-text
-              p Here we demo the use of <code>face.cursor.state</code>'s. Each face has it's own "state" which you can use within the <code>onFrame</code> callback of a plugin. For instance:
-              pre
-                code.javascript.
-                  handsfree.use({
-                    name: 'PaperDraw',
-                  
-                    onFrame (faces) {
-                      faces.forEach(face => {
-                        // Only catch events when the cursor is over the $canvas
-                        if (face.cursor.$target === $canvas) {
-                          // Called once when the user first clicks
-                          if (face.cursor.state.mouseDown) {
-                            // ...
-                          }
-                          
-                          // Called when the user is still holding a click
-                          if (face.cursor.state.mouseDrag) {
-                            // ...
-                          }
-                  
-                          // Called after the user releases a click
-                          if (face.cursor.state.mouseUp) {
-                            // ...
-                          }
-                        }
-                      })
-                    }
-                  })
+              p.text-xs-center
+                img(src='/favicon.png' width=100)
+              h2.text-xs-center.headline.mb-5 <strong>Going Further:</strong> Try the Handsfree Starter
+              p <a href="https://glitch.com/~handsfree-starter">The Handsfree Starter on Glitch</a> is a slimmed down version of this site, designed to help you prototype quickly. If you'd rather work on something locally, here's the bare minimum you need:
+
+              pre 
+                code.xml.
+                 &lt;!DOCTYPE html>
+                  &lt;body>
+                    &lt;button onclick="handsfree.start()">&lt;/button>
+                    
+                    &lt;script src="https://unpkg.com/handsfree@&lt;4/dist/handsfree.js">&lt;/script&gt;
+                    &lt;script>
+                      handsfree = new Handsfree()
+                    &lt;/script>
+                  &lt;/body>
 </template>
 
 <script>
