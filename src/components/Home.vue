@@ -1,9 +1,11 @@
 <template lang="pug">
   div
-    v-container(grid-list-md style='margin-top: 300px')
+    v-container(grid-list-md)
       v-layout.mb-5(justify-center wrap)
-        v-flex(mb-4 xs12 md8 lg6)
+        v-flex(mb-4 xs12 md6 style='margin-top: 300px')
           h1.text-xs-center.display-2.font-weight-bold.mb-3 Handsfree.js
+          p.text-xs-center
+            | Made possible by <a href="https://github.com/Tastenkunst/brfv4_javascript_examples">BRFv4</a> and <a href="https://js.tensorflow.org/">TensorFlow.js</a>
           p.text-xs-center
             a(href='https://www.npmjs.com/package/handsfree')
               img.mr-2(src='https://img.shields.io/npm/v/handsfree.svg')
@@ -15,12 +17,18 @@
               img.mr-2(src='https://img.shields.io/codecov/c/github/BrowseHandsfree/handsfreeJS/master.svg?style=flat')
             a.github-button(href='https://github.com/browsehandsfree/handsfreejs' data-show-count='true' aria-label='Star browsehandsfree/handsfreejs on GitHub' data-icon='octicon-star') GitHub
           p.subheading.font-weight-regular
-            | A JavaScript drop-in library for adding handsfree interfaces to any website, service, and Internet of Thing. Runs on any device that supports <a href="https://caniuse.com/#feat=stream" style='color: #ff5252'>getUserMedia()</a>.
+            | A JavaScript drop-in library for adding handsfree interfaces to any website, service, and Internet of Thing. Runs on any device that supports <a href="https://caniuse.com/#feat=stream">getUserMedia()</a>
           p.text-xs-center
             v-btn.primary.handsfree-show-when-stopped(large @click='startWebcam') Start Webcam
             v-btn.primary.handsfree-show-when-started.hidden(large color='error' @click='stopWebcam') Stop Webcam
-          p.text-xs-center
-            | Made possible by <a style='color: #ff5252' href="https://github.com/Tastenkunst/brfv4_javascript_examples">BRFv4</a>
+
+        v-flex(mb-4 xs12 md6)
+          v-card(light)
+            v-card-title(primary-title)
+              h2.headline.mb-0 Drawing Canvas
+            v-card-text
+              p 😊 Smiles activate clicks. Lean in and back to adjust brush size. Give it a try by drawing shapes in the canvas below 🎨
+              canvas#paperjs(style="width: 100%; height: 400px; box-shadow: 0 0 3px rgba(0,0,0,0.35)")
 
       v-layout(style='margin-top: 200px' wrap)
         v-flex(xs12)
@@ -46,7 +54,7 @@
               h2.headline.mb-0 Installation
             v-card-text
               h3 With HTML:
-              p This is how we encourage you to use Handsfree.js when using standard web technologies or when experimenting on sites like <a href="https://glitch.com">Glitch.com</a> and <a href="https://codepen.com">CodePen</a>:
+              p This is how we encourage you to use Handsfree.js when using standard web technologies or when experimenting on sites like <a href="https://glitch.com/~handsfree-starter">Glitch.com (check out the Handsfree Starter!)</a>:
               pre 
                 code.xml.
                  &lt;!-- Latest with bug fixes (Recommended for production) --&gt;
@@ -259,11 +267,6 @@
                       })
                     }
                   })
-
-      .v-layout(style='margin-top: 20px')
-        v-flex(xs12)
-          v-card(light)
-            canvas#paperjs(style="width: 100%; height: 100%; box-shadow: 0 0 3px rgba(0,0,0,0.35)")
 </template>
 
 <script>
