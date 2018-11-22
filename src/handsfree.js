@@ -2,7 +2,7 @@
  * Sets up handsfree.js
  */
 require('./assets/styles/handsfree.styl')
-const OzWinkyFace = require('./store/faces/oz-winky-face.json')
+const facesOfOz = require('./store/faces/oz-winky-face.json')
 
 document.addEventListener('DOMContentLoaded', () => {
   // eslint-disable-next-line
@@ -146,8 +146,12 @@ document.addEventListener('DOMContentLoaded', () => {
       this.resize(this.canvas[0].$)
       this.resize(this.canvas[1].$)
 
-      this.offset.x = window.innerWidth / 2 - OzWinkyFace[0].translationX + 70
-      this.offset.y = -OzWinkyFace[0].translationY / 4 + 40
+      if (window.innerWidth < 960) {
+        this.offset.x = window.innerWidth / 2 - facesOfOz[0].translationX + 70
+      } else {
+        this.offset.x = window.innerWidth / 2 - facesOfOz[0].translationX + window.innerWidth / 4
+      }
+      this.offset.y = -facesOfOz[0].translationY / 4 + 40
     },
 
     onFrame () {
@@ -159,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Reset the faces to whatever the start scene is
      */
     onStop () {
-      handsfree.faces = OzWinkyFace
+      handsfree.faces = facesOfOz
     },
 
     onStart () {
@@ -177,8 +181,8 @@ document.addEventListener('DOMContentLoaded', () => {
       for(let i = 0; i < 65; i++) {
         const boid = new Boid()
         boid.pos = {
-          x: OzWinkyFace[0].points[i].x + this.offset.x,
-          y: OzWinkyFace[0].points[i].y + this.offset.y
+          x: facesOfOz[0].points[i].x + this.offset.x,
+          y: facesOfOz[0].points[i].y + this.offset.y
         }
         boid.color = handsfree.getPointColor(i)
         boid.id = i
@@ -224,8 +228,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // Fly towards start point
       } else if (!handsfree.isTracking && BoidsDebugger.mouseDown) {
         this.speed = 0.05
-        this.vx = this.vx * BoidsDebugger.trackingSpeedMod - (this.pos.x - OzWinkyFace[0].points[this.id].x - BoidsDebugger.offset.x - Math.random() * 1) * 0.512
-        this.vy = this.vy * BoidsDebugger.trackingSpeedMod - (this.pos.y - OzWinkyFace[0].points[this.id].y - BoidsDebugger.offset.y - Math.random() * 1) * 0.512
+        this.vx = this.vx * BoidsDebugger.trackingSpeedMod - (this.pos.x - facesOfOz[0].points[this.id].x - BoidsDebugger.offset.x - Math.random() * 1) * 0.512
+        this.vy = this.vy * BoidsDebugger.trackingSpeedMod - (this.pos.y - facesOfOz[0].points[this.id].y - BoidsDebugger.offset.y - Math.random() * 1) * 0.512
       // Do their own thing
       } else {
         BoidsDebugger.canvas[0].ctx.globalAlpha = 0.1
