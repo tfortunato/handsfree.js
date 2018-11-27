@@ -160,6 +160,9 @@ handsfree.use({
   // Plugins are called alphabetically - to make a plugin load before another prefix it with a number
   name: '',
 
+  // Set to true to have this plugin disabled by default
+  _isDisabled: false,
+
   // Called once when the use method is called and after the plugin is added to the instance
   onUse: () => {},
 
@@ -174,6 +177,14 @@ handsfree.use({
   onStop: (handsfree) => {}
 })
 ```
+
+Additionally, every plugin has a `.disable()` and an `enable()` method, which sets a `._isDisabled` flag to either true or false:
+```js
+handsfree.plugin['my-plugin'].disable() // handsfree.plugin['my-plugin']._isDisabled === true
+handsfree.plugin['my-plugin'].enable() // handsfree.plugin['my-plugin']._isDisabled === false
+```
+
+Disabled plugins do not run their `on*` hooks.
 
 ## The `faces` array
 The `onFrame` recieves a `faces` array, which contains an object for each tracked face. The key properties of the a `face` object include:
