@@ -113,7 +113,7 @@ The following is our directory sturcture. [In brackets] are
 /-- models        -| Machine learning models
 /-- plugins       -| Core plugins
 
-/- docs           -| [DOC MAINTAINERS] The documentation site
+/- src           -| [DOC MAINTAINERS] The documentation site
 /-- assets
 /-- components
 /-- demo

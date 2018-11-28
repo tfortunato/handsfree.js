@@ -16,23 +16,22 @@
           v-list-tile-action
             img(src='/favicon.png' width=48)
           v-list-tile-title Home
+        v-list-tile(:to='{name: "settings"}')
+          v-list-tile-action
+            v-icon settings
+          v-list-tile-title Settings
 
         v-spacer
-        v-divider
-        v-list-tile(hfre='https://browsehandsfree.com')
-          v-list-tile-action
-            img(src='/browsehandsfree.png' width=24)
-          v-list-tile-title BrowseHandsfree
-        v-divider
-        v-list-tile(href='https://forum.browsehandsfree.com')
-          v-list-tile-action
-            v-icon forum
-          v-list-tile-title Forum
         v-divider
         v-list-tile(href='https://glitch.com/~handsfree-starter')
           v-list-tile-action
             v-icon developer_board
           v-list-tile-title Handsfree Starter Kit
+        v-divider
+        v-list-tile(href='https://browsehandsfree.com')
+          v-list-tile-action
+            img(src='/browsehandsfree.png' width=24)
+          v-list-tile-title BrowseHandsfree
         v-divider
         v-list-tile(href='https://twitter.com/labofoz')
           v-list-tile-action
@@ -41,7 +40,7 @@
 
     v-content
       .handsfree-debug-wrap
-      Home
+      router-view
 </template>
 
 <script>
