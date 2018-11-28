@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://media.giphy.com/media/PoJPCYGuWmOfP7losq/giphy.gif" alt="handsfree.js">
+  <img src="https://media.giphy.com/media/3Z15Ve7WEQGkLa1FwC/giphy.gif" alt="handsfree.js">
   <p>A platform for creating handsfree user interfaces, tools, games, and experiences for the web and IoT 🤯</p>
   <p>Made possible by <a href="https://github.com/Tastenkunst/brfv4_javascript_examples">BRFv4</a></p>
 <p>
