@@ -152,13 +152,16 @@ The debugger is loaded into the first element in the DOM with the `.handsfree-de
 ### Plugins
 Handsfree is built around a plugin architecture, which allows us to easily add and share functionality. We can even disable them!
 
-To add a plugin, use the `handsfree.use({})` method with the following form:
+To add a plugin, use the `handsfree.use({})` method with the following form. This method returns the plugin object:
 
 ```js
-handsfree.use({
+const myPlugin = handsfree.use({
   // Must be unique. Spaces and special characters are fine
   // Plugins are called alphabetically - to make a plugin load before another prefix it with a number
   name: '',
+
+  // Set to true to have this plugin disabled by default
+  _isDisabled: false,
 
   // Called once when the use method is called and after the plugin is added to the instance
   onUse: () => {},
@@ -174,6 +177,14 @@ handsfree.use({
   onStop: (handsfree) => {}
 })
 ```
+
+Additionally, every plugin has a `.disable()` and an `enable()` method, which sets a `._isDisabled` flag to either true or false:
+```js
+handsfree.plugin['my-plugin'].disable() // handsfree.plugin['my-plugin']._isDisabled === true
+handsfree.plugin['my-plugin'].enable() // handsfree.plugin['my-plugin']._isDisabled === false
+```
+
+Disabled plugins do not run their `on*` hooks.
 
 ## The `faces` array
 The `onFrame` recieves a `faces` array, which contains an object for each tracked face. The key properties of the a `face` object include:

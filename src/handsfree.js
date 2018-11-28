@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
    * - Places boids on the screen
    * - Boids do their own thing when camera is off
    * - Boids gather to face landmark points when turned on
-   * 
+   *
    * @see https://codepen.io/scorch/pen/aWzJgW
    */
   const BoidsDebugger = handsfree.use({
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
       x: 0,
       y: 0
     },
-    
+
     // How fast to move by
     rateOfChange: 0.01,
     // How much extra time to wait before flying back
@@ -49,13 +49,13 @@ document.addEventListener('DOMContentLoaded', () => {
     trackingSpeedMod: 0.9,
     // Whether we're ready
     isReady: false,
-    
+
     // The point boids return to
     returnPoint: {
       x: 0,
       y: 0
     },
-    
+
     // Defaulting to 64 since we have 64 face landmarks
     maxBoids: 64,
     // Collection of boid instances
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // update point to where the mouse cursor is
       document.onmousemove = e => this.returnPoint = {x: e.pageX, y: e.pageY}
-      
+
       // Start boid loop
       setTimeout(() => this.createInitialBoids(), 0)
       setTimeout(() => {
@@ -146,6 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
       this.resize(this.canvas[0].$)
       this.resize(this.canvas[1].$)
 
+      // Set the offset based on responsive mode so that it's always above the title
       if (window.innerWidth < 960) {
         this.offset.x = window.innerWidth / 2 - facesOfOz[0].translationX + 70
       } else {
@@ -158,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
       this.trackingSpeedMod += 0.0001
       this.trackingSpeedMod = Math.min(this.trackingSpeedMod, 0.8)
     },
-    
+
     /**
      * Reset the faces to whatever the start scene is
      */
@@ -206,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
     this.vy = Math.random() * this.speed / 4 - this.speed / 8
     this.color = '#ff0'
     this.history = []
-    
+
     this.update = function () {
       //////////////////////////////////////
       this.step ++
@@ -218,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
       this.pos.y += this.vy
       this.vx = this.vx * BoidsDebugger.rateOfChange + (Math.random() * this.speed * 2 - this.speed) * 0.12
       this.vy = this.vy * BoidsDebugger.rateOfChange + (Math.random() * this.speed * 2 - this.speed) * 0.12
-      
+
       // Fly towards point
       if (handsfree.isTracking && BoidsDebugger.isReady) {
         this.speed = 0.05
@@ -235,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
         BoidsDebugger.canvas[0].ctx.globalAlpha = 0.1
         this.speed = 6
       }
-      
+
       //////////////////////////////////////
       if (this.history.length > 4) {
         // Boid Body
@@ -253,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
         BoidsDebugger.canvas[1].ctx.lineJoin = "round"
         // BoidsDebugger.canvas[1].ctx.closePath()
         BoidsDebugger.canvas[1].ctx.stroke()
-        
+
         // Boid orb
         BoidsDebugger.canvas[0].ctx.beginPath()
         BoidsDebugger.canvas[0].ctx.fillStyle = `rgba(250,250,250,0.05)`
@@ -261,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
         BoidsDebugger.canvas[0].ctx.arc(this.history[4].x ,this.history[4].y , BoidsDebugger.orbSize, 0, 2 * Math.PI)
         BoidsDebugger.canvas[0].ctx.fill()
       }
-      
+
       // Delete the boid if it goes out of bounds
       if (this.pos.x > BoidsDebugger.canvas[0].$.width || this.pos.x < 0 || this.pos.y > BoidsDebugger.canvas[0].$.height || this.pos.y < 0) {
         BoidsDebugger.freedIDs.push(this.id)
@@ -276,6 +277,6 @@ document.addEventListener('DOMContentLoaded', () => {
         y: this.pos.y
       })
       return true
-    }  
+    }
   }
 })
