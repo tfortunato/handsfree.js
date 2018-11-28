@@ -8,6 +8,9 @@
               h2 Settings
 
         v-flex(xs12 md6 lg4)
+          v-card.mb-2(light)
+            v-card-text.statsjs(ref='stats')
+        
           v-card(light)
             v-card-title
               h2 Quick Settings
@@ -22,6 +25,8 @@
 </template>
 
 <script>
+import Stats from 'stats.js'
+
 export default {
   name: 'Settings',
 
@@ -37,6 +42,21 @@ export default {
     }
   },
 
+  /**
+   * Add stats
+   */
+  mounted () {
+    const stats = new Stats()
+    const perf = function () {
+      stats.end()
+      requestAnimationFrame(perf)
+      stats.begin()
+    }
+    stats.showPanel(0)
+    this.$refs.stats.appendChild(stats.dom)
+    perf()
+  },
+
   methods: {
     toggleBackground () {
       const plugin = window.handsfree.plugin['boids-debugger']
@@ -50,3 +70,11 @@ export default {
 }
 </script>
 
+<style lang="stylus">
+.statsjs > div
+  position: relative !important
+
+  canvas
+    width: 100% !important
+    height: initial !important
+</style>
