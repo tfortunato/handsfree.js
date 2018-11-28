@@ -174,7 +174,13 @@ const myPlugin = handsfree.use({
   onStart: (handsfree) => {},
 
   // Called any time Handsfree.stop() is called
-  onStop: (handsfree) => {}
+  onStop: (handsfree) => {},
+
+  // Called when .disable() is explicitely called on this plugin
+  onDisable: (handsfree) => {},
+
+  // Called when .enable() is explicitely called on this plugin
+  onEnable: (handsfree) => {}
 })
 ```
 

@@ -49,7 +49,7 @@ import Home from './components/Home'
 export default {
   name: 'App',
 
-  data: () => {
+  data () {
     return {
       isNavOpen: false
     }

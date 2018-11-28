@@ -63,6 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     orbSize: 7,
 
+    onDisable () {this.$wrap.style.display = 'none'},
+    onEnable () {this.$wrap.style.display = 'block'},
+    
     /**
      * Setup the canvas and boids
      */
@@ -109,6 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
      * Animates the boids
      */
     animateBoids () {
+      if (this._isDisabled) return
+      
       // Draw orbs
       this.canvas[1].ctx.beginPath()
       this.canvas[1].ctx.rect(0, 0, this.canvas[1].$.width, this.canvas[1].$.height)
