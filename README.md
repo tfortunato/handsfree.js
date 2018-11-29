@@ -113,7 +113,7 @@ The following is our directory sturcture. [In brackets] are
 /-- models        -| Machine learning models
 /-- plugins       -| Core plugins
 
-/- docs           -| [DOC MAINTAINERS] The documentation site
+/- src           -| [DOC MAINTAINERS] The documentation site
 /-- assets
 /-- components
 /-- demo
@@ -129,7 +129,17 @@ You can instantiate Handsfree with the following config (defaults are shown):
 ```js
 const handsfree = new Handsfree({
   // Whether to show (true) the debugger (face mask over video) or not (false)
-  debug: false
+  debug: false,
+  settings: {
+    // Maximum number of faces to detect
+    maxFaces: 1,
+    sensitivity: {
+      // How much to adjust move the sensitivity by
+      xy: 0.7,
+      // How much to adjust the smile click sensitivity by (-0.25 to 0.25 are good ranges)
+      click: 0
+    }
+  }
 })
 ```
 
@@ -174,7 +184,13 @@ const myPlugin = handsfree.use({
   onStart: (handsfree) => {},
 
   // Called any time Handsfree.stop() is called
-  onStop: (handsfree) => {}
+  onStop: (handsfree) => {},
+
+  // Called when .disable() is explicitely called on this plugin
+  onDisable: (handsfree) => {},
+
+  // Called when .enable() is explicitely called on this plugin
+  onEnable: (handsfree) => {}
 })
 ```
 
