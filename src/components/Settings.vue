@@ -20,13 +20,25 @@
                 v-flex(shrink style='width: 80px')
                   v-text-field(v-model='smileClickSensitivity')
 
-              h3 Multi User <small>(experimental)</small>
+              h3.mt-5 Stabilizer
+              v-layout(row)
+                v-flex
+                  v-slider(label='Factor' min=0 max=3 step=1 v-model='stabilizerFactor')
+                v-flex(shrink style='width: 80px')
+                  v-text-field(v-model='stabilizerFactor')
+              v-layout(row)
+                v-flex
+                  v-slider(label='Buffer' min=0 max=100 step=10 v-model='stabilizerBuffer')
+                v-flex(shrink style='width: 80px')
+                  v-text-field(v-model='stabilizerBuffer')
+
+              h3.mt-5 Multi User <small>(experimental)</small>
               v-alert(type='warning' value=1 style='color: #444') This currently does not work with the existing plugins but is exposed for experimentation.
               v-layout(row)
                 v-flex
-                  v-slider(label='Number of Faces' max=20 min=1 step=1 v-model='numFaces')
+                  v-slider(label='Number of Faces' max=20 min=1 step=1 v-model='maxFaces')
                 v-flex(shrink style='width: 80px')
-                  v-text-field(v-model='numFaces')
+                  v-text-field(v-model='maxFaces')
 
         v-flex(xs12 md6 lg4)
           v-card.mb-2(light)
@@ -67,31 +79,34 @@ export default {
     /**
      * Set the number of faces
      */
-    numFaces: debounce(function (numFaces) {
-      window.handsfree.settings.maxFaces = numFaces
-      window.handsfree.brf.manager.setNumFacesToTrack && window.handsfree.brf.manager.setNumFacesToTrack(numFaces)
+    maxFaces: debounce(function (maxFaces) {
+      window.handsfree.settings.maxFaces = maxFaces
+      window.handsfree.brf.manager.setmaxFacesToTrack && window.handsfree.brf.manager.setmaxFacesToTrack(maxFaces)
     }, 500),
 
     /**
      * Adjust sensitivity
      */
-    sensitivity: debounce(function (sensitivity) {
-      window.handsfree.settings.sensitivity.xy = sensitivity
-    }),
+    sensitivity: debounce(function (sensitivity) {window.handsfree.settings.sensitivity.xy = sensitivity}),
+    smileClickSensitivity: debounce(function (sensitivity) {window.handsfree.settings.sensitivity.click = sensitivity}),
 
-    smileClickSensitivity: debounce(function (sensitivity) {
-      window.handsfree.settings.sensitivity.click = sensitivity
-    })
+    /**
+     * Adjust Stabilizer
+     */
+    stabilizerFactor: debounce(function (factor) {window.handsfree.settings.stabilizer.factor = factor}),
+    stabilizerBuffer: debounce(function (buffer) {window.handsfree.settings.stabilizer.buffer = buffer})
   },
   
   data () {
     return {
       useBackground: true,
       quickSetting: 'custom',
-      numFaces: 1,
+      maxFaces: 1,
       smileClickSensitivity: 0,
       statsMode: 0,
-      sensitivity: 0.7
+      sensitivity: 0.7,
+      stabilizerFactor: 1,
+      stabilizerBuffer: 30
     }
   },
 
@@ -108,6 +123,8 @@ export default {
     stats.showPanel(0)
     this.$refs.stats.appendChild(stats.dom)
     perf()
+
+    this.syncSettings()
   },
 
   methods: {
@@ -129,6 +146,23 @@ export default {
     updateStatsDescription () {
       this.statsMode++
       if (this.statsMode > 2) this.statsMode = 0
+    },
+
+    /**
+     * Syncs settings with handsfree.js
+     */
+    syncSettings () {
+      if (window.handsfree) {
+        const settings = window.handsfree.settings
+  
+        this.maxFaces = settings.maxFaces
+        this.smileClickSensitivity = settings.sensitivity.click
+        this.sensitivity = settings.sensitivity.xy
+        this.stabilizerFactor = settings.stabilizer.factor
+        this.stabilizerBuffer = settings.stabilizer.buffer
+      } else {
+        setTimeout(() => {this.syncSettings()}, 50)
+      }
     }
   }
 }
