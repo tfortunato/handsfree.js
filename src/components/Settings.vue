@@ -21,6 +21,7 @@
                   v-text-field(v-model='smileClickSensitivity')
 
               h3 Multi User <small>(experimental)</small>
+              v-alert(type='warning' value=1 style='color: #444') This currently does not work with the existing plugins but is exposed for experimentation.
               v-layout(row)
                 v-flex
                   v-slider(label='Number of Faces' max=20 min=1 step=1 v-model='numFaces')
@@ -67,7 +68,8 @@ export default {
      * Set the number of faces
      */
     numFaces: debounce(function (numFaces) {
-      window.handsfree.brf.manager && window.handsfree.brf.manager.setNumFacesToTrack(numFaces)
+      window.handsfree.settings.maxFaces = numFaces
+      window.handsfree.brf.manager.setNumFacesToTrack && window.handsfree.brf.manager.setNumFacesToTrack(numFaces)
     }, 500),
 
     /**
