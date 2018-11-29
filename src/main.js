@@ -1,11 +1,13 @@
 import Vue from 'vue'
-import './plugins/vuetify'
 import App from './App.vue'
 import router from './plugins/router'
-import './handsfree.js'
-require('./assets/styles/main.styl')
+import store from './plugins/vuex'
+import './plugins/vuetify'
+import './handsfree'
+import './assets/styles/main.styl'
 
 // Highlight.js
+// @TODO only load on required pages
 import hljs from 'highlight.js'
 require('highlight.js/styles/shades-of-purple.css')
 hljs.registerLanguage('xml', require('highlight.js/lib/languages/xml'))
@@ -14,7 +16,8 @@ hljs.registerLanguage('javascript', require('highlight.js/lib/languages/javascri
 
 // Setup Vue
 Vue.config.productionTip = false
-new Vue({
+window.App = new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount('#app')

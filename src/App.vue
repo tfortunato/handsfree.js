@@ -12,7 +12,7 @@
 
     v-navigation-drawer(app temporary light v-model='isNavOpen')
       v-list.layout.column.fill-height
-        v-list-tile(:to='{name: "home"}')
+        v-list-tile(:to='{name: "homeDocumentation"}')
           v-list-tile-action
             img(src='/favicon.png' width=48)
           v-list-tile-title Home
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import Home from './components/Home'
+import HomeDocumentation from './components/HomeDocumentation'
 
 export default {
   name: 'App',
@@ -56,7 +56,7 @@ export default {
   },
 
   components: {
-    Home
+    HomeDocumentation
   },
   
   methods: {

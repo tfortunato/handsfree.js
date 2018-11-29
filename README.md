@@ -89,7 +89,7 @@ That will inject handsfree into the page, including the required components (vid
 
 ## Core Plugins
 ### Typing
-**See:** `/lib/plugins/SimpleKeyboard.js`
+**See:** `/handsfree.js/plugins/SimpleKeyboard.js`
 
 ![](https://i.giphy.com/495ysDE36USvobWE0y.gif)
 
@@ -108,12 +108,12 @@ The following is our directory sturcture. [In brackets] are
 
 /- starters       -| [DEVELOPERS] Standalone projects to get you started
 
-/- lib	          -| [CORE DEVELOPERS] The main handsfree.js library
+/- handsfree.js   -| [CORE DEVELOPERS] The main handsfree.js library
 /-- components    -| Cursor
 /-- models        -| Machine learning models
 /-- plugins       -| Core plugins
 
-/- src           -| [DOC MAINTAINERS] The documentation site
+/- src            -| [DOC MAINTAINERS] The documentation site
 /-- assets
 /-- components
 /-- demo

@@ -3,7 +3,7 @@ const path = require('path')
 module.exports = {
   configureWebpack: {
     entry: {
-      handsfree: ['idempotent-babel-polyfill', path.join(__dirname, 'lib/Handsfree.js')]
+      handsfree: ['idempotent-babel-polyfill', path.join(__dirname, 'handsfree.js/Handsfree.js')]
     },
 
     output: {
