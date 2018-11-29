@@ -65,6 +65,7 @@
   },
   "dependencies": {
     "idempotent-babel-polyfill": "^7.0.0",
+    "javascript-time-ago": "^1.0.32",
     "simple-keyboard": "^2.8.0",
     "vue-router": "^3.0.1"
   },

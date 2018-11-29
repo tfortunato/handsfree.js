@@ -55,7 +55,6 @@
 </template>
 
 <script>
-import picks from '../store/youtube-picks'
 import {mapState} from 'vuex'
 import {trim} from 'lodash'
 
@@ -79,8 +78,6 @@ export default {
   },
 
   data: () => ({
-    // Just a collection of cool videos
-    picks,
     // Limit to just 360 videos
     only360: true,
     // The search query to use

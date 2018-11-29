@@ -12,10 +12,15 @@
 
     v-navigation-drawer(app temporary light v-model='isNavOpen')
       v-list.layout.column.fill-height
-        v-list-tile(:to='{name: "homeDocumentation"}')
-          v-list-tile-action
-            img(src='/favicon.png' width=48)
-          v-list-tile-title Home
+        v-list-group
+          v-list-tile(slot='activator')
+            v-list-tile-action
+              img(src='/favicon.png' width=48)
+            v-list-tile-title Handsfree.js
+          v-list-tile(:to='{name: "homeDocumentation"}')
+            v-list-tile-action
+              v-icon book
+            v-list-tile-title Developers Guide
         v-list-tile(:to='{name: "settings"}')
           v-list-tile-action
             v-icon settings
@@ -23,15 +28,24 @@
 
         v-spacer
         v-divider
+        v-list-group
+          v-list-tile(slot='activator')
+            v-list-tile-action
+              img(src='/browsehandsfree.png' width=48)
+            v-list-tile-title BrowseHandsfree
+          v-list-tile(:to='{name: "homeBrowseHandsfree"}')
+            v-list-tile-action
+              v-icon public
+            v-list-tile-title Home
+          v-list-tile(:to='{name: "youtubeLanding"}')
+            v-list-tile-action
+              v-icon ondemand_video
+            v-list-tile-title Handsfree YouTube
+        v-divider
         v-list-tile(href='https://glitch.com/~handsfree-starter')
           v-list-tile-action
             v-icon developer_board
           v-list-tile-title Handsfree Starter Kit
-        v-divider
-        v-list-tile(href='https://browsehandsfree.com')
-          v-list-tile-action
-            img(src='/browsehandsfree.png' width=24)
-          v-list-tile-title BrowseHandsfree
         v-divider
         v-list-tile(href='https://twitter.com/labofoz')
           v-list-tile-action
