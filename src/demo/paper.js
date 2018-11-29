@@ -9,7 +9,7 @@ let tool
 /**
  * Plugin for drawing on paper with handsfree
  */
-document.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('load', () => {
   const handsfree = window.handsfree
   
   handsfree.use({
@@ -27,6 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
     },
 
     onFrame (faces) {
+      if (!$canvas) return
+      
       faces.forEach((face, faceIndex) => {
         // Only catch events when the cursor is over the canvas
         if (face.cursor.$target === $canvas) {

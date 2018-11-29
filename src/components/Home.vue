@@ -291,15 +291,16 @@
 
 <script>
 import hljs from 'highlight.js'
+require('../demo/paper.js')
 
 export default {
   mounted () {
     window.hljs = hljs
     hljs.initHighlighting()
 
-    if (window.handsfree) {
-      window.handsfree.plugin.PaperDraw.reInit()
-    }
+    // @TODO Let's make use of plugin enable/disables
+    window.handsfree && window.handsfree.plugin.PaperDraw.reInit()
+    window.addEventListener('load', () => {window.handsfree.plugin.PaperDraw.reInit()})
   },
 
   methods: {
