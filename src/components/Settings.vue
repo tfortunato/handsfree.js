@@ -26,6 +26,11 @@
                   v-slider(label='Factor' min=0 max=3 step=1 v-model='stabilizerFactor')
                 v-flex(shrink style='width: 80px')
                   v-text-field(v-model='stabilizerFactor')
+              v-layout(row)
+                v-flex
+                  v-slider(label='Buffer' min=0 max=100 step=10 v-model='stabilizerBuffer')
+                v-flex(shrink style='width: 80px')
+                  v-text-field(v-model='stabilizerBuffer')
 
               h3.mt-5 Multi User <small>(experimental)</small>
               v-alert(type='warning' value=1 style='color: #444') This currently does not work with the existing plugins but is exposed for experimentation.
@@ -88,7 +93,8 @@ export default {
     /**
      * Adjust Stabilizer
      */
-    stabilizerFactor: debounce(function (factor) {window.handsfree.settings.stabilizer.factor = factor})
+    stabilizerFactor: debounce(function (factor) {window.handsfree.settings.stabilizer.factor = factor}),
+    stabilizerBuffer: debounce(function (buffer) {window.handsfree.settings.stabilizer.buffer = buffer})
   },
   
   data () {
@@ -99,7 +105,8 @@ export default {
       smileClickSensitivity: 0,
       statsMode: 0,
       sensitivity: 0.7,
-      stabilizerFactor: 0
+      stabilizerFactor: 1,
+      stabilizerBuffer: 30
     }
   },
 
@@ -152,6 +159,7 @@ export default {
         this.smileClickSensitivity = settings.sensitivity.click
         this.sensitivity = settings.sensitivity.xy
         this.stabilizerFactor = settings.stabilizer.factor
+        this.stabilizerBuffer = settings.stabilizer.buffer
       } else {
         setTimeout(() => {this.syncSettings()}, 50)
       }
