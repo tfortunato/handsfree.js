@@ -2,7 +2,7 @@
  * Sets up the Paper.js demo
  */
 const paper = require('paper')
-const $canvas = document.getElementById('paperjs')
+let $canvas = document.getElementById('paperjs')
 let path
 let tool
 
@@ -16,6 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
     name: 'PaperDraw',
 
     lastPoint: [],
+
+    reInit () {
+      // Setup Paper.js
+      $canvas = document.getElementById('paperjs')
+      paper.setup($canvas)
+      path = new paper.Path()
+      tool = new paper.Tool()
+      tool.minDistance = 20
+    },
 
     onFrame (faces) {
       faces.forEach((face, faceIndex) => {

@@ -70,7 +70,7 @@
                     handsfree = new Handsfree()
                     handsfree.start()
                   &lt;/script>
-              
+
               h3 With Node:
               p When developing for the Internet of Things or non-browser based environments, we encourage you to use the below method:
               pre
@@ -135,7 +135,39 @@
               p Here are the landmark points, with #27 being the reference point for rotation/translation:
               p
                 img(src='../assets/img/brfv4_landmarks.jpg')
-                  
+
+
+              p The following are the available plugin methods:
+              pre
+                code.javascript.
+                  const myPlugin = handsfree.use({
+                    // Must be unique. Spaces and special characters are fine
+                    // Plugins are called alphabetically - to make a plugin load before another prefix it with a number
+                    name: '',
+
+                    // Set to true to have this plugin disabled by default
+                    _isDisabled: false,
+
+                    // Called once when the use method is called and after the plugin is added to the instance
+                    onUse: () => {},
+
+                    // Called once per frame, after calculations, along with the detected face object
+                    // To overwrite/modify the properties of faces for use within other plugins, return the faces object
+                    onFrame: (faces, handsfree) => {},
+
+                    // Called any time Handsfree.start() is called
+                    onStart: (handsfree) => {},
+
+                    // Called any time Handsfree.stop() is called
+                    onStop: (handsfree) => {},
+
+                    // Called when .disable() is explicitely called on this plugin
+                    onDisable: (handsfree) => {},
+
+                    // Called when .enable() is explicitely called on this plugin
+                    onEnable: (handsfree) => {}
+                  })
+
               p Here's what our page scrolling plugin looks like:
               pre
                 code.javascript.
@@ -264,7 +296,10 @@ export default {
   mounted () {
     window.hljs = hljs
     hljs.initHighlighting()
-    require('../demo/paper.js')
+
+    if (window.handsfree) {
+      window.handsfree.plugin.PaperDraw.reInit()
+    }
   },
 
   methods: {
