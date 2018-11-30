@@ -65,7 +65,7 @@ TimeAgo.addLocale(en)
 const timeAgo = new TimeAgo('en-US')
 
 export default {
-  name: 'YouTube',
+  name: 'YouTubeLanding',
 
   computed: {
     isDisabled () {return this.isLoading || !this.isAPIReady || !trim(this.searchQuery)},

@@ -6,17 +6,17 @@
           #youtube-player(style='min-height: 450px')
 
     v-container
-      YouTube
+      YouTubeLanding
 </template>
 
 <script>
-import YouTube from './YouTube'
-import '../../handsfree.js/plugins/YouTube360.js'
+import YouTubeLanding from './Landing'
+import './youtube.handsfree.js'
 
 export default {
   name: 'YouTubeSingle',
 
-  components: {YouTube},
+  components: {YouTubeLanding},
 
   mounted () {this.maybeInitVideo()},
 

@@ -77,5 +77,6 @@ module.exports = Handsfree => {
     this.use(require('./plugins/Scrolling'))
     this.use(require('./plugins/SmileClick'))
     this.use(require('./plugins/SimpleKeyboard'))
+    this.use(require('./plugins/CenterVector'))
   }
 }

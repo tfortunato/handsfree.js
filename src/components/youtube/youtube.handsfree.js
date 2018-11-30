@@ -19,7 +19,6 @@ apis.forEach((api, i) => {
 
   // YouTube Data API
   if (i === 1) $script.onload = window.onYouTubeDataAPIReady
-
   document.body.appendChild($script)
 })
 
@@ -62,29 +61,13 @@ window.addEventListener('load', () => {
      */
     updatePOV (face) {
       if (!window.App.$store.state.youtube.player.getSphericalProperties) return
-
-      const x = face.cursor.x
-      const y = face.cursor.y
-      const $pointer = handsfree.cursor.$el
       const pov = window.App.$store.state.youtube.player.getSphericalProperties()
 
-      // Then add the points to the cursor!
-      $pointer.style.left = x + 'px'
-      $pointer.style.top = y + 'px'
-
       // Update POV
-      if (y < 0)
-        pov.pitch -= y * 0.025
-      else if (y > window.innerHeight)
-        pov.pitch -= (y - window.innerHeight) * 0.025
-      if (x < 0)
-        pov.yaw -= x * 0.025
-      else if (x > window.innerWidth)
-        pov.yaw -= (x - window.innerWidth) * 0.025
+      pov.pitch -= face.centerVector.y * 7
+      pov.yaw -= face.centerVector.x * 7
 
-
-      if (x < 0 || y < 0 || x > window.innerHeight || y > window.innerHeight)
-        window.App.$store.state.youtube.player.setSphericalProperties(pov)
+      if (face.centerVector.y || face.centerVector.x) window.App.$store.state.youtube.player.setSphericalProperties(pov)
     }
   })
 })
