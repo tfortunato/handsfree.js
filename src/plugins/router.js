@@ -7,9 +7,7 @@ import YouTubeSingle from '../components/YouTubeSingle.vue'
 import Settings from '../components/Settings.vue'
 
 const isAtBrowseHandsfree = window.location.hostname === 'browsehandsfree.com'
-
-Vue.use(VueRouter)
-export default new VueRouter({
+const config = {
   scrollBehavior () {return {x: 0, y: 0}},
   routes: [
     {
@@ -25,5 +23,10 @@ export default new VueRouter({
     {name: 'settings', path: '/settings', component: Settings},
     {name: 'youtubeLanding', path: '/youtube', component: YouTube},
     {name: 'youtubeSingle', path: '/youtube/:id', component: YouTubeSingle}
-]
-})
+  ]
+}
+
+if (isAtBrowseHandsfree) config.mode = 'history'
+
+Vue.use(VueRouter)
+export default new VueRouter(config)
