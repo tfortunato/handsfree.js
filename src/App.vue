@@ -4,23 +4,19 @@
       v-toolbar-side-icon(@click.stop='isNavOpen = !isNavOpen')
       v-toolbar-title.headline.text-uppercase
         span
-          img.mr-2(src='/favicon.png' height=50 style='vertical-align: middle')
-          span.hidden-sm-and-down <strong>Handsfree</strong><small>.js.org</small>
+          img.mr-2(:src='favicon' height=50 style='vertical-align: middle')
+          span.hidden-sm-and-down(v-html='title')
       v-spacer
       v-btn.primary.handsfree-show-when-stopped(large @click='startWebcam') Start Webcam
       v-btn.primary.handsfree-show-when-started.hidden(large color='error' @click='stopWebcam') Stop Webcam
 
     v-navigation-drawer(app temporary light v-model='isNavOpen')
       v-list.layout.column.fill-height
-        v-list-group
-          v-list-tile(slot='activator')
-            v-list-tile-action
-              img(src='/favicon.png' width=48)
-            v-list-tile-title Handsfree.js
-          v-list-tile(:to='{name: "homeDocumentation"}')
-            v-list-tile-action
-              v-icon book
-            v-list-tile-title Developers Guide
+        template(v-if='isAtBrowseHandsfree')
+          NavBrowseHandsfree
+        template(v-else)
+          NavHandsfreeJS
+
         v-list-tile(:to='{name: "settings"}')
           v-list-tile-action
             v-icon settings
@@ -28,19 +24,10 @@
 
         v-spacer
         v-divider
-        v-list-group
-          v-list-tile(slot='activator')
-            v-list-tile-action
-              img(src='/browsehandsfree.png' width=48)
-            v-list-tile-title BrowseHandsfree
-          v-list-tile(:to='{name: "homeBrowseHandsfree"}')
-            v-list-tile-action
-              v-icon public
-            v-list-tile-title Home
-          v-list-tile(:to='{name: "youtubeLanding"}')
-            v-list-tile-action
-              v-icon ondemand_video
-            v-list-tile-title Handsfree YouTube
+        template(v-if='isAtBrowseHandsfree')
+          NavHandsfreeJS
+        template(v-else)
+          NavBrowseHandsfree
         v-divider
         v-list-tile(href='https://glitch.com/~handsfree-starter')
           v-list-tile-action
@@ -59,20 +46,36 @@
 
 <script>
 import HomeDocumentation from './components/HomeDocumentation'
+import NavBrowseHandsfree from './components/nav/BrowseHandsfree.vue'
+import NavHandsfreeJS from './components/nav/HandsfreeJS.vue'
 
 export default {
   name: 'App',
 
+  components: {
+    HomeDocumentation,
+    NavBrowseHandsfree,
+    NavHandsfreeJS
+  },
+
   data () {
+    const isAtBrowseHandsfree = window.location.hostname === 'browsehandsfree.com'
+
     return {
-      isNavOpen: false
+      // The favicon next to the title
+      favicon: isAtBrowseHandsfree ? '/browsehandsfree.png' : '/favicon.png',
+
+      // Determines if we're at browsehandsfree.com
+      isAtBrowseHandsfree,
+      
+      // If the navigation is open
+      isNavOpen: false,
+
+      // The title
+      title: isAtBrowseHandsfree ? 'Browse<strong>Handsfree</strong>' : '<strong>Handsfree</strong><small>.js.org</small>'
     }
   },
 
-  components: {
-    HomeDocumentation
-  },
-  
   methods: {
     startWebcam () {window.handsfree.start()},
     stopWebcam () {window.handsfree.stop()}
