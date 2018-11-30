@@ -3,7 +3,6 @@
  */
 module.exports = {
   name: 'CenterVector',
-  // _isDisabled: true,
 
   windowCenter: {
     x: window.innerWidth / 2,

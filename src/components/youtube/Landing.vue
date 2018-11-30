@@ -9,6 +9,26 @@
                 v-btn.mt-0(slot='append-outer' @click='search' :disabled='isDisabled' :loading='isLoading')
                   v-icon search
               v-switch(label='Only 360/VR videos' v-model='only360')
+
+          v-container.px-0(v-if='results.search.items.length')
+            v-layout(wrap)
+              template(v-for='result in results.search.items')
+                v-flex.mb-3(xs12)
+                  v-card(light)
+                    v-layout(row)
+                      v-flex(xs5)
+                        router-link(:to='{name: "youtubeSingle", params: {id: result.id.videoId}}')
+                          v-img(contain :src='result.snippet.thumbnails.medium.url')
+                      v-flex(xs7)
+                        router-link.unlink(:to='{name: "youtubeSingle", params: {id: result.id.videoId}}')
+                          v-card-title(primary-title)
+                            div
+                              h3 {{result.snippet.title}}
+                              //- @TODO link
+                              span.grey--text {{result.snippet.channelTitle}} &middot; {{timeAgo(result.snippet.publishedAt)}}
+                          v-card-text 
+                            div(style='white-space: pre-wrap;') {{result.snippet.description}}
+
         v-flex(xs12 md6 lg4)
           v-card(light)
             v-card-title.pb-0(primary-title)
@@ -33,25 +53,6 @@
                 li Upvote/downvote
                 li Account-based features (requires login)
               p.mt-4 Want to help? Pull requests welcome on <a href="https://github.com/browsehandsfree/HandsfreeJS">GitHub</a> or <a href="https://twitter.com/labofoz">@labofoz</a>
-
-    v-container(v-if='results.search.items.length')
-      v-layout(wrap)
-        template(v-for='result in results.search.items')
-          v-flex.mb-5(xs12)
-            v-card(light)
-              v-layout(row)
-                v-flex(xs5)
-                  router-link(:to='{name: "youtubeSingle", params: {id: result.id.videoId}}')
-                    v-img(contain :src='result.snippet.thumbnails.medium.url')
-                v-flex(xs7)
-                  router-link.unlink(:to='{name: "youtubeSingle", params: {id: result.id.videoId}}')
-                    v-card-title(primary-title)
-                      div
-                        h3 {{result.snippet.title}}
-                        //- @TODO link
-                        span.grey--text {{result.snippet.channelTitle}} &middot; {{timeAgo(result.snippet.publishedAt)}}
-                    v-card-text 
-                      div(style='white-space: pre-wrap;') {{result.snippet.description}}
 </template>
 
 <script>
