@@ -1,7 +1,7 @@
 const STUBS = require('../test/jest-polyfills')
 const Handsfree = require('./Handsfree')
 let handsfree = null
-let faces = require('../src/store/faces/oz-winky-face.json')
+let faces = require('../src/store/faces/1-wink-face.json')
 STUBS.mediaDevices.support()
 
 describe('Handsfree.use()', () => {

@@ -26,7 +26,7 @@
     }
   },
   "eslintIgnore": [
-    "lib/models/**/*"
+    "handsfree.js/models/**/*"
   ],
   "postcss": {
     "plugins": {
@@ -53,18 +53,19 @@
       "/test/",
       "/src/",
       "/public/",
-      "/lib/models/"
+      "/handsfree.js/models/"
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/test/",
       "/src/",
       "/public/",
-      "/lib/models/"
+      "/handsfree.js/models/"
     ]
   },
   "dependencies": {
     "idempotent-babel-polyfill": "^7.0.0",
+    "javascript-time-ago": "^1.0.32",
     "simple-keyboard": "^2.8.0",
     "vue-router": "^3.0.1"
   },
@@ -95,6 +96,7 @@
     "vue-cli-plugin-vuetify": "^0.4.5",
     "vue-template-compiler": "^2.5.17",
     "vuetify": "^1.3.0",
-    "vuetify-loader": "^1.0.5"
+    "vuetify-loader": "^1.0.5",
+    "vuex": "^3.0.1"
   }
 }

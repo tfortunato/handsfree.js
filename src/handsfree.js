@@ -2,7 +2,7 @@
  * Sets up handsfree.js
  */
 require('./assets/styles/handsfree.styl')
-const facesOfOz = require('./store/faces/oz-winky-face.json')
+const facesOfOz = require('./store/faces/1-wink-face.json')
 
 document.addEventListener('DOMContentLoaded', () => {
   // eslint-disable-next-line
