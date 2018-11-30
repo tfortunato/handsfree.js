@@ -32,7 +32,7 @@
                 li Comment on videos
                 li Upvote/downvote
                 li Account-based features (requires login)
-              p.mt-4 Want to help? Pull requests welcome on <a href="https://github.com/browsehandsfree/browsehandsfree">GitHub</a> or <a href="https://twitter.com/labofoz">@labofoz</a>
+              p.mt-4 Want to help? Pull requests welcome on <a href="https://github.com/browsehandsfree/HandsfreeJS">GitHub</a> or <a href="https://twitter.com/labofoz">@labofoz</a>
 
     v-container(v-if='results.search.items.length')
       v-layout(wrap)

@@ -11,6 +11,7 @@
 
 <script>
 import YouTube from './YouTube'
+import '../../handsfree.js/plugins/YouTube360.js'
 
 export default {
   name: 'YouTubeSingle',

@@ -1,8 +1,10 @@
 <template lang="pug">
   div
-    v-container(grid-list-md)
+    v-container(grid-list-lg)
       v-layout.mb-5(justify-center wrap)
-        v-flex(mb-4 xs12 md6 style='margin-top: 300px')
+        v-flex(mb-4 xs12 md6 style='margin-top: 150px')
+          div.text-xs-center
+            img(src='/favicon.png' width=100)
           h1.text-xs-center.display-2.font-weight-bold.mb-3 Handsfree.js
           p.text-xs-center
             | Made possible by <a href="https://github.com/Tastenkunst/brfv4_javascript_examples">BRFv4</a> and <a href="https://js.tensorflow.org/">TensorFlow.js</a>
@@ -17,7 +19,7 @@
               img.mr-2(src='https://img.shields.io/codecov/c/github/BrowseHandsfree/handsfreeJS/master.svg?style=flat')
             a.github-button(href='https://github.com/browsehandsfree/handsfreejs' data-show-count='true' aria-label='Star browsehandsfree/handsfreejs on GitHub' data-icon='octicon-star') GitHub
           p.subheading.font-weight-regular
-            | A JavaScript drop-in library for adding handsfree interfaces to any website, service, and Internet of Thing. Runs on any device that supports <a href="https://caniuse.com/#feat=stream">getUserMedia()</a>
+            | A drop-in library for adding handsfree interfaces to any website, service, and Internet of Thing. Runs on any device that supports <a href="https://caniuse.com/#feat=stream">getUserMedia()</a>
           p.text-xs-center
             v-btn.primary.handsfree-show-when-stopped(large @click='startWebcam') Start Webcam
             v-btn.primary.handsfree-show-when-started.hidden(large color='error' @click='stopWebcam') Stop Webcam
@@ -29,6 +31,8 @@
             v-card-text
               p 😊 Smiles activate clicks. Lean in and back to adjust brush size. Give it a try by drawing shapes in the canvas below 🎨
               canvas#paperjs(style="width: 100%; height: 400px; box-shadow: 0 0 3px rgba(0,0,0,0.35)")
+              div
+                v-btn.mx-0(large color='primary' @click='clearDrawing' style='width: 100%;') Clear Drawing
 
       v-layout(style='margin-top: 200px' wrap)
         v-flex(xs12)
@@ -83,6 +87,42 @@
                   const handsfree = new Handsfree()
                   handsfree.start()
 
+      v-layout(justify-center style='margin-top: 200px')
+        v-flex(xs12 md8)
+          v-card(light)
+            v-card-title(primary-title)
+              h2.headline.mb-0 Settings
+            v-card-text
+              p When instantiating <code>Handsfree</code>, you can pass in a config object.
+              pre
+                code.javascript.
+                 const handsfree = new Handsfree({
+                    // Whether to show (true) the debugger (face mask over video) or not (false)
+                    debug: false,
+
+                    // Available settings
+                    settings: {
+                      // Maximum number of faces to track
+                      maxFaces: 1,
+
+                      sensitivity: {
+                        // A factor to adjust the cursors move speed by
+                        xy: 0.7,
+                        // How much wider (+) or narrower (-) a smile needs to be to click
+                        click: 0
+                      },
+
+                      stabilizer: {
+                        // How much stabilization to use: 0 = none, 3 = heavy
+                        factor: 1,
+                        // Number of frames to stabilizer over
+                        buffer: 30
+                      }
+                    }
+                  })
+
+              p Settings can later be updated with <code>handsfree.settings['my.setting'] = newValue;</code>
+            
       v-layout(justify-center style='margin-top: 200px')
         v-flex(xs12 md8)
           v-card(light)
@@ -168,6 +208,12 @@
                     onEnable: (handsfree) => {}
                   })
 
+              p Additionally, every plugin has a <code>.disable()</code> and an <code>.enable()</code> method, which sets a <code>._isDisabled</code> flag to either true or false:
+              pre
+                code.javascript.
+                 handsfree.plugin['my-plugin'].disable() // handsfree.plugin['my-plugin']._isDisabled === true
+                  handsfree.plugin['my-plugin'].enable() // handsfree.plugin['my-plugin']._isDisabled === false
+                  
               p Here's what our page scrolling plugin looks like:
               pre
                 code.javascript.
@@ -313,7 +359,8 @@ export default {
 
   methods: {
     startWebcam () {window.handsfree.start()},
-    stopWebcam () {window.handsfree.stop()}
+    stopWebcam () {window.handsfree.stop()},
+    clearDrawing () {window.paper.project.clear()}
   }
 }
 </script>

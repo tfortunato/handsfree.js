@@ -2,6 +2,7 @@
  * Sets up the Paper.js demo
  */
 const paper = require('paper')
+window.paper = paper
 let $canvas = document.getElementById('paperjs')
 let path
 let tool

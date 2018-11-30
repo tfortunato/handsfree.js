@@ -130,14 +130,24 @@ You can instantiate Handsfree with the following config (defaults are shown):
 const handsfree = new Handsfree({
   // Whether to show (true) the debugger (face mask over video) or not (false)
   debug: false,
+
+  // Available settings
   settings: {
-    // Maximum number of faces to detect
+    // Maximum number of faces to track
     maxFaces: 1,
+
     sensitivity: {
-      // How much to adjust move the sensitivity by
+      // A factor to adjust the cursors move speed by
       xy: 0.7,
-      // How much to adjust the smile click sensitivity by (-0.25 to 0.25 are good ranges)
+      // How much wider (+) or narrower (-) a smile needs to be to click
       click: 0
+    },
+
+    stabilizer: {
+      // How much stabilization to use: 0 = none, 3 = heavy
+      factor: 1,
+      // Number of frames to stabilizer over
+      buffer: 30
     }
   }
 })
