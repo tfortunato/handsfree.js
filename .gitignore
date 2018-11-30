@@ -3,6 +3,7 @@ node_modules
 /dist
 /coverage
 handsfree.code-workspace
+/.firebase/
 
 # local env files
 .env.local
