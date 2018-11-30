@@ -70,7 +70,17 @@ export default {
     $script.setAttribute('src', 'https://platform.twitter.com/widgets.js')
     document.body.appendChild($script)
   },
-  mounted () {this.maybeInitVideo()},
+  mounted () {
+    this.maybeInitVideo()
+
+    // Add scripts
+    let scripts = ['https://platform.twitter.com/widgets.js', 'https://buttons.github.io/buttons.js']
+    scripts.forEach(script => {
+      const $script = document.createElement('script')
+      $script.src = script
+      document.body.appendChild($script)
+    })
+  },
 
   components: {
     Demo

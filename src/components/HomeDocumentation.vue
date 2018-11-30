@@ -291,7 +291,7 @@
 
 <script>
 import hljs from 'highlight.js'
-require('../demo/paper.js')
+import '../demo/paper.js'
 
 export default {
   mounted () {
@@ -301,6 +301,14 @@ export default {
     // @TODO Let's make use of plugin enable/disables
     window.handsfree && window.handsfree.plugin.PaperDraw.reInit()
     window.addEventListener('load', () => {window.handsfree.plugin.PaperDraw.reInit()})
+
+    // Add scripts
+    let scripts = ['https://platform.twitter.com/widgets.js', 'https://buttons.github.io/buttons.js']
+    scripts.forEach(script => {
+      const $script = document.createElement('script')
+      $script.src = script
+      document.body.appendChild($script)
+    })
   },
 
   methods: {
