@@ -37,8 +37,8 @@
                 | Handsfree Tips
             v-card-text
               ul
-                li Click videos to play/pause
                 li Turn head in the direction you want to look in
+                li Click videos to play/pause
             v-card-title.pb-0
               h3 🗺️ Roadmap
             v-card-text

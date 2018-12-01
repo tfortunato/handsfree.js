@@ -3,7 +3,7 @@
     v-container
       v-layout
         v-flex.mb-5(xs12 m8)
-          #youtube-player(style='min-height: 450px')
+          #youtube-player
 
     v-container
       YouTubeLanding
@@ -18,7 +18,11 @@ export default {
 
   components: {YouTubeLanding},
 
-  mounted () {this.maybeInitVideo()},
+  mounted () {
+    this.maybeInitVideo()
+    this.resizePlayer()
+    window.addEventListener('resize', () => this.resizePlayer())
+  },
 
   beforeRouteUpdate (to, from, next) {
     next()
@@ -39,6 +43,13 @@ export default {
      */
     maybeInitVideo () {
       this.$store.dispatch('youtube/setupPlayer', {id: this.$route.params.id})
+    },
+
+    /**
+     * Resizes the player ot be as tall as the display
+     */
+    resizePlayer () {
+      document.querySelector('#youtube-player').style.height = `${window.innerHeight - 100}px`
     }
   }
 }
