@@ -3,8 +3,10 @@
  * - Requires a div#youtube-player
  *    - This is a hard requirement, it MUST be a div as the API will transform this div into an iframe but keep the ID
  */
+import {throttle} from 'lodash'
+import {TweenMax} from 'gsap'
 
- /**
+/**
  * Inject APIs
  * @see https://developers.google.com/youtube/iframe_api_reference
  * @see https://developers.google.com/youtube/v3/docs/search#resource
@@ -33,6 +35,8 @@ window.addEventListener('load', () => {
     
     onStart () {window.App.$store.dispatch('youtube/play')},
     onStop () {window.App.$store.dispatch('youtube/pause')},
+
+    tween: {},
     
     /**
      * This is called on each webcam frame
@@ -41,6 +45,7 @@ window.addEventListener('load', () => {
     onFrame (faces) {
       // @TODO Refactor this
       if (!window.App.$store.state.youtube.player || !document.contains(window.App.$store.state.youtube.player.a)) return
+      window.App.$store.state.youtube.player.getSphericalProperties && window.App.$store.state.youtube.player.setSphericalProperties(this.tween)
 
       faces.forEach(face => {
         this.updatePOV(face)
@@ -59,15 +64,18 @@ window.addEventListener('load', () => {
     /**
      * Updates the pov
      */
-    updatePOV (face) {
-      if (!window.App.$store.state.youtube.player.getSphericalProperties) return
-      const pov = window.App.$store.state.youtube.player.getSphericalProperties()
-
-      // Update POV
-      pov.pitch -= face.centerVector.y * 7
-      pov.yaw -= face.centerVector.x * 7
-
-      if (face.centerVector.y || face.centerVector.x) window.App.$store.state.youtube.player.setSphericalProperties(pov)
-    }
+    updatePOV: throttle(function (face) {
+      if (window.App.$store.state.youtube.player.getSphericalProperties 
+      && (face.centerVector.x || face.centerVector.y)) {
+        this.tween = window.App.$store.state.youtube.player.getSphericalProperties()
+        TweenMax.to(this.tween, 250 / 1000, {
+          ease: 'Linear.easeNone',
+          pitch: this.tween.pitch - face.centerVector.y * 10,
+          yaw: this.tween.yaw - face.centerVector.x * 10,
+          overwrite: true,
+          immediate: true
+        })
+      }
+    }, 250)
   })
 })

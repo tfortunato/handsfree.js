@@ -224,7 +224,7 @@ class Handsfree {
       if(Math.abs(tweenFace.rx - rx) > jitterFactor) { tweenDuration = 0.0; }
       if(Math.abs(tweenFace.ry - ry) > jitterFactor) { tweenDuration = 0.0; }
 
-      TweenMax.to(tweenFace, tweenDuration, { rx: rx, ry: ry, overwrite: true});
+      TweenMax.to(tweenFace, tweenDuration, { rx: rx, ry: ry, overwrite: true, ease: 'Linear.easeNone'});
 
       let ryp         = Math.sin((tweenFace.ry / maxRyp * (Math.PI * 0.5)));
       let rxp         = Math.sin((tweenFace.rx / maxRxp * (Math.PI * 0.5)));
