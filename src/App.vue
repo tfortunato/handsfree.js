@@ -24,6 +24,11 @@
             v-icon ondemand_video
           v-list-tile-title Handsfree YouTube
 
+        v-list-tile(:to='{name: "holodeckLanding"}')
+          v-list-tile-action
+            v-icon blur_on
+          v-list-tile-title PlayCanvas Holodeck
+
         v-list-tile(:to='{name: "settings"}')
           v-list-tile-action
             v-icon settings
