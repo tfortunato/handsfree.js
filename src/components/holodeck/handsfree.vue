@@ -42,8 +42,9 @@ export default {
               $holodeck.contentWindow.postMessage({
                 action: 'handsfree:onFrame',
                 face: {
-                  translationX: face.translationX,
-                  translationY: face.translationY
+                  rotationX: -face.rotationX,
+                  rotationY: -face.rotationY,
+                  rotationZ: face.rotationZ
                 }
               }, '*')
             })
