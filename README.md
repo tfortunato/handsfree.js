@@ -335,6 +335,38 @@ npm run deploy
 
 For detailed explanation on how things work, check out the [Vuetify.js](https://vuetifyjs.com/) and [CLI Plugin](https://github.com/vuetifyjs/vue-cli-plugin-vuetify) documentation.
 
+## Development Notes
+
+- The main Vue instance is available on `window.App`
+- The main vuex store then is available on `window.App.$store`
+
+### Actions
+
+The following is a set of actions available:
+
+```js
+/**
+ * Calls the passed function either when window.handsfree is available, or immediately if it's ready
+ * - Think of this as window.addEventListener('load') but for the handsfree instance
+ * 
+ * - Use this inside the Mount component life cycle to disable plugins
+ * -- @see https://vuejs.org/v2/guide/instance.html#Lifecycle-Diagram
+ * 
+ * - Also use it on the beforeRouteLeave vue-router guard
+ * -- @see https://router.vuejs.org/guide/advanced/navigation-guards.html#in-component-guards
+ */
+App.$store.dispatch('onReady', () => {})
+```
+
+
+
+
+
+
+
+
+
+
 
 # More coming soon
 

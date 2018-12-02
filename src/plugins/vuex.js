@@ -23,8 +23,14 @@ export default new Vuex.Store({
 
   actions: {
     /**
-     * Runs a passed method either immediately or when window.handsfree is ready
-     * @param {Function} callback The callback to call when window.handsfree is ready (or immediately if it already is)
+     * Calls the passed function either when window.handsfree is available, or immediately if it's ready
+     * - Think of this as window.addEventListener('load') but for the handsfree instance
+     * 
+     * - Use this inside the Mount component life cycle to disable plugins
+     * -- @see https://vuejs.org/v2/guide/instance.html#Lifecycle-Diagram
+     * 
+     * - Also use it on the beforeRouteLeave vue-router guard
+     * -- @see https://router.vuejs.org/guide/advanced/navigation-guards.html#in-component-guards
      */
     onReady (store, callback) {
       if (window.handsfree) {
