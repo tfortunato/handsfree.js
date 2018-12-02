@@ -59,7 +59,7 @@ export default {
               this.updatePOV(face)
               
               // When cursor is over youtube...
-              if (face.cursor.$target && face.cursor.$target.getAttribute('id') === 'youtube-player') {
+              if (window.App.$store.state.youtube.player.getPlayerState && face.cursor.$target && face.cursor.$target.getAttribute('id') === 'youtube-player') {
                 // ...toggle the player
                 if (face.cursor.state.mouseDown) {
                   if (window.App.$store.state.youtube.player.getPlayerState() === 1) {

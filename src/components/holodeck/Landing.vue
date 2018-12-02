@@ -47,6 +47,11 @@ export default {
     const $canvas = this.$refs.playcanvas
     
     $canvas.height = `${window.innerHeight - $nav.clientHeight}px`
+
+    // Disable the boids plugin
+    this.$store.dispatch('onReady', () => {
+      window.handsfree.plugin['boids-debugger'].disable()
+    })
   }
 }
 </script>

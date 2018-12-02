@@ -5,10 +5,9 @@ require('./assets/styles/handsfree.styl')
 const facesOfOz = require('./store/faces/1-wink-face.json')
 
 document.addEventListener('DOMContentLoaded', () => {
-  // eslint-disable-next-line
-  window.handsfree = new Handsfree()
+  window.handsfree = new window.Handsfree()
   const handsfree = window.handsfree
-
+    
   /**
    * Boids Debugger Plugin
    * - Adds a fullscreen canvas

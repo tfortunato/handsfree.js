@@ -30,7 +30,7 @@ module.exports = Handsfree => {
     }
     
     // Call onUse hook
-    !config._isDisabled && config.onUse && config.onUse()
+    !config._isDisabled && config.onUse && config.onUse(this)
 
     // Sort alphabetically
     let newPlugins = {}
