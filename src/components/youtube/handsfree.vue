@@ -52,7 +52,7 @@ export default {
           window.App.$store.state.youtube.player.getSphericalProperties && window.App.$store.state.youtube.player.setSphericalProperties(this.tween)
 
           faces.forEach(face => {
-            this.updatePOV(face)
+            this.tweenPOV(face)
             
             // When cursor is over youtube...
             if (window.App.$store.state.youtube.player.getPlayerState && face.cursor.$target && face.cursor.$target.getAttribute('id') === 'youtube-player') {
@@ -77,13 +77,13 @@ export default {
         /**
          * Updates the pov
          */
-        updatePOV (face) {
+        tweenPOV (face) {
           if (window.App.$store.state.youtube.player.getSphericalProperties) {
             TweenMax.to(this.tween, 500 / 1000, {
-              ease: 'Linear.easeNone',
               pitch: -face.rotationX * 180 / Math.PI * 8,
               yaw: -face.rotationY * 180 / Math.PI * 10,
               roll: face.rotationZ * 180 / Math.PI * 2,
+              ease: 'Linear.easeNone',
               overwrite: true,
               immediate: true
             })
