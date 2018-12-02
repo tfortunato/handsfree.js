@@ -172,7 +172,7 @@ The debugger is loaded into the first element in the DOM with the `.handsfree-de
 ### Plugins
 Handsfree is built around a plugin architecture, which allows us to easily add and share functionality. We can even disable them!
 
-To add a plugin, use the `handsfree.use({})` method with the following form. This method returns the plugin object:
+To add a plugin, use the `handsfree.use({})` method with the following form. Calling `use()` with the same plugin `.name` overwrites it, allowing you to isolate the plugin while developing with Hot Reload! This method returns the plugin object:
 
 ```js
 const myPlugin = handsfree.use({

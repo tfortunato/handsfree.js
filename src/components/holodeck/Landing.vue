@@ -1,5 +1,6 @@
 <template lang="pug">
   div
+    HandsfreeHolodceck
     iframe(ref='playcanvas' src='https://playcanv.as/b/I1zzSILd/')
 
     v-container(grid-list-md)
@@ -34,8 +35,13 @@
 </template>
 
 <script>
+import HandsfreeHolodceck from './handsfree'
+
 export default {
   name: 'PlayCanvasLanding',
+
+  components: {HandsfreeHolodceck},
+  
   mounted () {
     const $nav = document.querySelector('#main-nav')
     const $canvas = this.$refs.playcanvas
