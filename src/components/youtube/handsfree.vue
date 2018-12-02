@@ -3,7 +3,6 @@ div
 </template>
 
 <script>
-import {throttle} from 'lodash'
 import {TweenMax} from 'gsap'
 
 /**
@@ -25,79 +24,73 @@ apis.forEach((api, i) => {
 })
 
 export default {
-  mounted () {this.useHandsfree()},
-
-  methods: {
-    /**
-     * Sets up Handsfree for this view
-     */
-    useHandsfree: throttle(function () {
+  mounted () {
+    this.$store.dispatch('onReady', () => {
       const handsfree = window.handsfree
+      handsfree.use({
+        name: 'youtube-360',
+        
+        // Used for tweening
+        tween: {},
 
-      if (handsfree) {
-        handsfree.use({
-          name: 'youtube-360',
-          
-          onStart () {window.App.$store.dispatch('youtube/play')},
-          onStop () {
-            window.App.$store.dispatch('youtube/pause')
-            handsfree.cursor.$el.style.display = 'inherit'
-          },
+        /**
+         * Toggle video with camera
+         */
+        onStart () {window.App.$store.dispatch('youtube/play')},
+        onStop () {
+          window.App.$store.dispatch('youtube/pause')
+          handsfree.cursor.$el.style.display = 'inherit'
+        },
 
-          tween: {},
-          
-          /**
-           * This is called on each webcam frame
-           * @param {Array} faces An array of detected faces
-           */
-          onFrame (faces) {
-            // @TODO Refactor this
-            if (!window.App.$store.state.youtube.player || !document.contains(window.App.$store.state.youtube.player.a)) return
-            window.App.$store.state.youtube.player.getSphericalProperties && window.App.$store.state.youtube.player.setSphericalProperties(this.tween)
+        /**
+         * This is called on each webcam frame
+         * @param {Array} faces An array of detected faces
+         */
+        onFrame (faces) {
+          // @TODO Refactor this
+          if (!window.App.$store.state.youtube.player || !document.contains(window.App.$store.state.youtube.player.a)) return
+          window.App.$store.state.youtube.player.getSphericalProperties && window.App.$store.state.youtube.player.setSphericalProperties(this.tween)
 
-            faces.forEach(face => {
-              this.updatePOV(face)
-              
-              // When cursor is over youtube...
-              if (window.App.$store.state.youtube.player.getPlayerState && face.cursor.$target && face.cursor.$target.getAttribute('id') === 'youtube-player') {
-                // ...toggle the player
-                if (face.cursor.state.mouseDown) {
-                  if (window.App.$store.state.youtube.player.getPlayerState() === 1) {
-                    this.onStop()
-                  } else {
-                    this.onStart()
-                  }
+          faces.forEach(face => {
+            this.updatePOV(face)
+            
+            // When cursor is over youtube...
+            if (window.App.$store.state.youtube.player.getPlayerState && face.cursor.$target && face.cursor.$target.getAttribute('id') === 'youtube-player') {
+              // ...toggle the player
+              if (face.cursor.state.mouseDown) {
+                if (window.App.$store.state.youtube.player.getPlayerState() === 1) {
+                  this.onStop()
+                } else {
+                  this.onStart()
                 }
-
-                // Hide cursor
-                if (window.App.$store.state.youtube.player.getPlayerState && window.App.$store.state.youtube.player.getPlayerState() === 1) handsfree.cursor.$el.style.display = 'none'
-              } else {
-                // Show cursor
-                handsfree.cursor.$el.style.display = 'inherit'
               }
-            })
-          },
 
-          /**
-           * Updates the pov
-           */
-          updatePOV (face) {
-            if (window.App.$store.state.youtube.player.getSphericalProperties) {
-              TweenMax.to(this.tween, 500 / 1000, {
-                ease: 'Linear.easeNone',
-                pitch: -face.rotationX * 180 / Math.PI * 8,
-                yaw: -face.rotationY * 180 / Math.PI * 10,
-                roll: face.rotationZ * 180 / Math.PI * 2,
-                overwrite: true,
-                immediate: true
-              })
+              // Hide cursor
+              if (window.App.$store.state.youtube.player.getPlayerState && window.App.$store.state.youtube.player.getPlayerState() === 1) handsfree.cursor.$el.style.display = 'none'
+            } else {
+              // Show cursor
+              handsfree.cursor.$el.style.display = 'inherit'
             }
+          })
+        },
+
+        /**
+         * Updates the pov
+         */
+        updatePOV (face) {
+          if (window.App.$store.state.youtube.player.getSphericalProperties) {
+            TweenMax.to(this.tween, 500 / 1000, {
+              ease: 'Linear.easeNone',
+              pitch: -face.rotationX * 180 / Math.PI * 8,
+              yaw: -face.rotationY * 180 / Math.PI * 10,
+              roll: face.rotationZ * 180 / Math.PI * 2,
+              overwrite: true,
+              immediate: true
+            })
           }
-        })
-      } else {
-        this.useHandsfree()
-      }
-    }, 50)
+        }
+      })
+    })
   }
 }
 </script>
