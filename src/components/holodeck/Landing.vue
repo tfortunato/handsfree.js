@@ -1,13 +1,36 @@
 <template lang="pug">
   div
     iframe(ref='playcanvas' src='https://playcanv.as/b/I1zzSILd/')
+
     v-container(grid-list-md)
       v-layout.mb-5(wrap)
         v-flex(xs12 md6 lg8)
         v-flex(xs12 md6 lg4)
           v-card(light)
-            v-card-title
-              h2 Roadmap
+            v-card-text
+              //- v-img(src='https://media.giphy.com/media/4HgnusIh1i8MzRoaOm/giphy.gif')
+              p.mt-3
+                | This experiment creates an illusion of depth via head tracking!
+                //- |  <a href="https://glitch.com/~handsfree-youtube">Remix the YouTube Handsfree Starter Kit on Glitch to take it further</a> 🔮
+            
+            v-divider.my-3
+
+            v-card-title.pb-0
+              h3 Instructions
+            v-card-text
+              ul
+                li Turn, tilt, and roll your head in the direction you want to look in
+                li Lean in/back to adjust your field of view
+              
+            v-divider.my-3
+
+            v-card-title.pb-0
+              h3 🗺️ Roadmap
+            v-card-text
+              p
+                i 
+                  a(href='https://github.com/BrowseHandsfree/handsfreeJS/issues/37') coming soon
+              p.mt-4 Want to help? Pull requests welcome on <a href="https://github.com/browsehandsfree/HandsfreeJS">GitHub</a> or <a href="https://twitter.com/labofoz">@labofoz</a>
 </template>
 
 <script>

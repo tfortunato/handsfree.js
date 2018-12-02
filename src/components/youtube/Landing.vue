@@ -36,34 +36,29 @@
                 img.mr-2(src='/favicon.png' height=36)
                 | About This Youtube Client
             v-card-text
-              v-img(src='https://media.giphy.com/media/2t9vvwruEefeOw90HE/giphy.gif')
-              p.mt-3 This accessible experiment explores handsfree ways to watch YouTube 360 videos! <a href="https://glitch.com/~handsfree-youtube">Remix the YouTube Handsfree Starter Kit on Glitch to take it further</a> 🔮
+              v-img(src='https://media.giphy.com/media/4HgnusIh1i8MzRoaOm/giphy.gif')
+              p.mt-3 This experiment explores handsfree ways to watch YouTube 360 videos without a headset! <a href="https://glitch.com/~handsfree-youtube">Remix the YouTube Handsfree Starter Kit on Glitch to take it further</a> 🔮
             
-              v-divider.my-3
+            v-divider.my-3
 
-              p
-                strong Quickstart
+            v-card-title.pb-0
+              h3 Instructions
+            v-card-text
               ul
-                li Turn head in the direction you want to look in
-                li Click videos to play/pause
+                li Turn, tilt, and roll your head in the direction you want to look in
+                li Smile wide to click on video to start/pause it
+                li Manually click/tap fullscreen button to enter full screen and hide cursor
               
-              v-divider.my-3
-              
-              p
-                strong Details
-              ul
-                li There is a circular "safe zone" about half the size of your display in the center of the screen, keep the cursor here to keep the video still
-                li Move the cursor outside this zone to look in that direction. The further from the center you move the cursor, the faster you'll turn
-                li Manually clicking the full screen icon in the YouTube player will also hide the cursor for a more immersive experience
-
             v-divider.my-3
 
             v-card-title.pb-0
               h3 🗺️ Roadmap
             v-card-text
               ol
-                li Go in and out of full screen
+                li Remove jitter
+                li Go in and out of full screen with gesture
                 li Change FOV by leaning in/out
+                li Get virtual keyboard working
                 li Pagination
                 li Search filters
                 li Scrub videos

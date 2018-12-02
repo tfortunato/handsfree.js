@@ -1,5 +1,6 @@
 <template lang="pug">
   div
+    UseHandsfree
     v-container
       v-layout
         v-flex.mb-5(xs12 m8)
@@ -11,12 +12,12 @@
 
 <script>
 import YouTubeLanding from './Landing'
-import './youtube.handsfree.js'
+import UseHandsfree from './handsfree.vue'
 
 export default {
   name: 'YouTubeSingle',
 
-  components: {YouTubeLanding},
+  components: {YouTubeLanding, UseHandsfree},
 
   mounted () {
     this.maybeInitVideo()
@@ -49,7 +50,8 @@ export default {
      * Resizes the player ot be as tall as the display
      */
     resizePlayer () {
-      document.querySelector('#youtube-player').style.height = `${window.innerHeight - 100}px`
+      const $player = document.querySelector('#youtube-player')
+      if ($player) $player.style.height = `${window.innerHeight - 100}px`
     }
   }
 }
