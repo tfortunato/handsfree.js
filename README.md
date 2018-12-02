@@ -280,9 +280,8 @@ The document body contains `.handsfree-stopped` when handsfree is stopped (this 
 
 ## Visual Debugging
 
-The debugger is loaded into the first element in the DOM with the `.handsfree-debug-wrap`. If one doesn't exist, then it's added as the last root element of `body`. You should rarely need to debug visually, and it's preferred that you don't draw into this canvas at all.
+The debugger is loaded into the first element in the DOM with the `.handsfree-debug-wrap`. If one doesn't exist, then it's added as the last root element of `body`. You should rarely need to debug visually, and it's preferred that you don't draw into this canvas at all as it's used by the BRFv4 model for inferring your head pose.
 
-This will eventually be used to help me record better GIFs and live
 
 
 
@@ -299,7 +298,19 @@ This will eventually be used to help me record better GIFs and live
 
 This is where [handsfree.js.org](https://handsfree.js.org) lives and is a good place to prototype quickly. I'll leave more instructions for this workflow soon.
 
-## Prereqs
+## Workflows
+### Handsfree YouTube
+
+**Source:** `/src/components/youtube/`
+
+**Preview:** https://handsfree.js.org/#/youtube
+
+**Starter Kit:** https://glitch.com/~handsfree-youtube
+
+![](https://media.giphy.com/media/4HgnusIh1i8MzRoaOm/giphy.gif)
+
+
+## Building Prereqs
 - [NodeJS](https://nodejs.org/en/)
 
 ## Scripts
