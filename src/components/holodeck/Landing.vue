@@ -1,12 +1,12 @@
 <template lang="pug">
   div
     HandsfreeHolodceck
-    iframe(ref='playcanvas' src='https://playcanv.as/b/I1zzSILd/')
+    iframe#handsfree-holodeck(ref='playcanvas' src='https://playcanv.as/p/1ha5glKf/')
 
     v-container(grid-list-md)
       v-layout.mb-5(wrap)
-        v-flex(xs12 md6 lg8)
-        v-flex(xs12 md6 lg4)
+        v-flex(xs12 md6 lg8 style='height: 500px')
+        v-flex.handsfree-show-when-stopped(xs12 md6 lg4)
           v-card(light)
             v-card-text
               //- v-img(src='https://media.giphy.com/media/4HgnusIh1i8MzRoaOm/giphy.gif')
@@ -21,7 +21,7 @@
             v-card-text
               ul
                 li Turn, tilt, and roll your head in the direction you want to look in
-                li Lean in/back to adjust your field of view
+                li Physically move to get a better view
               
             v-divider.my-3
 

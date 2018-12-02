@@ -98,7 +98,7 @@ export default {
     // Limit to just 360 videos
     only360: true,
     // The search query to use
-    searchQuery: 'Science'
+    searchQuery: 'Blue Angels'
   }),
 
   mounted () {

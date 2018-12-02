@@ -3,10 +3,22 @@ div
 </template>
 
 <script>
+/**
+ * PlayCanvas Holodeck
+ * - Emmits a 'handsfree:onFrame' on the iframe with camera config
+ */
 import {throttle} from 'lodash'
 
 export default {
-  mounted () {this.useHandsfree()},
+  mounted () {
+    this.useHandsfree()
+  },
+
+  data () {
+    return {
+      holodeck: null
+    }
+  },
 
   methods: {
     /**
@@ -17,6 +29,7 @@ export default {
       const handsfree = window.handsfree
 
       if (handsfree) {
+        const $holodeck = document.getElementById('handsfree-holodeck')
         handsfree.use({
           name: 'playcanvas-holodeck',
           
@@ -24,8 +37,16 @@ export default {
            * This is called on each webcam frame
            * @param {Array} faces An array of detected faces
            */
-          onFrame () {
-
+          onFrame (faces) {
+            faces.forEach(face => {
+              $holodeck.contentWindow.postMessage({
+                action: 'handsfree:onFrame',
+                face: {
+                  translationX: face.translationX,
+                  translationY: face.translationY
+                }
+              }, '*')
+            })
           }
         })
       } else {
