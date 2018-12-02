@@ -34,15 +34,34 @@
             v-card-title.pb-0(primary-title)
               h2 
                 img.mr-2(src='/favicon.png' height=36)
-                | Handsfree Tips
+                | About This Youtube Client
             v-card-text
+              v-img(src='https://media.giphy.com/media/2t9vvwruEefeOw90HE/giphy.gif')
+              p.mt-3 This accessible experiment explores handsfree ways to watch YouTube 360 videos! <a href="https://glitch.com/~handsfree-youtube">Remix the YouTube Handsfree Starter Kit on Glitch to take it further</a> 🔮
+            
+              v-divider.my-3
+
+              p
+                strong Quickstart
               ul
                 li Turn head in the direction you want to look in
                 li Click videos to play/pause
+              
+              v-divider.my-3
+              
+              p
+                strong Details
+              ul
+                li There is a circular "safe zone" about half the size of your display in the center of the screen, keep the cursor here to keep the video still
+                li Move the cursor outside this zone to look in that direction. The further from the center you move the cursor, the faster you'll turn
+
+            v-divider.my-3
+
             v-card-title.pb-0
               h3 🗺️ Roadmap
             v-card-text
               ol
+                li Change FOV by leaning in/out
                 li Pagination
                 li Search filters
                 li Scrub videos

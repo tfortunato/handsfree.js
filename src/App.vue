@@ -1,6 +1,6 @@
 <template lang="pug">
   v-app(dark)
-    v-toolbar(light app)
+    v-toolbar#main-nav(light app)
       v-toolbar-side-icon(@click.stop='isNavOpen = !isNavOpen')
       v-toolbar-title.headline.text-uppercase
         span
