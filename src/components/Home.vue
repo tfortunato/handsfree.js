@@ -2,9 +2,9 @@
   div
     v-container(grid-list-lg)
       v-layout.mb-5(justify-center wrap)
-        v-flex(mb-4 xs12 md6 style='margin-top: 150px')
-          div.text-xs-center
-            img(src='/favicon.png' width=100)
+        v-flex(mb-4 xs12 md6)
+          p.mb-3.text-xs-center
+            img(src='https://media.giphy.com/media/AFXBi87gYqWMth1T6m/giphy.gif')
           h1.text-xs-center.display-2.font-weight-bold.mb-3 Handsfree.js
           p.text-xs-center
             | Made possible by <a href="https://github.com/Tastenkunst/brfv4_javascript_examples">BRFv4</a> and <a href="https://js.tensorflow.org/">TensorFlow.js</a>
@@ -27,9 +27,9 @@
         v-flex(mb-4 xs12 md6)
           v-card(light)
             v-card-title(primary-title)
-              h2.headline.mb-0 Drawing Canvas
+              h2.headline.mb-0 🎨 Try It
             v-card-text
-              p 😊 Smiles activate clicks. Lean in and back to adjust brush size. Give it a try by drawing shapes in the canvas below 🎨
+              p Smile wide to start a click and make a normal face to release it. Lean in and back to adjust brush size. <a href="https://glitch.com/~handsfree-drawing">Try the Handsfree Drawing Starter Kit on Glitch</a>.
               canvas#paperjs(style="width: 100%; height: 400px; box-shadow: 0 0 3px rgba(0,0,0,0.35)")
               div
                 v-btn.mx-0(large color='primary' @click='clearDrawing' style='width: 100%;') Clear Drawing

@@ -54,6 +54,7 @@
               ul
                 li There is a circular "safe zone" about half the size of your display in the center of the screen, keep the cursor here to keep the video still
                 li Move the cursor outside this zone to look in that direction. The further from the center you move the cursor, the faster you'll turn
+                li Manually clicking the full screen icon in the YouTube player will also hide the cursor for a more immersive experience
 
             v-divider.my-3
 
@@ -61,6 +62,7 @@
               h3 🗺️ Roadmap
             v-card-text
               ol
+                li Go in and out of full screen
                 li Change FOV by leaning in/out
                 li Pagination
                 li Search filters
