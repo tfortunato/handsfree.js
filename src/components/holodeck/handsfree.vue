@@ -17,6 +17,29 @@ document.body.appendChild($script)
  * - Emmits a 'handsfree:onFrame' on the iframe with camera config
  */
 export default {  
+  data () {
+    return {
+      // THREE.js
+      renderer: null,
+      scene: null,
+      camera: null,
+      ww: 0,
+      wh: 0,
+
+      // The scaling of the "screen" in the 3d model
+      // - This is the vertical size of screen in 3d-model relative to vertical size of computerscreen in real life
+      scaling: 27,
+
+      // x, y, z position of "screen" in 3d-model
+      fixedPosition: [0, 0, 50],
+
+      damping: 0.5,
+
+      // vertical size of computer screen (default is 20 cm, i.e. typical laptop size)
+      screenHeight: 20
+    }
+  },
+
   mounted () {
     const component = this
     
@@ -67,7 +90,11 @@ export default {
   },
 
   methods: {
+    /**
+     * @see https://www.auduno.com/headtrackr/examples/targets.html
+     */
     updateCamera (face) {
+      // Use the heads position
       face.translationX = (-face.translationX / window.handsfree.debug.$canvas.width + 0.5) * 20
       face.translationY = (-face.translationY / window.handsfree.debug.$canvas.height + 0.5) * 20
       face.translationZ = (window.handsfree.debug.$canvas.height - face.scale) / 8 + 10
@@ -82,8 +109,6 @@ export default {
       
       // when changing height of window, we need to change field of view
       this.camera.fov = Math.atan((this.wh / 2 + Math.abs(face.translationY * this.scaling * this.damping )) / (Math.abs(face.translationZ * this.scaling))) *360 / Math.PI
-
-      //debugger
       this.camera.updateProjectionMatrix()
     },
     
@@ -180,9 +205,9 @@ export default {
       const THREE = window.THREE
       
       // Cylinder
-      const cylinder = new THREE.Mesh( new THREE.CylinderGeometry(30,30,1,20,1,false), new THREE.MeshBasicMaterial( { color : 0xeeeeee} ) )
+      const cylinder = new THREE.Mesh( new THREE.CylinderGeometry(30, 30, 1, 20, 1), new THREE.MeshBasicMaterial( { color : 0xeeeeee} ) )
       cylinder.position.x = x
-      cylinder.rotation.x = Math.PI/2
+      cylinder.rotation.x = Math.PI / 2
       cylinder.position.y = y
       cylinder.position.z = z
       this.scene.add( cylinder )
@@ -194,29 +219,6 @@ export default {
       line.position.x = x
       line.position.y = y
       this.scene.add( line )
-    }
-  },
-
-  data () {
-    return {
-      // THREE.js
-      renderer: null,
-      scene: null,
-      camera: null,
-      ww: 0,
-      wh: 0,
-
-      // The scaling of the "screen" in the 3d model
-      // - This is the vertical size of screen in 3d-model relative to vertical size of computerscreen in real life
-      scaling: 27,
-
-      // x, y, z position of "screen" in 3d-model
-      fixedPosition: [0, 0, 50],
-
-      damping: 0.5,
-
-      // vertical size of computer screen (default is 20 cm, i.e. typical laptop size)
-      screenHeight: 20
     }
   }
 }
