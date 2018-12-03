@@ -4,8 +4,6 @@ div
 </template>
 
 <script>
-import {TweenMax} from 'gsap'
-
 /**
  * Setup Three
  * @todo Only load when needed
@@ -20,6 +18,8 @@ document.body.appendChild($script)
  */
 export default {  
   mounted () {
+    const component = this
+    
     this.$store.dispatch('onReady', () => {
       const handsfree = window.handsfree
       this.setupThree()
@@ -58,22 +58,8 @@ export default {
             }
             
             // Update positions
-            this.tweenPOV(face)
-            this.renderer.render(this.scene, this.camera)
-          })
-        },
-
-        /**
-         * Updates the pov
-         */
-        tweenPOV (face) {
-          TweenMax.to(this.tween, 500 / 1000, {
-            rotationX: face.rotationX,
-            rotationY: face.rotationY,
-            rotationZ: face.rotationZ,
-            ease: 'Linear.easeNone',
-            overwrite: true,
-            immediate: true
+            component.updateCamera(face)
+            component.renderer.render(component.scene, component.camera)
           })
         }
       })
@@ -81,6 +67,26 @@ export default {
   },
 
   methods: {
+    updateCamera (face) {
+      face.translationX = (-face.translationX / window.handsfree.debug.$canvas.width + 0.5) * 20
+      face.translationY = (-face.translationY / window.handsfree.debug.$canvas.height + 0.5) * 20
+      face.translationZ = (window.handsfree.debug.$canvas.height - face.scale) / 8 + 10
+
+      let xOffset = face.translationX > 0 ? 0 : -face.translationX * 2 * this.damping * this.scaling
+      let yOffset = face.translationY < 0 ? 0 : face.translationY * 2 * this.damping * this.scaling
+      this.camera.setViewOffset(this.ww + Math.abs(face.translationX * 2 * this.damping * this.scaling), this.wh + Math.abs(face.translationY * this.damping * 2 * this.scaling), xOffset, yOffset, this.ww, this.wh)
+      
+      this.camera.position.x = this.fixedPosition[0] + (face.translationX * this.scaling * this.damping )
+      this.camera.position.y = this.fixedPosition[1] + (face.translationY * this.scaling * this.damping )
+      this.camera.position.z = this.fixedPosition[2] + (face.translationZ * this.scaling)
+      
+      // when changing height of window, we need to change field of view
+      this.camera.fov = Math.atan((this.wh / 2 + Math.abs(face.translationY * this.scaling * this.damping )) / (Math.abs(face.translationZ * this.scaling))) *360 / Math.PI
+
+      //debugger
+      this.camera.updateProjectionMatrix()
+    },
+    
     /**
      * @see https://www.auduno.com/headtrackr/examples/targets.html
      */
@@ -102,6 +108,42 @@ export default {
       this.camera.position.z = 6000
       this.scene.add(this.camera)
 
+      this.createWalls()
+
+      // Create targets
+      this.createTarget(-150,-150,-550)
+      this.createTarget(0,-150,-200)
+      this.createTarget(100,0,500)
+      this.createTarget(-150,100,0)
+      this.createTarget(150,-100,-1050)
+      this.createTarget(50,0,1100)
+      this.createTarget(-50,-50,600)
+      this.createTarget(0,150,-2100)
+      this.createTarget(-130,0,-700)      
+
+      // Attach things
+      this.renderer = new THREE.WebGLRenderer({clearAlpha: 1})
+      this.renderer.setSize(window.innerWidth, window.innerHeight)
+      container.appendChild(this.renderer.domElement)
+
+      // Setup Camera
+      this.camera.position.x = this.fixedPosition[0]
+      this.camera.position.y = this.fixedPosition[1]
+      this.camera.position.z = this.fixedPosition[2]
+      this.camera.lookAt(new THREE.Vector3(0,0,0))
+      
+      this.wh = this.screenHeight * this.scaling
+      this.ww = this.wh * this.camera.aspect
+      
+      this.renderer.render(this.scene, this.camera)
+    },
+
+    /**
+     * Creates the walls
+     */
+    createWalls () {
+      const THREE = window.THREE
+      
       //top wall
       const plane1 = new THREE.Mesh( new THREE.PlaneGeometry( 500, 3000, 5, 15 ), new THREE.MeshBasicMaterial( { color: 0xcccccc, wireframe : true } ) )
       plane1.rotation.x = Math.PI/2
@@ -129,26 +171,6 @@ export default {
       plane4.position.y = -250
       plane4.position.z = 50-1500
       this.scene.add( plane4 )
-
-      // Create targets
-      this.createTarget(-150,-150,-550)
-      this.createTarget(0,-150,-200)
-      this.createTarget(100,0,500)
-      this.createTarget(-150,100,0)
-      this.createTarget(150,-100,-1050)
-      this.createTarget(50,0,1100)
-      this.createTarget(-50,-50,600)
-      this.createTarget(0,150,-2100)
-      this.createTarget(-130,0,-700)      
-
-      // Attach things
-      this.renderer = new THREE.WebGLRenderer({clearAlpha: 1})
-      this.renderer.setSize(window.innerWidth, window.innerHeight)
-      container.appendChild(this.renderer.domElement)
-
-      // Render
-      this.setupHeadtrackedCamera(this.camera, 27, [0, 0, 50], new THREE.Vector3(0, 0, 0), {damping: 0.5})
-      this.renderer.render(this.scene, this.camera)
     },
 
     /**
@@ -172,56 +194,6 @@ export default {
       line.position.x = x
       line.position.y = y
       this.scene.add( line )
-    },
-
-    /**
-     * Controls a THREE.js camera to create pseudo-3D effect
-     *
-     * Needs the position of "screen" in 3d-model to be given up front, and to be static (i.e. absolute) during headtracking
-     * 
-     * @see https://www.auduno.com/headtrackr/examples/js/headtrackr.js
-     *
-     * @param {THREE.PerspectiveCamera} camera
-     * @param {number} scaling The scaling of the "screen" in the 3d model. 
-     *   This is the vertical size of screen in 3d-model relative to vertical size of computerscreen in real life
-     * @param {array} fixedPosition array with attributes x,y,z, position of "screen" in 3d-model
-     * @param {THREE.Vector3} lookAt the object/position the camera should be pointed towards
-     * @param {object} params optional object with optional parameters
-     *
-     * Optional parameters:
-     *   screenHeight : vertical size of computer screen (default is 20 cm, i.e. typical laptop size)
-     */
-    setupHeadtrackedCamera (camera, scaling, fixedPosition, lookAt, params = {}) {
-      let screenHeight_cms = params.screenHeight || 20
-      if (typeof params.damping === 'undefined') params.damping = 1
-      
-      // Set position
-      this.camera.position.x = fixedPosition[0]
-      this.camera.position.y = fixedPosition[1]
-      this.camera.position.z = fixedPosition[2]
-      this.camera.lookAt(lookAt)
-      
-      this.wh = screenHeight_cms * scaling
-      this.ww = this.wh * this.camera.aspect
-      
-      document.addEventListener('headtrackingEvent', (event) => {
-        // update camera
-        let xOffset = event.x > 0 ? 0 : -event.x * 2 * params.damping * scaling
-        let yOffset = event.y < 0 ? 0 : event.y * 2 * params.damping * scaling
-        this.camera.setViewOffset(this.ww + Math.abs(event.x * 2 * params.damping * scaling), this.wh + Math.abs(event.y * params.damping * 2 * scaling), xOffset, yOffset, this.ww, this.wh)
-        
-        this.camera.position.x = fixedPosition[0] + (event.x * scaling * params.damping )
-        this.camera.position.y = fixedPosition[1] + (event.y * scaling * params.damping )
-        this.camera.position.z = fixedPosition[2] + (event.z * scaling)
-        
-        // update lookAt?
-        
-        // when changing height of window, we need to change field of view
-        this.camera.fov = Math.atan((this.wh / 2 + Math.abs(event.y * scaling * params.damping ))/(Math.abs(event.z*scaling)))*360/Math.PI
-
-        //debugger
-        this.camera.updateProjectionMatrix()
-      }, false)
     }
   },
 
@@ -232,7 +204,19 @@ export default {
       scene: null,
       camera: null,
       ww: 0,
-      wh: 0
+      wh: 0,
+
+      // The scaling of the "screen" in the 3d model
+      // - This is the vertical size of screen in 3d-model relative to vertical size of computerscreen in real life
+      scaling: 27,
+
+      // x, y, z position of "screen" in 3d-model
+      fixedPosition: [0, 0, 50],
+
+      damping: 0.5,
+
+      // vertical size of computer screen (default is 20 cm, i.e. typical laptop size)
+      screenHeight: 20
     }
   }
 }
