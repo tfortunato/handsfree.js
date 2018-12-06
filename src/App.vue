@@ -27,7 +27,7 @@
         v-list-tile(:to='{name: "holodeckLanding"}')
           v-list-tile-action
             v-icon blur_on
-          v-list-tile-title Holodeck
+          v-list-tile-title 3D Perspective Test
 
         v-list-tile(:to='{name: "settings"}')
           v-list-tile-action
