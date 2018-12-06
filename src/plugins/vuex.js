@@ -47,7 +47,16 @@ const store = new Vuex.Store({
       } else {
         setTimeout(() => store.dispatch('onReady', callback), 50)
       }
-    }
+    },
+
+    /**
+     * Toggle Handsfree
+     */
+    startHandsfree (store) {
+      store.commit('set', ['loading.color', 'error'])
+      window.handsfree.start()
+    },
+    stopHandsfree () {window.handsfree.stop()}
   }
 })
 
@@ -61,6 +70,10 @@ window.addEventListener('handsfree:ready', () => {
 })
 window.addEventListener('handsfree:loading', (ev) => {
   store.commit('set', ['loading.progress', ev.detail.progress])
+  if (ev.detail.progress === 100) {
+    store.commit('set', ['loading.color', 'success'])
+    setTimeout(() => store.commit('set', ['loading.color', 'info']), 1000)
+  }
 })
 
 export default store
