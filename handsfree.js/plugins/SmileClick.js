@@ -37,12 +37,14 @@ module.exports = {
       if (smileFactor < 0) smileFactor = 0
       if (smileFactor > 1) smileFactor = 1
 
+      // Update states and fire events
       instance.faces[faceIndex].cursor.state = this.updateMouseStates({
         face,
         faceIndex,
         instance,
         smileFactor
       })
+      this.maybeFireEvents(instance.faces, faceIndex)
     })
 
     return instance.faces
@@ -55,8 +57,10 @@ module.exports = {
   updateMouseStates (state) {
     if (state.smileFactor >= 1) {
       this.mouseDrag[state.faceIndex] = this.mouseDowned[state.faceIndex]
+      // Every frame after first frame of click
       if (this.mouseDowned[state.faceIndex]) {
         this.mouseDown[state.faceIndex] = false
+      // First frame of click
       } else {
         this.mouseDowned[state.faceIndex] = true
         this.mouseDown[state.faceIndex] = true
@@ -81,6 +85,31 @@ module.exports = {
       mouseDown: this.mouseDown[state.faceIndex],
       mouseDrag: this.mouseDrag[state.faceIndex],
       mouseUp: this.mouseUp[state.faceIndex]
+    }
+  },
+
+  /**
+   * Maybe fire events
+   */
+  maybeFireEvents (faces, index) {
+    const state = faces[index].cursor.state
+    let eventName = ''
+    
+    if (state.mouseDown) {
+      eventName = 'mouseDown'
+    } else if (state.mouseDrag) {
+      eventName = 'mouseDrag'
+    } else if (state.mouseUp) {
+      eventName = 'mouseUp'
+    }
+
+    if (eventName) {
+      window.dispatchEvent(new CustomEvent(`handsfree:${eventName}`, {
+        detail: {
+          face: faces[index],
+          id: index
+        }
+      }))
     }
   },
 

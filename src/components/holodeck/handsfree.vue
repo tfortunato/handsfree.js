@@ -61,6 +61,11 @@ export default {
           rotationY: 0,
           rotationZ: 0
         },
+
+        /**
+         * Toggle cursor
+         */
+        onMouseDown () {this.showCursor = !this.showCursor},
         
         /**
          * This is called on each webcam frame
@@ -68,11 +73,6 @@ export default {
          */
         onFrame (faces) {
           faces.forEach(face => {
-            // Show/hide cursor
-            if (face.cursor.state.mouseDown) {
-              this.showCursor = !this.showCursor
-            }
-
             // Hide cursor when over the iframe
             if (face.cursor.$target && face.cursor.$target.nodeName === 'CANVAS') {
               handsfree.cursor.$el.style.display = this.showCursor ? 'inherit' : 'none'

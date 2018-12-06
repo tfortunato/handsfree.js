@@ -175,7 +175,16 @@ const myPlugin = handsfree.use({
   onDisable: (handsfree) => {},
 
   // Called when .enable() is explicitely called on this plugin
-  onEnable: (handsfree) => {}
+  onEnable: (handsfree) => {},
+
+  // Called the first frame a face clicks
+  onMouseDown: (face, faceIndex) => {},
+
+  // Called every frame after a face clicks and is still in "click mode"
+  onMouseDrag: (face, faceIndex) => {},
+
+  // Called after a face releases a click
+  onMouseUp: (face, faceIndex) => {}
 })
 ```
 
@@ -272,6 +281,48 @@ window.addEventListener('handsfree:ready', () => {
   // do stuff when handsfree is ready
 })
 ```
+
+### handsfree.mouseDown
+```js
+/**
+ * Called the first frame that a face clicks
+ */
+window.addEventListener('handsfree:mouseDown', (ev) => {
+  const face = ev.detail.face
+  const faceIndex = ev.detail.faceIndex
+
+  // Do things with face and faceIndex here
+})
+```
+
+### handsfree.mouseDrag
+```js
+/**
+ * Called every frame after a face clicks and is still in "click mode"
+ */
+window.addEventListener('handsfree:mouseDrag', (ev) => {
+  const face = ev.detail.face
+  const faceIndex = ev.detail.faceIndex
+
+  // Do things with face and faceIndex here
+})
+```
+
+### handsfree.mouseUp
+```js
+/**
+ * Called when a face releases a click
+ */
+window.addEventListener('handsfree:mouseUp', (ev) => {
+  const face = ev.detail.face
+  const faceIndex = ev.detail.faceIndex
+
+  // Do things with face and faceIndex here
+})
+```
+
+## Deprecated Events
+The following events are still being used but will be deprecated during the next major release:
 
 ### handsfree-trackFaces
 An alternative to plugins is to listen in on the window's `handsfree-trackFaces` event:

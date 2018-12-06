@@ -17,7 +17,8 @@
               img.mr-2(src='https://travis-ci.org/BrowseHandsfree/handsfreeJS.svg?branch=master')
             a(href='https://codecov.io/gh/BrowseHandsfree/handsfreeJS')
               img.mr-2(src='https://img.shields.io/codecov/c/github/BrowseHandsfree/handsfreeJS/master.svg?style=flat')
-            a.github-button(href='https://github.com/browsehandsfree/handsfreejs' data-show-count='true' aria-label='Star browsehandsfree/handsfreejs on GitHub' data-icon='octicon-star') GitHub
+            span(style='margin-top: 5px; display: inline-block; vertical-align: middle')
+              a.github-button(href='https://github.com/browsehandsfree/handsfreejs' data-show-count='true' aria-label='Star browsehandsfree/handsfreejs on GitHub' data-icon='octicon-star') GitHub
           p.subheading.font-weight-regular
             | A drop-in library for adding handsfree interfaces to any website, service, and Internet of Thing. Runs on any device that supports <a href="https://caniuse.com/#feat=stream">getUserMedia()</a>
           p.text-xs-center
@@ -205,7 +206,16 @@
                     onDisable: (handsfree) => {},
 
                     // Called when .enable() is explicitely called on this plugin
-                    onEnable: (handsfree) => {}
+                    onEnable: (handsfree) => {},
+
+                    // Called the first frame a face clicks
+                    onMouseDown: (face, faceIndex) => {},
+
+                    // Called every frame after a face clicks and is still in "click mode"
+                    onMouseDrag: (face, faceIndex) => {},
+
+                    // Called after a face releases a click
+                    onMouseUp: (face, faceIndex) => {}
                   })
 
               p Additionally, every plugin has a <code>.disable()</code> and an <code>.enable()</code> method, which sets a <code>._isDisabled</code> flag to either true or false:
@@ -278,7 +288,36 @@
                       // Enable .start() buttons
                     })
 
-                  
+                    /**
+                     * Called the first frame that a face clicks
+                     */
+                    window.addEventListener('handsfree:mouseDown', (ev) => {
+                      const face = ev.detail.face
+                      const faceIndex = ev.detail.faceIndex
+
+                      // Do things with face and faceIndex here
+                    })
+
+                    /**
+                     * Called every frame after a face clicks and is still in "click mode"
+                     */
+                    window.addEventListener('handsfree:mouseDrag', (ev) => {
+                      const face = ev.detail.face
+                      const faceIndex = ev.detail.faceIndex
+
+                      // Do things with face and faceIndex here
+                    })
+
+                    /**
+                     * Called when a face releases a click
+                     */
+                    window.addEventListener('handsfree:mouseUp', (ev) => {
+                      const face = ev.detail.face
+                      const faceIndex = ev.detail.faceIndex
+
+                      // Do things with face and faceIndex here
+                    })
+
                     /**
                     * Bind to the handsfree-trackFaces event, which is called once per frame
                     * @param {Handsfree} ev.detail.scope The handsfree instance

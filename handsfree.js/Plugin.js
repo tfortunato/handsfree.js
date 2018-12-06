@@ -32,6 +32,11 @@ module.exports = Handsfree => {
     // Call onUse hook
     !config._isDisabled && config.onUse && config.onUse(this)
 
+    // Call onMouseDown, onMouseDrag, onMouseUp
+    if (config.onMouseDown) window.addEventListener('handsfree:mouseDown', (ev) => {config.onMouseDown(ev.detail.face, ev.detail.id)})
+    if (config.onMouseDrag) window.addEventListener('handsfree:mouseDrag', (ev) => {config.onMouseDrag(ev.detail.face, ev.detail.id)})
+    if (config.onMouseUp) window.addEventListener('handsfree:mouseUp', (ev) => {config.onMouseUp(ev.detail.face, ev.detail.id)})
+
     // Sort alphabetically
     let newPlugins = {}
     Object.keys(this.plugin).sort().forEach(key => newPlugins[key] = this.plugin[key])

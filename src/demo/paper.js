@@ -27,44 +27,42 @@ window.addEventListener('load', () => {
       tool.minDistance = 20
     },
 
-    onFrame (faces) {
-      if (!$canvas) return
-      
-      faces.forEach((face, faceIndex) => {
-        // Only catch events when the cursor is over the canvas
-        if (face.cursor.$target === $canvas) {
-          // Start path, select a new color
-          if (face.cursor.state.mouseDown) {
-            this.setLastPoint(face, faceIndex)
-            path = new paper.Path()
-            path.strokeColor = {
-              hue: Math.random() * 360,
-              saturation: 1,
-              brightness: 1
-            }
-            path.strokeJoin = 'round'
-            path.strokeWidth = face.scale / 10
-            path.moveTo(this.lastPoint[faceIndex])
-          }
+    /**
+     * Start path, select new color
+     */
+    onMouseDown (face, faceIndex) {
+      if (face.cursor.$target !== $canvas) return
 
-          // Draw the path
-          if (face.cursor.state.mouseDrag) {
-            const newPoint = this.getPoint(face)
+      this.setLastPoint(face, faceIndex)
+      path = new paper.Path()
+      path.strokeColor = {
+        hue: Math.random() * 360,
+        saturation: 1,
+        brightness: 1
+      }
+      path.strokeJoin = 'round'
+      path.strokeWidth = face.scale / 10
+      path.moveTo(this.lastPoint[faceIndex])
+    },
 
-            if (newPoint.getDistance(this.getLastPoint(faceIndex)) > tool.minDistance) {
-              path.strokeWidth = Math.max(face.scale / 2 - 50, 1)
-              path.lineTo(new paper.Point(
-                face.cursor.x - $canvas.getBoundingClientRect().left,
-                face.cursor.y - $canvas.getBoundingClientRect().top
-              ))
-              paper.view.draw()
-              path.smooth()
+    /**
+     * Draw the path
+     */
+    onMouseDrag (face, faceIndex) {
+      if (face.cursor.$target !== $canvas) return
+      const newPoint = this.getPoint(face)
 
-              this.setLastPoint(face, faceIndex)
-            }
-          }
-        }
-      })
+      if (newPoint.getDistance(this.getLastPoint(faceIndex)) > tool.minDistance) {
+        path.strokeWidth = Math.max(face.scale / 2 - 50, 1)
+        path.lineTo(new paper.Point(
+          face.cursor.x - $canvas.getBoundingClientRect().left,
+          face.cursor.y - $canvas.getBoundingClientRect().top
+        ))
+        paper.view.draw()
+        path.smooth()
+
+        this.setLastPoint(face, faceIndex)
+      }
     },
 
     /**
