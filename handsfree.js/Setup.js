@@ -21,7 +21,9 @@ module.exports = Handsfree => {
       let xhr = new XMLHttpRequest()
       let url = this.brf.baseURL + this.brf.sdkName + '.wasm'
       let onError = err => this.throwError(err)
-      let onProgress = progress => console.log(progress)
+      let onProgress = progress => {
+        window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: progress.loaded / progress.total * 100}}))
+      }
 
       xhr.open('GET', url, true)
       xhr.responseType = 'arraybuffer'

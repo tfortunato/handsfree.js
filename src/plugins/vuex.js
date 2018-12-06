@@ -11,7 +11,12 @@ const store = new Vuex.Store({
 
   state: {
     // Whether handsfree is loading or not
-    isHandsfreeLoading: true
+    isHandsfreeLoading: true,
+
+    loading: {
+      progress: 0,
+      color: 'error'
+    }
   },
   
   mutations: {
@@ -47,10 +52,15 @@ const store = new Vuex.Store({
 })
 
 /**
- * Set isHandsfreeLoading
+ * Handsfree Hooks
  */
 window.addEventListener('handsfree:ready', () => {
   store.commit('set', ['isHandsfreeLoading', false])
+  store.commit('set', ['loading.color', 'success'])
+  setTimeout(() => store.commit('set', ['loading.color', 'info']), 1000)
+})
+window.addEventListener('handsfree:loading', (ev) => {
+  store.commit('set', ['loading.progress', ev.detail.progress])
 })
 
 export default store

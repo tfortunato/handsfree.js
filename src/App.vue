@@ -12,6 +12,8 @@
       v-btn.primary.handsfree-show-when-stopped(large @click='startWebcam' :disabled='isHandsfreeLoading') Start Webcam
       v-btn.primary.handsfree-show-when-started.hidden(large color='error' @click='stopWebcam') Stop Webcam
 
+    v-progress-linear#loading-bar(v-model='loading.progress' :color='loading.color')
+
     v-navigation-drawer(app temporary light v-model='isNavOpen')
       v-list.layout.column.fill-height
         v-list-tile(:to='{name: "Home"}')
@@ -62,7 +64,10 @@ export default {
     Home
   },
 
-  computed: mapState(['isHandsfreeLoading']),
+  computed: mapState([
+    'isHandsfreeLoading',
+    'loading'
+  ]),
 
   data () {
     return {
@@ -90,4 +95,18 @@ export default {
     background: none
     position: relative
     z-index: 1
+
+  #loading-bar
+    position: fixed
+    top: 50px
+    z-index: 1
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.35)
+
+  @media screen and (max-width: 960px)
+    #loading-bar
+      top: 34px
+
+  @media screen and (max-width: 724px)
+    #loading-bar
+      top: 42px
 </style>
