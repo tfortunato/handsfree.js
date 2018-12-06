@@ -260,6 +260,15 @@
                 pre
                   code.javascript.
                     /**
+                     * Called for every chunk while BRFv4 is loading
+                     * - Good for showing load progress
+                     */
+                    window.addEventListener('handsfree:loading', (ev) => {
+                      const progress = ev.data.progress
+                      // Display progress
+                    })
+
+                    /**
                      * Called after handsfree is instantiated and ready to be used
                      * - Models are loaded and ready to be used
                      * - Use this to enable a [onclick="handsfree.start()"]

@@ -245,6 +245,19 @@ There are 64 landmark points, reflected in the following image:
 ![image from BRFv4](src/assets/img/brfv4_landmarks.jpg)
 
 ## Events
+### handsfree:loading
+The BRFv4 model is around 9Mb, so this helper helps give your users feedback! This event is called for every downloaded chunk, with the progress expresses as %XXX.XX
+
+```js
+/**
+ * Called for every chunk while BRFv4 is loading
+ * - Good for showing load progress
+ */
+window.addEventListener('handsfree:loading', (ev) => {
+  const progress = ev.data.progress
+})
+```
+
 ### handsfree:ready
 Called after handsfree has been instantiated. Listen to this event to do things like enable `[onclick="handsfree.start()"]` buttons, advance a loading screen, and more!
 
