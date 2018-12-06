@@ -245,6 +245,21 @@ There are 64 landmark points, reflected in the following image:
 ![image from BRFv4](src/assets/img/brfv4_landmarks.jpg)
 
 ## Events
+### handsfree:ready
+Called after handsfree has been instantiated. Listen to this event to do things like enable `[onclick="handsfree.start()"]` buttons, advance a loading screen, and more!
+
+```js
+/**
+ * Called after handsfree is instantiated and ready to be used
+ * - Models are loaded and ready to be used
+ * - Use this to enable a [onclick="handsfree.start()"]
+ * - Also good for ending a loading screen
+ */
+window.addEventListener('handsfree:ready', () => {
+  // do stuff when handsfree is ready
+})
+```
+
 ### handsfree-trackFaces
 An alternative to plugins is to listen in on the window's `handsfree-trackFaces` event:
 

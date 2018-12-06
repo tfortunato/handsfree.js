@@ -260,6 +260,17 @@
                 pre
                   code.javascript.
                     /**
+                     * Called after handsfree is instantiated and ready to be used
+                     * - Models are loaded and ready to be used
+                     * - Use this to enable a [onclick="handsfree.start()"]
+                     * - Also good for ending a loading screen
+                     */
+                    window.addEventListener('handsfree:ready', () => {
+                      // Enable .start() buttons
+                    })
+
+                  
+                    /**
                     * Bind to the handsfree-trackFaces event, which is called once per frame
                     * @param {Handsfree} ev.detail.scope The handsfree instance
                     * @param {Object}    ev.detail.faces An array of face objects
