@@ -3,7 +3,7 @@
     v-toolbar#main-nav(light app)
       v-toolbar-side-icon(@click.stop='isNavOpen = !isNavOpen')
       v-toolbar-title.headline.text-uppercase
-        span
+        router-link(to='/' style='text-decoration: none; color: inherit')
           img.mr-2(:src='favicon' height=50 style='vertical-align: middle')
           span.hidden-sm-and-down
             strong Handsfree

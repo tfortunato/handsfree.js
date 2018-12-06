@@ -30,16 +30,12 @@ v-container(grid-list-md)
 
     v-flex(xs12 md6 lg4)
       v-card(light)
-        v-card-title.pb-0(primary-title)
-          h2 
-            img.mr-2(src='/favicon.png' height=36)
-            | About This Youtube Client
-        v-card-text
+        v-card-media
           v-img(src='https://media.giphy.com/media/4HgnusIh1i8MzRoaOm/giphy.gif')
-          p.mt-3 This experiment explores handsfree ways to watch YouTube 360 videos without a headset! <a href="https://glitch.com/~handsfree-youtube">Remix the YouTube Handsfree Starter Kit on Glitch to take it further</a> 🔮
-        
-        v-divider.my-3
-
+        v-card-text
+          div.mt-3
+              | This experiment explores watching YouTube handsfree, specifically "360" panoramic videos!
+        v-divider.mb-3
         v-card-title.pb-0
           h3 Instructions
         v-card-text

@@ -6,19 +6,19 @@ div
       v-flex(xs12 md6 lg8 style='height: 500px')
       v-flex.handsfree-show-when-stopped(xs12 md6 lg4)
         v-card(light)
+          v-card-media
+            v-img(src='https://media.giphy.com/media/9wZID81vMLTwJ5JKps/giphy.gif')
           v-card-text
             //- v-img(src='https://media.giphy.com/media/4HgnusIh1i8MzRoaOm/giphy.gif')
             p.mt-3
-              | This experiment explores an illusion of depth effect via head tracking!
-              //- |  <a href="https://glitch.com/~handsfree-youtube">Remix the YouTube Handsfree Starter Kit on Glitch to take it further</a> 🔮
+              | This experiment explores an illusion of depth effect via head tracking! It doesn't work quite right yet, so you can <a href="https://github.com/BrowseHandsfree/handsfreeJS/issues/37">check out these links</a> for examples of what it should look like.
           
-          v-divider.my-3
+          v-divider.mb-3
 
           v-card-title.pb-0
             h3 Instructions
           v-card-text
             ul
-              li Turn, tilt, and roll your head in the direction you want to look in
               li Lean and duck in any direction to move towards that direction
               li Smile wide to show and hide the cursor
             
@@ -29,7 +29,7 @@ div
           v-card-text
             p
               i 
-                a(href='https://github.com/BrowseHandsfree/handsfreeJS/issues/37') coming soon
+                a(href='https://github.com/BrowseHandsfree/handsfreeJS/issues/37') See issue on GitHub
             p.mt-4 Want to help? Pull requests welcome on <a href="https://github.com/browsehandsfree/HandsfreeJS">GitHub</a> or <a href="https://twitter.com/labofoz">@labofoz</a>
 </template>
 
