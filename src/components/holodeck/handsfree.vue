@@ -65,7 +65,7 @@ export default {
         /**
          * Toggle cursor
          */
-        onMouseDown (face) {this.showCursor = !this.showCursor},
+        onMouseDown () {this.showCursor = !this.showCursor},
         
         /**
          * This is called on each webcam frame

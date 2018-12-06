@@ -206,7 +206,16 @@
                     onDisable: (handsfree) => {},
 
                     // Called when .enable() is explicitely called on this plugin
-                    onEnable: (handsfree) => {}
+                    onEnable: (handsfree) => {},
+
+                    // Called the first frame a face clicks
+                    onMouseDown: (face, faceIndex) => {},
+
+                    // Called every frame after a face clicks and is still in "click mode"
+                    onMouseDrag: (face, faceIndex) => {},
+
+                    // Called after a face releases a click
+                    onMouseUp: (face, faceIndex) => {}
                   })
 
               p Additionally, every plugin has a <code>.disable()</code> and an <code>.enable()</code> method, which sets a <code>._isDisabled</code> flag to either true or false:
@@ -279,7 +288,36 @@
                       // Enable .start() buttons
                     })
 
-                  
+                    /**
+                     * Called the first frame that a face clicks
+                     */
+                    window.addEventListener('handsfree:mouseDown', (ev) => {
+                      const face = ev.detail.face
+                      const faceIndex = ev.detail.faceIndex
+
+                      // Do things with face and faceIndex here
+                    })
+
+                    /**
+                     * Called every frame after a face clicks and is still in "click mode"
+                     */
+                    window.addEventListener('handsfree:mouseDrag', (ev) => {
+                      const face = ev.detail.face
+                      const faceIndex = ev.detail.faceIndex
+
+                      // Do things with face and faceIndex here
+                    })
+
+                    /**
+                     * Called when a face releases a click
+                     */
+                    window.addEventListener('handsfree:mouseUp', (ev) => {
+                      const face = ev.detail.face
+                      const faceIndex = ev.detail.faceIndex
+
+                      // Do things with face and faceIndex here
+                    })
+
                     /**
                     * Bind to the handsfree-trackFaces event, which is called once per frame
                     * @param {Handsfree} ev.detail.scope The handsfree instance
