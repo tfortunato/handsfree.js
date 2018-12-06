@@ -4,10 +4,14 @@ import {set} from 'lodash'
 import youtube from '../store/youtube'
 
 Vue.use(Vuex)
-
-export default new Vuex.Store({
+const store = new Vuex.Store({
   modules: {
     youtube
+  },
+
+  state: {
+    // Whether handsfree is loading or not
+    isHandsfreeLoading: true
   },
   
   mutations: {
@@ -41,3 +45,12 @@ export default new Vuex.Store({
     }
   }
 })
+
+/**
+ * Set isHandsfreeLoading
+ */
+window.addEventListener('handsfree:ready', () => {
+  store.commit('set', ['isHandsfreeLoading', false])
+})
+
+export default store

@@ -21,7 +21,7 @@
           p.subheading.font-weight-regular
             | A drop-in library for adding handsfree interfaces to any website, service, and Internet of Thing. Runs on any device that supports <a href="https://caniuse.com/#feat=stream">getUserMedia()</a>
           p.text-xs-center
-            v-btn.primary.handsfree-show-when-stopped(large @click='startWebcam') Start Webcam
+            v-btn.primary.handsfree-show-when-stopped(large @click='startWebcam' :disabled='isHandsfreeLoading') Start Webcam
             v-btn.primary.handsfree-show-when-started.hidden(large color='error' @click='stopWebcam') Stop Webcam
 
         v-flex(mb-4 xs12 md6)
@@ -338,8 +338,11 @@
 <script>
 import hljs from 'highlight.js'
 import '../demo/paper.js'
+import {mapState} from 'vuex'
 
 export default {
+  computed: mapState(['isHandsfreeLoading']),
+  
   mounted () {
     window.hljs = hljs
     hljs.initHighlighting()

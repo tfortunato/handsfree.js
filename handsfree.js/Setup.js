@@ -32,15 +32,28 @@ module.exports = Handsfree => {
         } else {
           onError()
         }
+        this.onReadyHook()
       }
       xhr.onerror = onError
       xhr.onprogress = onProgress
       xhr.send(null)
     } else {
+      this.onReadyHook()
       this.loadPlugins()
     }
   }
 
+  /**
+   * Notifies the document that handsfree is ready
+   * - Adds a body class
+   * - useful for enabling .start() buttons
+   */
+  Handsfree.prototype.onReadyHook = function () {
+    window.dispatchEvent(new CustomEvent('handsfree:ready'))
+    document.body.classList.remove('handsfree-is-loading')
+    document.body.classList.add('handsfree-ready')
+  },
+  
   /**
    * Actually starts BRFv4 (once stream dimensions are known)
    */

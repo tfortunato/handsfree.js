@@ -9,7 +9,7 @@
             strong Handsfree
             small .js.org
       v-spacer
-      v-btn.primary.handsfree-show-when-stopped(large @click='startWebcam') Start Webcam
+      v-btn.primary.handsfree-show-when-stopped(large @click='startWebcam' :disabled='isHandsfreeLoading') Start Webcam
       v-btn.primary.handsfree-show-when-started.hidden(large color='error' @click='stopWebcam') Stop Webcam
 
     v-navigation-drawer(app temporary light v-model='isNavOpen')
@@ -53,6 +53,7 @@
 
 <script>
 import Home from './components/Home'
+import {mapState} from 'vuex'
 
 export default {
   name: 'App',
@@ -60,6 +61,8 @@ export default {
   components: {
     Home
   },
+
+  computed: mapState(['isHandsfreeLoading']),
 
   data () {
     return {
