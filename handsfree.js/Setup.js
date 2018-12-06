@@ -70,6 +70,7 @@ module.exports = Handsfree => {
       // Resize canvas to stream
       $canvas.width = $webcam.videoWidth
       $canvas.height = $webcam.videoHeight
+      window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 20}}))      
 
       this.waitForSDK()
     }
@@ -88,6 +89,7 @@ module.exports = Handsfree => {
         wasmBinary: this.brf.WASMBuffer
       }
       BRFvInitializer(this.brf.sdk)
+      window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 30}}))
     }
 
     if (this.brf.sdk && this.brf.sdk.sdkReady) {
@@ -106,6 +108,7 @@ module.exports = Handsfree => {
     this.brf.manager = new this.brf.sdk.BRFManager()
     this.brf.manager.init(this.brf.resolution, this.brf.resolution, 'js.handsfree')
     this.brf.manager.setNumFacesToTrack(this.settings.maxFaces)
+    window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 100}}))
 
     this.isTracking = true
     this.trackFaces()

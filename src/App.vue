@@ -80,8 +80,8 @@ export default {
   },
 
   methods: {
-    startWebcam () {window.handsfree.start()},
-    stopWebcam () {window.handsfree.stop()}
+    startWebcam () {this.$store.dispatch('startHandsfree')},
+    stopWebcam () {this.$store.dispatch('stopHandsfree')}
   }
 }
 </script>

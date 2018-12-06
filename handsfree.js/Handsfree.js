@@ -98,6 +98,7 @@ class Handsfree {
     this.toggleDebugger(this.opts.debug)
     document.body.classList.add('handsfree-started')
     document.body.classList.remove('handsfree-stopped')
+    window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 0}}))
 
     window.navigator.mediaDevices.getUserMedia({
       video: {width: 640, height: 480, frameRate: 30}
@@ -107,8 +108,10 @@ class Handsfree {
       this.onStartHooks()
 
       if (!this.brf.sdk) {
+        window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 10}}))
         this.startBRFv4()
       } else {
+        window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 100}}))
         this.isTracking = true
         this.brf.manager.setNumFacesToTrack(this.settings.maxFaces)
         this.trackFaces()
