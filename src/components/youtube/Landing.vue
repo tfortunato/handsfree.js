@@ -30,7 +30,7 @@ v-container(grid-list-md)
 
     v-flex(xs12 md6 lg4)
       v-card(light)
-        v-card-media
+        v-responsive
           v-img(src='https://media.giphy.com/media/4HgnusIh1i8MzRoaOm/giphy.gif')
         v-card-text
           div.mt-3

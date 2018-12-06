@@ -6,7 +6,7 @@ div
       v-flex(xs12 md6 lg8 style='height: 500px')
       v-flex.handsfree-show-when-stopped(xs12 md6 lg4)
         v-card(light)
-          v-card-media
+          v-responsive
             v-img(src='https://media.giphy.com/media/9wZID81vMLTwJ5JKps/giphy.gif')
           v-card-text
             //- v-img(src='https://media.giphy.com/media/4HgnusIh1i8MzRoaOm/giphy.gif')
