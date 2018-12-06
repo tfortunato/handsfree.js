@@ -21,7 +21,9 @@ module.exports = Handsfree => {
       let xhr = new XMLHttpRequest()
       let url = this.brf.baseURL + this.brf.sdkName + '.wasm'
       let onError = err => this.throwError(err)
-      let onProgress = progress => console.log(progress)
+      let onProgress = progress => {
+        window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: progress.loaded / progress.total * 100}}))
+      }
 
       xhr.open('GET', url, true)
       xhr.responseType = 'arraybuffer'
@@ -32,15 +34,28 @@ module.exports = Handsfree => {
         } else {
           onError()
         }
+        this.onReadyHook()
       }
       xhr.onerror = onError
       xhr.onprogress = onProgress
       xhr.send(null)
     } else {
+      this.onReadyHook()
       this.loadPlugins()
     }
   }
 
+  /**
+   * Notifies the document that handsfree is ready
+   * - Adds a body class
+   * - useful for enabling .start() buttons
+   */
+  Handsfree.prototype.onReadyHook = function () {
+    window.dispatchEvent(new CustomEvent('handsfree:ready'))
+    document.body.classList.remove('handsfree-is-loading')
+    document.body.classList.add('handsfree-ready')
+  },
+  
   /**
    * Actually starts BRFv4 (once stream dimensions are known)
    */

@@ -30,14 +30,6 @@ export default {
     if (to.name === from.name) this.$nextTick(() => this.maybeInitVideo())
   },
 
-  /**
-   * Stop the video before navigation
-   */
-  beforeRouteLeave (to, from, next) {
-    window.App.$store.state.youtube.player.stopVideo && window.App.$store.state.youtube.player.stopVideo()
-    next()
-  },
-
   methods: {
     /**
      * Attempts to instantiate the video repeteadly until it works

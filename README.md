@@ -245,6 +245,34 @@ There are 64 landmark points, reflected in the following image:
 ![image from BRFv4](src/assets/img/brfv4_landmarks.jpg)
 
 ## Events
+### handsfree:loading
+The BRFv4 model is around 9Mb, so this helper helps give your users feedback! This event is called for every downloaded chunk, with the progress expresses as %XXX.XX
+
+```js
+/**
+ * Called for every chunk while BRFv4 is loading
+ * - Good for showing load progress
+ */
+window.addEventListener('handsfree:loading', (ev) => {
+  const progress = ev.data.progress
+})
+```
+
+### handsfree:ready
+Called after handsfree has been instantiated. Listen to this event to do things like enable `[onclick="handsfree.start()"]` buttons, advance a loading screen, and more!
+
+```js
+/**
+ * Called after handsfree is instantiated and ready to be used
+ * - Models are loaded and ready to be used
+ * - Use this to enable a [onclick="handsfree.start()"]
+ * - Also good for ending a loading screen
+ */
+window.addEventListener('handsfree:ready', () => {
+  // do stuff when handsfree is ready
+})
+```
+
 ### handsfree-trackFaces
 An alternative to plugins is to listen in on the window's `handsfree-trackFaces` event:
 
@@ -334,6 +362,38 @@ npm run deploy
 ```
 
 For detailed explanation on how things work, check out the [Vuetify.js](https://vuetifyjs.com/) and [CLI Plugin](https://github.com/vuetifyjs/vue-cli-plugin-vuetify) documentation.
+
+## Development Notes
+
+- The main Vue instance is available on `window.App`
+- The main vuex store then is available on `window.App.$store`
+
+### Actions
+
+The following is a set of actions available:
+
+```js
+/**
+ * Calls the passed function either when window.handsfree is available, or immediately if it's ready
+ * - Think of this as window.addEventListener('load') but for the handsfree instance
+ * 
+ * - Use this inside the Mount component life cycle to disable plugins
+ * -- @see https://vuejs.org/v2/guide/instance.html#Lifecycle-Diagram
+ * 
+ * - Also use it on the beforeRouteLeave vue-router guard
+ * -- @see https://router.vuejs.org/guide/advanced/navigation-guards.html#in-component-guards
+ */
+App.$store.dispatch('onReady', () => {})
+```
+
+
+
+
+
+
+
+
+
 
 
 # More coming soon

@@ -306,6 +306,9 @@ class Handsfree {
   }
 }
 
+// Add class to body to style loading
+document.body.classList.add('handsfree-is-loading')
+
 // Set the lib path to whereever this file is, this is required for loading the BRFv4 SDK
 Handsfree.libPath = trimStart(document.currentScript.getAttribute('src').replace('handsfree.js', ''), '/')
 Handsfree.version = pkg.version
