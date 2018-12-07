@@ -52,13 +52,14 @@ class Handsfree {
       WASMBuffer: null
     }
 
+    // @FIXME we should add a cursor for every face
     this.cursor = {
       $el: null,
       x: -100,
       y: -100
     }
 
-    // The tracked faces object
+    // Contains all the tracked faces
     this.faces = null
 
     // Helper object to remove jittering
@@ -89,9 +90,7 @@ class Handsfree {
     document.body.classList.remove('handsfree-stopped')
     window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 0}}))
 
-    window.navigator.mediaDevices.getUserMedia({
-      video: {width: 640, height: 480, frameRate: 30}
-    }).then(mediaStream => {
+    window.navigator.mediaDevices.getUserMedia(this.settings.webcam).then(mediaStream => {
       this.debug.$webcam.srcObject = mediaStream
       this.debug.$webcam.play()
       this.onStartHooks()
@@ -105,7 +104,7 @@ class Handsfree {
         this.brf.manager.setNumFacesToTrack(this.settings.maxFaces)
         this.trackFaces()
       }
-    }).catch(() => this.throwError('There are no cameras available.'))
+    }).catch((err) => this.throwError(err))
   }
 
   /**

@@ -1,6 +1,21 @@
-const Handsfree = require('./Handsfree')
-const pckg = require('../package')
+/**
+ * Setup
+ */
+// Mock function calls inside constructor
+Handsfree.prototype.applyConfig = jest.fn()
+Handsfree.prototype.checkForMediaSupport = jest.fn()
+Handsfree.prototype.injectDebugger = jest.fn()
+Handsfree.prototype.injectCursor = jest.fn()
+Handsfree.prototype.initAndMaybeReadWASMBinary = jest.fn()
+Handsfree.prototype.throwError = jest.fn()
 
+const pckg = require('../package')
+let handsfree
+handsfree = new Handsfree({})
+
+/**
+ * Tests
+ */
 describe('On require', () => {
   it('sets handsfree-is-loading body class', () => {
     expect(document.body.classList.contains('handsfree-is-loading')).toBeTruthy()
@@ -16,15 +31,6 @@ describe('On require', () => {
 })
 
 describe('Handsfree.constructor', () => {
-  Handsfree.prototype.applyConfig = jest.fn()
-  Handsfree.prototype.checkForMediaSupport = jest.fn()
-  Handsfree.prototype.injectDebugger = jest.fn()
-  Handsfree.prototype.injectCursor = jest.fn()
-  Handsfree.prototype.initAndMaybeReadWASMBinary = jest.fn()
-
-  const opts = {}
-  const handsfree = new Handsfree({})
-
   it('adds "handsfree-stopped" to body class', () => {
     expect(document.body.classList.contains('handsfree-stopped')).toBeTruthy()
   })
@@ -40,48 +46,57 @@ describe('Handsfree.constructor', () => {
     expect(handsfree.faces).toBeNull()
     expect(handsfree.tweenFaces).toBeTruthy()
   })
-  
-  Handsfree.prototype.applyConfig.mockRestore()
-  Handsfree.prototype.checkForMediaSupport.mockRestore()
-  Handsfree.prototype.injectDebugger.mockRestore()
-  Handsfree.prototype.injectCursor.mockRestore()
-  Handsfree.prototype.initAndMaybeReadWASMBinary.mockRestore()
 })
 
 describe('Handsfree.start', () => {
-  it('toggles debugger', () => {})
-  it('sets tracking mode', () => {})
-  it('sets body classes', () => {})
-  it('can get user media stream', () => {})
-  it('can detect that no cameras are available', () => {})
-  it('dispatches "handsfree:loading"', () => {})
-  it('starts the webcam', () => {})
-  it('calls "onStartHooks"', () => {})
-  it('starts BRFv4', () => {})
-  it('starts tracking faces', () => {})
+  it('toggles debugger', () => {
+    handsfree.toggleDebugger = jest.fn()
+    handsfree.debug.$webcam = document.createElement('video')
+    handsfree.start()
+    expect(handsfree.toggleDebugger).toHaveBeenCalled()
+  })
+
+  it('adjusts body classes', () => {
+    expect(document.body.classList.contains('handsfree-started')).toBeTruthy()
+    expect(document.body.classList.contains('handsfree-stopped')).toBeFalsy()
+  })
+
+  it('handles mediaDevice errors', () => {
+    const webcam = handsfree.settings.webcam
+    handsfree.settings.webcam = false
+    handsfree.toggleDebugger.mockClear()
+    handsfree.start()
+    
+    expect(handsfree.toggleDebugger).toHaveBeenCalled()
+    handsfree.settings.webcam = webcam
+  })
 })
 
-describe('Handsfree.stop', () => {
-  it('sets body classes', () => {})
-  it('sets trackings mode', () => {})
-  it('toggles debugger', () => {})
-  it('fires onStopHooks', () => {})
-})
+// // @TODO
+// describe('Handsfree.stop', () => {
+//   it('sets body classes', () => {})
+//   it('sets trackings mode', () => {})
+//   it('toggles debugger', () => {})
+//   it('fires onStopHooks', () => {})
+// })
 
-describe('Handsfree.trackFaces', () => {
-  it('mirrors context', () => {})
-  it('can get faces', () => {})
-  it('calculates cursor position', () => {})
-  it('sets touched elements', () => {})
-  it('fires onFrameHooks', () => {})
-  it('dispatches handsfree-trackFaces', () => {})
-  it('can be stopped', () => {})
-})
+// // @TODO
+// describe('Handsfree.trackFaces', () => {
+//   it('mirrors context', () => {})
+//   it('can get faces', () => {})
+//   it('calculates cursor position', () => {})
+//   it('sets touched elements', () => {})
+//   it('fires onFrameHooks', () => {})
+//   it('dispatches handsfree-trackFaces', () => {})
+//   it('can be stopped', () => {})
+// })
 
-describe('Handsfree.setTouchedElement', () => {
-  it('correctly sets cursor.$target', () => {})
-})
+// // @TODO
+// describe('Handsfree.setTouchedElement', () => {
+//   it('correctly sets cursor.$target', () => {})
+// })
 
-describe('Handsfree.calculateXY', () => {
-  it('can set cursor settings', () => {})
-})
+// // @TODO
+// describe('Handsfree.calculateXY', () => {
+//   it('can set cursor settings', () => {})
+// })

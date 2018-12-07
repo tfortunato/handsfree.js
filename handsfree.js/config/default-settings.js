@@ -17,5 +17,14 @@ module.exports = {
     factor: 1,
     // Number of frames to stabilizer over
     buffer: 30
+  },
+
+  // Sets up the webcam
+  webcam: {
+    video: {
+      width: 640,
+      height: 480,
+      frameRate: 30
+    }
   }
 }
