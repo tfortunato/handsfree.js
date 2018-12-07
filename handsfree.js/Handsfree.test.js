@@ -70,6 +70,34 @@ describe('Handsfree.start', () => {
     expect(handsfree.toggleDebugger).toHaveBeenCalled()
     handsfree.settings.webcam = webcam
   })
+
+  it('dispatches handsfree:loading', async () => {
+    const dispatch = jest.fn()
+    window.addEventListener('handsfree:loading', dispatch)
+    await handsfree.start()
+
+    expect(dispatch).toHaveBeenCalledTimes(2)
+    window.removeEventListener('handsfree:loading', dispatch)
+  })
+
+  it('starts BRFv4 when the sdk is not ready', async () => {
+    handsfree.startBRFv4 = jest.fn()
+    await handsfree.start()
+    expect(handsfree.startBRFv4).toHaveBeenCalled()
+  })
+
+  it('tracks faces when brf is ready', async () => {
+    let numFaces = 0
+    handsfree.trackFaces = jest.fn()
+    handsfree.brf = {
+      sdk: true,
+      manager: {setNumFacesToTrack: count => {numFaces = count}}
+    }
+    await handsfree.start()
+
+    expect(handsfree.trackFaces).toHaveBeenCalled()
+    expect(numFaces).toBe(handsfree.settings.maxFaces)
+  })
 })
 
 // // @TODO
