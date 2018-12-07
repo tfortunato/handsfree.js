@@ -7,14 +7,12 @@ STUBS.mediaDevices.support()
 describe('Handsfree.use()', () => {
   it('Adds a plugin to handsfree.plugin', () => {
     handsfree = new Handsfree({debug: true})
-
     handsfree.use({name: 'UnitTest123'})
     expect(handsfree.plugin['UnitTest123']).toBeTruthy()
   })
 
   it('Runs the onUse callback', () => {
     handsfree = new Handsfree({debug: true})
-
     handsfree.use({name: 'UnitTest123', onUse: jest.fn()})
     expect(handsfree.plugin['UnitTest123'].onUse).toHaveBeenCalled()
   })
@@ -22,7 +20,6 @@ describe('Handsfree.use()', () => {
   it('Sorts plugins alphabetically', () => {
     let plugins = []
     handsfree = new Handsfree({debug: true})
-
     handsfree.use({name: 'UnitTest123'})
     handsfree.use({name: 'UnitTest000'})
     handsfree.use({name: 'UnitTest999'})
@@ -38,11 +35,26 @@ describe('Handsfree.use()', () => {
 
   it('onFrame hooks are called', () => {
     handsfree = new Handsfree({debug: true})
-
     handsfree.use({name: 'UnitTest123', onFrame: jest.fn()})
     handsfree.onFrameHooks(faces)
 
     expect(handsfree.plugin['UnitTest123'].onFrame).toHaveBeenCalled()
+  })
+
+  it('onStart hooks are called', () => {
+    handsfree = new Handsfree({debug: true})
+    handsfree.use({name: 'UnitTest123', onStart: jest.fn()})
+    handsfree.onStartHooks(faces)
+
+    expect(handsfree.plugin['UnitTest123'].onStart).toHaveBeenCalled()
+  })
+
+  it('onStop hooks are called', () => {
+    handsfree = new Handsfree({debug: true})
+    handsfree.use({name: 'UnitTest123', onStop: jest.fn()})
+    handsfree.onStopHooks(faces)
+
+    expect(handsfree.plugin['UnitTest123'].onStop).toHaveBeenCalled()
   })
 
   it('includes disable/enable methods', () => {

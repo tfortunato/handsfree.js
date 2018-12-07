@@ -39,6 +39,8 @@ module.exports = Handsfree => {
       xhr.onerror = onError
       xhr.onprogress = onProgress
       xhr.send(null)
+
+    // @FIXME These shouldn't be called, let's show an alert or something instead
     } else {
       this.onReadyHook()
       this.loadPlugins()
