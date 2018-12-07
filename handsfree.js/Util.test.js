@@ -48,6 +48,6 @@ describe('Handsfree.throwError()', () => {
     } catch (e) {
       expect(message).toBe(e.message)
       console.error = err
-    } 
+    }
   })
 })
