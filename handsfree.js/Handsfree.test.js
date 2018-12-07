@@ -16,11 +16,14 @@ describe('On require', () => {
 })
 
 describe('Handsfree.constructor', () => {
-  Handsfree.prototype.initAndMaybeReadWASMBinary = jest.fn()
+  Handsfree.prototype.applyConfig = jest.fn()
+  Handsfree.prototype.checkForMediaSupport = jest.fn()
   Handsfree.prototype.injectDebugger = jest.fn()
   Handsfree.prototype.injectCursor = jest.fn()
-  Handsfree.prototype.checkForMediaSupport = jest.fn()
-  const handsfree = new Handsfree()
+  Handsfree.prototype.initAndMaybeReadWASMBinary = jest.fn()
+
+  const opts = {}
+  const handsfree = new Handsfree({})
 
   it('adds "handsfree-stopped" to body class', () => {
     expect(document.body.classList.contains('handsfree-stopped')).toBeTruthy()
@@ -38,24 +41,11 @@ describe('Handsfree.constructor', () => {
     expect(handsfree.tweenFaces).toBeTruthy()
   })
   
-  it('sets default settings', () => {})
-
-  it('sets default options', () => {})
-
-  it('applies config', () => {})
-
-  it('checks for media support', () => {})
-
-  it('injects debugger', () => {})
-
-  it('injects cursor', () => {})
-  
-  it('called this.initAndMaybeReadWASMBinary', () => {})
-
-  Handsfree.prototype.initAndMaybeReadWASMBinary.mockRestore()
+  Handsfree.prototype.applyConfig.mockRestore()
+  Handsfree.prototype.checkForMediaSupport.mockRestore()
   Handsfree.prototype.injectDebugger.mockRestore()
   Handsfree.prototype.injectCursor.mockRestore()
-  Handsfree.prototype.checkForMediaSupport.mockRestore()
+  Handsfree.prototype.initAndMaybeReadWASMBinary.mockRestore()
 })
 
 describe('Handsfree.start', () => {
