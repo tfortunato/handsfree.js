@@ -1,8 +1,10 @@
+jest.mock('./models/BRFv4_JS_TK110718_v4.1.0_trial.js')
 const STUBS = require('../test/jest-polyfills')
 const Handsfree = require('./Handsfree')
 const onReadyHook = Handsfree.prototype.onReadyHook
 const loadPlugins = Handsfree.prototype.loadPlugins
 const waitForSDK = Handsfree.prototype.waitForSDK
+const initSDK = Handsfree.prototype.initSDK
 STUBS.mediaDevices.support()
 
 describe('Handsfree.applyConfig', () => {
@@ -95,5 +97,45 @@ describe('Handsfree.startBRFv4', () => {
     expect(Handsfree.prototype.debug.$canvas.width).toBe(Handsfree.prototype.debug.$webcam.videoWidth)
     expect(Handsfree.prototype.debug.$canvas.height).toBe(Handsfree.prototype.debug.$webcam.videoHeight)
     Handsfree.prototype.waitForSDK = waitForSDK
+  })
+})
+
+describe('Handsfree.waitForSDK', () => {
+  it('sets brf sdk', (done) => {
+    // Mock warnings for not loading BRFv4 properly
+    const log = console.log
+    const warn = console.warn
+    console.log = jest.fn()
+    console.warn = jest.fn()
+
+    Handsfree.prototype.brf = {
+      baseURL: '',
+      sdk: null
+    }
+    Handsfree.prototype.waitForSDK()
+    Handsfree.prototype.brf.sdk.locateFile()
+    expect(Handsfree.prototype.sdk).not.toBeNull()
+    done()
+  })
+
+  it('init SDK', () => {
+    Handsfree.prototype.brf = {sdk: {sdkReady: true}}
+    Handsfree.prototype.initSDK = jest.fn()
+    Handsfree.prototype.waitForSDK()
+
+    expect(Handsfree.prototype.initSDK).toHaveBeenCalled()
+    Handsfree.prototype.initSDK = initSDK
+  })
+
+  it('waits for SDK', () => {
+    const timeout = setTimeout
+    setTimeout = jest.fn()
+    Handsfree.prototype.brf = {sdk: true}
+    Handsfree.prototype.initSDK = jest.fn()
+    Handsfree.prototype.waitForSDK()
+    
+    expect(setTimeout).toHaveBeenCalled()
+    Handsfree.prototype.initSDK = initSDK
+    setTimeout = timeout
   })
 })
