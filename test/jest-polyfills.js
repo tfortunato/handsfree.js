@@ -1,53 +1,71 @@
 /**
- * A suite of polyfill togglers for testing with jest
+ * Polyfills required for unit testing
  */
 
 /**
- * Catch window.alert
+ * Polyfill the currentScript, required to set Handsfree.libPath
+ * @see /handsfree.js/Handsfree.js
  */
-window.alert = function () {}
+const script = document.createElement('script')
+script.setAttribute('src', '')
+Object.defineProperty(document, 'currentScript', {
+  value: script
+})
 
 /**
- * Suppress known error messages
+ * Make sure document.elementFromPoint returns something
  */
-window.consoleError = console.error
-console.error = function (message, ...args) {
-  if (message.startsWith('ERROR: This browser does not support webcams, please try another browser...like Google Chrome!')
-    || message.startsWith('Unexpected character')
-    ) {
-    console.warning('Uncaught Error', ...args)
-  } else {
-    window.consoleError(message, ...args)
-  }
-}
+Object.defineProperty(document, 'elementFromPoint', {
+  value: function () { return {} }
+})
 
-module.exports = {
-  mediaDevices: {
-    support () {
-      window.HTMLMediaElement.prototype.load = () => {}
-      window.HTMLMediaElement.prototype.play = () => {}
-      window.HTMLMediaElement.prototype.pause = () => {}
-      window.HTMLMediaElement.prototype.addTextTrack = () => {}
-      window.HTMLMediaElement.prototype.srcObject = {
-        getTracks: () => [{stop: jest.fn()}]
-      }
-      navigator.mediaDevices = {
-        getUserMedia: function () {
-          return {
-            then: function () {
-              return {
-                catch: function () {}
-              }
-            }
-          }
-        }
-      }
-    },
-    unsupport () {navigator.mediaDevices = null}
-  },
+// @FIXME get rid of this
+// /**
+//  * Catch window.alert
+//  */
+// window.alert = function () {}
 
-  WebGL: {
-    support () {window.WebGLRenderingContext = true},
-    unsupport () {window.WebGLRenderingContext = false}
-  }
-}
+// /**
+//  * Suppress known error messages
+//  */
+// window.consoleError = console.error
+// console.error = function (message, ...args) {
+//   if (message.startsWith('ERROR: This browser does not support webcams, please try another browser...like Google Chrome!')
+//     || message.startsWith('Unexpected character')
+//     ) {
+//     console.warning('Uncaught Error', ...args)
+//   } else {
+//     window.consoleError(message, ...args)
+//   }
+// }
+
+// module.exports = {
+//   mediaDevices: {
+//     support () {
+//       window.HTMLMediaElement.prototype.load = () => {}
+//       window.HTMLMediaElement.prototype.play = () => {}
+//       window.HTMLMediaElement.prototype.pause = () => {}
+//       window.HTMLMediaElement.prototype.addTextTrack = () => {}
+//       window.HTMLMediaElement.prototype.srcObject = {
+//         getTracks: () => [{stop: jest.fn()}]
+//       }
+//       navigator.mediaDevices = {
+//         getUserMedia: function () {
+//           return {
+//             then: function () {
+//               return {
+//                 catch: function () {}
+//               }
+//             }
+//           }
+//         }
+//       }
+//     },
+//     unsupport () {navigator.mediaDevices = null}
+//   },
+
+//   WebGL: {
+//     support () {window.WebGLRenderingContext = true},
+//     unsupport () {window.WebGLRenderingContext = false}
+//   }
+// }

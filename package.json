@@ -51,15 +51,11 @@
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/test/",
-      "/src/",
-      "/public/",
       "/handsfree.js/models/"
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/test/",
-      "/src/",
-      "/public/",
       "/handsfree.js/models/"
     ]
   },

@@ -1,3 +1,7 @@
+/**
+ * This is the main entry point for Handsfree.js
+ * - This be defined after the body class
+ */
 const pkg = require('../package.json')
 const {trimStart, merge} = require('lodash')
 const {TweenMax} = require('gsap')
