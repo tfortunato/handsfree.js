@@ -1,10 +1,11 @@
 /**
  * This is the main entry point for Handsfree.js
- * - This be defined after the body class
+ * - This be defined after the body class, or with script[defer]
  */
 const pkg = require('../package.json')
 const {trimStart, merge} = require('lodash')
 const {TweenMax} = require('gsap')
+const defaultSettings = require('./config/default-settings')
 
 class Handsfree {
   constructor (opts = {}) {
@@ -18,23 +19,7 @@ class Handsfree {
 
     // Settings
     opts.settings = opts.settings || {}
-    this.settings = merge({
-      // Maximum number of faces to track
-      maxFaces: 1,
-
-      sensitivity: {
-        // A factor to adjust the cursors move speed by
-        xy: 0.7,
-        // How much wider (+) or narrower (-) a smile needs to be to click
-        click: 0
-      },
-      stabilizer: {
-        // How much stabilization to use: 0 = none, 3 = heavy
-        factor: 1,
-        // Number of frames to stabilizer over
-        buffer: 30
-      }
-    }, opts.settings)
+    this.settings = merge(defaultSettings, opts.settings)
 
     // Properties
     // @see this.injectDebugger

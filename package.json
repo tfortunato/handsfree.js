@@ -41,6 +41,7 @@
   "jest": {
     "collectCoverage": true,
     "coverageDirectory": "coverage",
+    "testEnvironment": "jest-environment-jsdom",
     "testURL": "http://localhost",
     "transformIgnorePatterns": [
       "/public/brf/"

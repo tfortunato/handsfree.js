@@ -1,12 +1,61 @@
 const Handsfree = require('./Handsfree')
+const pckg = require('../package')
+
+describe('On require', () => {
+  it('sets handsfree-is-loading body class', () => {
+    expect(document.body.classList.contains('handsfree-is-loading')).toBeTruthy()
+  })
+  
+  it('sets version', () => {
+    expect(Handsfree.version).toBe(pckg.version)
+  })
+
+  it('sets libPath', () => {
+    expect(Handsfree.libPath).toBe(pckg.jest.testURL)
+  })
+})
 
 describe('Handsfree.constructor', () => {
-  it('sets handsfree-is-loading body class', () => {})
-  it('sets libPath', () => {})
-  it('sets version', () => {})
-  it('sets default flags', () => {})
+  Handsfree.prototype.initAndMaybeReadWASMBinary = jest.fn()
+  Handsfree.prototype.injectDebugger = jest.fn()
+  Handsfree.prototype.injectCursor = jest.fn()
+  Handsfree.prototype.checkForMediaSupport = jest.fn()
+  const handsfree = new Handsfree()
+
+  it('adds "handsfree-stopped" to body class', () => {
+    expect(document.body.classList.contains('handsfree-stopped')).toBeTruthy()
+  })
+
+  it('sets default flags', () => {
+    expect(handsfree.isTracking).toBe(false)
+    expect(handsfree.isSupported).toBe(false)
+    expect(handsfree.isWASMSupported).toBe(true)
+    expect(handsfree.plugin).toBeTruthy()
+    expect(handsfree.debug).toBeTruthy()
+    expect(handsfree.brf).toBeTruthy()
+    expect(handsfree.cursor).toBeTruthy()
+    expect(handsfree.faces).toBeNull()
+    expect(handsfree.tweenFaces).toBeTruthy()
+  })
+  
   it('sets default settings', () => {})
-  it('adds "handsfree-stopped" to body class', () => {})
+
+  it('sets default options', () => {})
+
+  it('applies config', () => {})
+
+  it('checks for media support', () => {})
+
+  it('injects debugger', () => {})
+
+  it('injects cursor', () => {})
+  
+  it('called this.initAndMaybeReadWASMBinary', () => {})
+
+  Handsfree.prototype.initAndMaybeReadWASMBinary.mockRestore()
+  Handsfree.prototype.injectDebugger.mockRestore()
+  Handsfree.prototype.injectCursor.mockRestore()
+  Handsfree.prototype.checkForMediaSupport.mockRestore()
 })
 
 describe('Handsfree.start', () => {

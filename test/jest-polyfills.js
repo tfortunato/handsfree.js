@@ -3,16 +3,6 @@
  */
 
 /**
- * Polyfill the currentScript, required to set Handsfree.libPath
- * @see /handsfree.js/Handsfree.js
- */
-const script = document.createElement('script')
-script.setAttribute('src', '')
-Object.defineProperty(document, 'currentScript', {
-  value: script
-})
-
-/**
  * Make sure document.elementFromPoint returns something
  */
 Object.defineProperty(document, 'elementFromPoint', {
