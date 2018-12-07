@@ -21,11 +21,8 @@ describe('On require', () => {
     expect(document.body.classList.contains('handsfree-is-loading')).toBeTruthy()
   })
   
-  it('sets version', () => {
+  it('sets version and libPath', () => {
     expect(Handsfree.version).toBe(pckg.version)
-  })
-
-  it('sets libPath', () => {
     expect(Handsfree.libPath).toBe(pckg.jest.testURL)
   })
 })
@@ -45,6 +42,11 @@ describe('Handsfree.constructor', () => {
     expect(handsfree.cursor).toBeTruthy()
     expect(handsfree.faces).toBeNull()
     expect(handsfree.tweenFaces).toBeTruthy()
+  })
+  
+  it('overwrites settings', () => {
+    const hf = new Handsfree({settings: {maxFaces: 2}})
+    expect(hf.settings.maxFaces).toBe(2)
   })
 })
 
@@ -100,13 +102,27 @@ describe('Handsfree.start', () => {
   })
 })
 
-// // @TODO
-// describe('Handsfree.stop', () => {
-//   it('sets body classes', () => {})
-//   it('sets trackings mode', () => {})
-//   it('toggles debugger', () => {})
-//   it('fires onStopHooks', () => {})
-// })
+describe('Handsfree.stop', () => {
+  it('sets body classes', () => {
+    handsfree.isTracking = false
+    handsfree.stop()
+
+    expect(document.body.classList.contains('handsfree-started')).toBeFalsy()
+    expect(document.body.classList.contains('handsfree-stopped')).toBeTruthy()
+  })
+  
+  it('stops tracking', () => {
+    handsfree.isTracking = true
+    handsfree.onStopHooks = jest.fn()
+    handsfree.toggleDebugger = jest.fn()
+    handsfree.debug.$webcam.srcObject = {getTracks: () => []}
+    handsfree.stop()
+
+    expect(handsfree.isTracking).toBeFalsy()
+    expect(handsfree.toggleDebugger).toHaveBeenCalledWith(false)
+    expect(handsfree.onStopHooks).toHaveBeenCalled()
+  })
+})
 
 // // @TODO
 // describe('Handsfree.trackFaces', () => {
