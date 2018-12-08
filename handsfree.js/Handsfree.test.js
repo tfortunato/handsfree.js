@@ -8,8 +8,12 @@ Handsfree.prototype.injectDebugger = jest.fn()
 Handsfree.prototype.injectCursor = jest.fn()
 Handsfree.prototype.initAndMaybeReadWASMBinary = jest.fn()
 Handsfree.prototype.throwError = jest.fn()
+Handsfree.prototype.calculateXY = jest.fn()
+Handsfree.prototype.onFrameHooks = jest.fn()
+Handsfree.prototype.drawFaces = jest.fn()
 
 const pckg = require('../package')
+const faces = require('../src/store/faces/1-wink-face')
 let handsfree
 handsfree = new Handsfree({})
 
@@ -27,6 +31,9 @@ describe('On require', () => {
   })
 })
 
+/**
+ * Handsfree.constructor
+ */
 describe('Handsfree.constructor', () => {
   it('adds "handsfree-stopped" to body class', () => {
     expect(document.body.classList.contains('handsfree-stopped')).toBeTruthy()
@@ -50,6 +57,9 @@ describe('Handsfree.constructor', () => {
   })
 })
 
+/**
+ * Handsfree.start
+ */
 describe('Handsfree.start', () => {
   it('toggles debugger', () => {
     handsfree.toggleDebugger = jest.fn()
@@ -90,18 +100,22 @@ describe('Handsfree.start', () => {
 
   it('tracks faces when brf is ready', async () => {
     let numFaces = 0
-    handsfree.trackFaces = jest.fn()
+    const trackFaces = jest.spyOn(handsfree, 'trackFaces')
     handsfree.brf = {
       sdk: true,
       manager: {setNumFacesToTrack: count => {numFaces = count}}
     }
     await handsfree.start()
 
-    expect(handsfree.trackFaces).toHaveBeenCalled()
+    expect(trackFaces).toHaveBeenCalled()
     expect(numFaces).toBe(handsfree.settings.maxFaces)
+    trackFaces.mockRestore()
   })
 })
 
+/**
+ * Handsfree.stop
+ */
 describe('Handsfree.stop', () => {
   it('sets body classes', () => {
     handsfree.isTracking = false
@@ -124,23 +138,62 @@ describe('Handsfree.stop', () => {
   })
 })
 
-// // @TODO
-// describe('Handsfree.trackFaces', () => {
-//   it('mirrors context', () => {})
-//   it('can get faces', () => {})
-//   it('calculates cursor position', () => {})
-//   it('sets touched elements', () => {})
-//   it('fires onFrameHooks', () => {})
-//   it('dispatches handsfree-trackFaces', () => {})
-//   it('can be stopped', () => {})
-// })
+/**
+ * Handsfree.trackFaces
+ */
+describe('Handsfree.trackFaces', () => {
+  it('mirrors context', () => {
+    handsfree.debug.ctx = {
+      drawImage: jest.fn(),
+      setTransform: jest.fn(),
+      getImageData: () => ({data: 0})
+    }
+    handsfree.brf.manager.update = jest.fn()
+    handsfree.brf.manager.getFaces = () => faces
+    handsfree.brf.resolution = {width: 640, height: 480}
+    handsfree.isTracking = false
+    handsfree.trackFaces()
 
-// // @TODO
-// describe('Handsfree.setTouchedElement', () => {
-//   it('correctly sets cursor.$target', () => {})
-// })
+    expect(handsfree.debug.ctx.drawImage).toHaveBeenCalled()
+    expect(handsfree.debug.ctx.setTransform).toHaveBeenCalled()
+  })
 
-// // @TODO
-// describe('Handsfree.calculateXY', () => {
-//   it('can set cursor settings', () => {})
-// })
+  it('does\'t draw faces when debug is on', () => {
+    handsfree.debug.isDebugging = false
+    handsfree.trackFaces()
+
+    expect(handsfree.drawFaces).not.toHaveBeenCalled()
+  })
+
+  it('draws faces when debug is on', () => {
+    const setTouchedElement = jest.spyOn(handsfree, 'setTouchedElement')
+    handsfree.debug.$canvas = {
+      width: 640,
+      height: 480
+    }
+    
+    handsfree.debug.isDebugging = true
+    handsfree.trackFaces()
+    expect(handsfree.drawFaces).toHaveBeenCalled()
+  })
+
+  it('loops while isTracking is on', () => {
+    const rAF = jest.spyOn(window, 'requestAnimationFrame')
+    handsfree.isTracking = true
+    handsfree.trackFaces()
+
+    expect(rAF).toHaveBeenCalled()
+  })
+
+  it('dispatches event', () => {
+    const cb = jest.fn()
+    window.addEventListener('handsfree-trackFaces', cb)
+    handsfree.trackFaces()
+    
+    expect(cb).toHaveBeenCalled()
+    window.removeEventListener('handsfree-trackFaces', cb)
+  })
+})
+
+// @TODO
+describe('Handsfree.setTouchedElement', () => {})
