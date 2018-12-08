@@ -103,8 +103,8 @@ describe('Handsfree.startBRFV4', () => {
 describe('Handsfree.waitForSDK', () => {
   it('sets sdk if not set and dispatches progress', () => {
     const cb = jest.fn()
-    handsfree.brf.sdk = null
     window.addEventListener('handsfree:loading', cb)
+    handsfree.brf.sdk = null
 
     handsfree.waitForSDK()
     expect(handsfree.sdk).not.toBeNull()
@@ -133,6 +133,27 @@ describe('Handsfree.waitForSDK', () => {
   })
 })
 
-// @TODO
-describe('Handsfree.initSDK', () => {})
+/**
+ * Handsfree.initSDK
+ */
+describe('Handsfree.initSDK', () => {
+  it('dispatches handsfree:loading and enabled tracking', () => {
+    const cb = jest.fn()
+    window.addEventListener('handsfree:loading', cb)
 
+    handsfree.isTracking = false
+    handsfree.trackFaces = jest.fn()
+    handsfree.brf.sdk = {
+      Rectangle: function () {},
+      BRFManager: function () {
+        this.init = function () {}
+        this.setNumFacesToTrack = function () {}
+      }
+    }
+
+    handsfree.initSDK()
+    expect(cb).toHaveBeenCalled()
+    expect(handsfree.isTracking).toBe(true)
+    window.removeEventListener('handsfree:loading', cb)
+  })
+})
