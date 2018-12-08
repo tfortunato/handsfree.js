@@ -195,5 +195,12 @@ describe('Handsfree.trackFaces', () => {
   })
 })
 
-// @TODO
-describe('Handsfree.setTouchedElement', () => {})
+describe('Handsfree.setTouchedElement', () => {
+  it('sets a target', () => {
+    handsfree.faces = faces
+    handsfree.faces[0].cursor.$target = null
+    handsfree.setTouchedElement()
+  
+    expect(handsfree.faces[0].cursor.$target).toBeTruthy()
+  })
+})
