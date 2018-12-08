@@ -15,7 +15,7 @@ Handsfree.prototype.drawFaces = jest.fn()
 const pckg = require('../package')
 const faces = require('../src/store/faces/1-wink-face')
 let handsfree
-handsfree = new Handsfree({})
+handsfree = new Handsfree()
 
 /**
  * Tests
@@ -195,6 +195,9 @@ describe('Handsfree.trackFaces', () => {
   })
 })
 
+/**
+ * handsfree.setTouchedElement
+ */
 describe('Handsfree.setTouchedElement', () => {
   it('sets a target', () => {
     handsfree.faces = faces
