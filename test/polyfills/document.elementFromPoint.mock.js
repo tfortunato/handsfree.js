@@ -1,8 +1,4 @@
 /**
- * Polyfills required for unit testing
- */
-
-/**
  * Make sure document.elementFromPoint returns something
  */
 Object.defineProperty(document, 'elementFromPoint', {
