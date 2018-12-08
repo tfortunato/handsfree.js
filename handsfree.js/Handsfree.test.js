@@ -2,20 +2,16 @@
  * Setup
  */
 // Mock function calls inside constructor
-Handsfree.prototype.applyConfig = jest.fn()
-Handsfree.prototype.checkForMediaSupport = jest.fn()
-Handsfree.prototype.injectDebugger = jest.fn()
-Handsfree.prototype.injectCursor = jest.fn()
-Handsfree.prototype.initAndMaybeReadWASMBinary = jest.fn()
+require('../test/setup/block-post-instantiation.js')
 Handsfree.prototype.throwError = jest.fn()
 Handsfree.prototype.calculateXY = jest.fn()
 Handsfree.prototype.onFrameHooks = jest.fn()
 Handsfree.prototype.drawFaces = jest.fn()
+Handsfree.prototype.initAndMaybeReadWASMBinary = jest.fn()
 
 const pckg = require('../package')
 const faces = require('../src/store/faces/1-wink-face')
-let handsfree
-handsfree = new Handsfree()
+let handsfree = new Handsfree()
 
 /**
  * Tests

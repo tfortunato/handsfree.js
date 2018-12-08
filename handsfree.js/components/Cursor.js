@@ -1,3 +1,5 @@
+const {TweenMax} = require('gsap')
+
 module.exports = Handsfree => {
   /**
    * Injects the cursor the user moves around

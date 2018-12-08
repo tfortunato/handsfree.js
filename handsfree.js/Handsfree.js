@@ -4,7 +4,6 @@
  */
 const pkg = require('../package.json')
 const {trimStart, merge} = require('lodash')
-const {TweenMax} = require('gsap')
 const defaultSettings = require('./config/default-settings')
 
 class Handsfree {
@@ -24,6 +23,7 @@ class Handsfree {
     // Properties
     // @see this.injectDebugger
     this.debug = {
+      isEnabled: opts.debug,
       // Whether we're actually debugging or not
       isDebugging: false,
       // The webcam stream
@@ -67,7 +67,6 @@ class Handsfree {
 
     // Apply config options
     this.opts = opts
-    this.applyConfig(opts)
 
     // Error out if we don't have support
     this.checkForMediaSupport()
@@ -85,7 +84,7 @@ class Handsfree {
    * Starts the webcam stream
    */
   start () {
-    this.toggleDebugger(this.opts.debug)
+    this.toggleDebugger(this.debug.isEnabled)
     document.body.classList.add('handsfree-started')
     document.body.classList.remove('handsfree-stopped')
     window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 0}}))

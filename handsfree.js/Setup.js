@@ -1,18 +1,6 @@
-const {assign} = require('lodash')
 const BRFvInitializer = require('./models/BRFv4_JS_TK110718_v4.1.0_trial.js')
 
 module.exports = Handsfree => {
-  /**
-   * Applies the instantiation config
-   */
-  Handsfree.prototype.applyConfig = function (opts) {
-    opts = assign({
-      debug: false
-    }, opts)
-
-    this.opts = opts
-  }
-
   /**
    * Reads the Web ASM Binary into a buffer if it's supported
    */

@@ -3,6 +3,6 @@
  */
 require('jest-canvas-mock')
 require('./jest-polyfills')
-require('./document.currentScript.mock')
-require('./navigator.mediaDevices.mock')
+require('./polyfills/document.currentScript.mock')
+require('./polyfills/navigator.mediaDevices.mock')
 global.Handsfree = require('../handsfree.js/Handsfree')

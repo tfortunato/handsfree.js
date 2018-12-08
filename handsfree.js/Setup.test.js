@@ -1,11 +1,15 @@
-// @TODO
-describe('Handsfree.applyConfig', () => {
-  it('applies defaults', () => {})
-})
+require('../test/setup/block-post-instantiation.js')
+Handsfree.prototype.throwError = jest.fn()
+let handsfree = new Handsfree()
 
 // @TODO
 describe('Handsfree.initAndMaybeReadWASMBinary', () => {
-  it('throws error when WASM is not supported', () => {})
+  it('throws error when WASM is not supported', () => {
+    handsfree.isWASMSupported = false
+    handsfree.initAndMaybeReadWASMBinary()
+
+    expect(handsfree.throwError).toHaveBeenCalled()
+  })
 
   it('emmits wasm progress', () => {})
 
