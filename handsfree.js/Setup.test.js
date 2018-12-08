@@ -3,6 +3,9 @@ Handsfree.prototype.throwError = jest.fn()
 Handsfree.prototype.loadPlugins = jest.fn()
 let handsfree = new Handsfree()
 
+/**
+ * Handsfree.initAndMaybeReadWASMBinary
+ */
 describe('Handsfree.initAndMaybeReadWASMBinary', () => {
   it('throws error when WASM is not supported', () => {
     handsfree.isWASMSupported = false
@@ -44,27 +47,91 @@ describe('Handsfree.initAndMaybeReadWASMBinary', () => {
   })
 })
 
+/**
+ * Handsfree.onReadyHook
+ */
 describe('Handsfree.onReadyHook', () => {
-  it('fires handsfree:ready', () => {
+  it('fires handsfree:ready and sets body classes', () => {
     const cb = jest.fn()
     window.addEventListener('handsfree:ready', cb)
     
     handsfree.onReadyHook()
     expect(cb).toHaveBeenCalled()
-  })
-
-  it('sets body classes', () => {
-    handsfree.onReadyHook()
     expect(document.body.classList.contains('handsfree-is-loading')).toBeFalsy()
     expect(document.body.classList.contains('handsfree-ready')).toBeTruthy()
   })
 })
 
-// @TODO
-describe('Handsfree.startBRFV4', () => {})
+/**
+ * Handsfree.startBRFV4
+ */
+describe('Handsfree.startBRFV4', () => {
+  it('recurses until videoWidth is set', () => {
+    const timeout = setTimeout
+    setTimeout = jest.fn()
+    handsfree.debug.$webcam = {videoWidth: 0}
 
-// @TODO
-describe('Handsfree.waitForSDK', () => {})
+    handsfree.startBRFv4()
+    expect(setTimeout).toHaveBeenCalled()
+    setTimeout = timeout
+  })
+
+  it('Sets canvas size and dispatches events', () => {
+    const cb = jest.fn()
+    const waitForSDK = handsfree.waitForSDK
+
+    handsfree.waitForSDK = jest.fn()
+    handsfree.debug.$canvas = {}
+    handsfree.debug.$webcam = {
+      videoWidth: 640,
+      videoHeight: 480
+    }
+    window.addEventListener('handsfree:loading', cb)
+    handsfree.startBRFv4()
+  
+    expect(cb).toHaveBeenCalled()
+    expect(handsfree.debug.$canvas.width).toBe(handsfree.debug.$webcam.videoWidth)
+    expect(handsfree.debug.$canvas.height).toBe(handsfree.debug.$webcam.videoHeight)
+    handsfree.waitForSDK = waitForSDK
+    window.removeEventListener('handsfree:loading', cb)
+  })
+})
+
+/**
+ * Handsfree.waitForSDK
+ */
+describe('Handsfree.waitForSDK', () => {
+  it('sets sdk if not set and dispatches progress', () => {
+    const cb = jest.fn()
+    handsfree.brf.sdk = null
+    window.addEventListener('handsfree:loading', cb)
+
+    handsfree.waitForSDK()
+    expect(handsfree.sdk).not.toBeNull()
+    expect(cb).toHaveBeenCalled()
+    window.removeEventListener('handsfree:loading', cb)
+  })
+
+  it('waits for sdk when sdk is not ready', () => {
+    const timeout = setTimeout
+    setTimeout = jest.fn()
+    handsfree.brf.sdk = {sdkReady: false}
+
+    handsfree.waitForSDK()
+    expect(setTimeout).toHaveBeenCalled()
+    setTimeout = timeout
+  })
+
+  it('initializes sdk once it\'s ready', () => {
+    const initSDK = handsfree.initSDK
+    handsfree.initSDK = jest.fn()
+    handsfree.brf.sdk = {sdkReady: true}
+    
+    handsfree.waitForSDK()
+    expect(handsfree.initSDK).toHaveBeenCalled()
+    handsfree.initSDK = initSDK
+  })
+})
 
 // @TODO
 describe('Handsfree.initSDK', () => {})
