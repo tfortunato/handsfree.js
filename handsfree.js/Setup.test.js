@@ -44,8 +44,21 @@ describe('Handsfree.initAndMaybeReadWASMBinary', () => {
   })
 })
 
-// @TODO
-describe('Handsfree.onReadyHook', () => {})
+describe('Handsfree.onReadyHook', () => {
+  it('fires handsfree:ready', () => {
+    const cb = jest.fn()
+    window.addEventListener('handsfree:ready', cb)
+    
+    handsfree.onReadyHook()
+    expect(cb).toHaveBeenCalled()
+  })
+
+  it('sets body classes', () => {
+    handsfree.onReadyHook()
+    expect(document.body.classList.contains('handsfree-is-loading')).toBeFalsy()
+    expect(document.body.classList.contains('handsfree-ready')).toBeTruthy()
+  })
+})
 
 // @TODO
 describe('Handsfree.startBRFV4', () => {})
