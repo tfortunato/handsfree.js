@@ -8,12 +8,9 @@
 
 // Make Handsfree globally accessible
 global.Handsfree = require('../handsfree.js/Handsfree')
+global.handsfree = null
 
-Handsfree.prototype._mock = function () {
-  Object.getOwnPropertyNames(Handsfree.prototype).forEach((propName) => {
-    if (propName !== '_mock') {
-      Handsfree.prototype[`_${propName}`] = Handsfree.prototype[propName]
-      Handsfree.prototype[propName] = jest.fn()
-    }
-  })
-}
+Object.getOwnPropertyNames(Handsfree.prototype).forEach((propName) => {
+  Handsfree.prototype[`_${propName}`] = Handsfree.prototype[propName]
+  Handsfree.prototype[propName] = jest.fn()
+})

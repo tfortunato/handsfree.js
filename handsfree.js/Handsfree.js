@@ -123,7 +123,7 @@ class Handsfree {
         this.brf.manager.setNumFacesToTrack(this.settings.maxFaces)
         this.trackFaces()
       }
-    }).catch((err) => this.throwError(err))
+    })
   }
 
   /**
