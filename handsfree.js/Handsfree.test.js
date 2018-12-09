@@ -3,6 +3,21 @@
  */
 Handsfree.prototype._mock()
 
+/**
+ * Constructor
+ */
+describe('Handsfree Constructor', () => {
+  it('sets body class after instantiation and emits handsfree:instantiated', () => {
+    const cb = jest.fn()
+    window.addEventListener('handsfree:instantiated', cb)
+    
+    const handsfree = new Handsfree()
+    expect(document.body.classList).toContain('handsfree-stopped')
+    expect(cb).toHaveBeenCalled()
+
+    window.removeEventListener('handsfree:instantiated', cb)
+  })
+})
 
 
 // Mock function calls inside constructor
