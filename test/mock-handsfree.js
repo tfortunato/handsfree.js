@@ -17,4 +17,3 @@ Handsfree.prototype._mock = function () {
     }
   })
 }
-Handsfree.prototype._mock()

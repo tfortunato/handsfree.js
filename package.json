@@ -49,6 +49,7 @@
     "setupFiles": [
       "./test/jest-setup.js"
     ],
+    "setupTestFrameworkScriptFile": "./test/global-setup.js",
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/test/",

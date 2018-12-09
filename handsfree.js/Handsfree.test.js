@@ -1,9 +1,4 @@
 /**
- * Setup
- */
-Handsfree.prototype._mock()
-
-/**
  * Constructor
  */
 describe('Handsfree Constructor', () => {
@@ -17,6 +12,13 @@ describe('Handsfree Constructor', () => {
 
     window.removeEventListener('handsfree:instantiated', cb)
   })
+})
+
+/**
+ * Handsfree.prototype.start
+ */
+describe('Handsfree.prototype.start', () => {
+
 })
 
 
