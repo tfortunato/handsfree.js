@@ -1,29 +1,43 @@
 /**
- * This is the main entry point for Handsfree.js
- * - This be defined after the body class, or with script[defer]
+ * 🔮 Handsfree.js 🔮
+ * 
+ * - This is what you get when you require('handsfree')
+ * - When called as a <script>, you'll get a global `Handsfree`
  */
-const pkg = require('../package.json')
-const {trimStart, merge} = require('lodash')
-const defaultSettings = require('./config/default-settings')
-
 class Handsfree {
   constructor (opts = {}) {
-    // Flags
-    this.isTracking = false
-    this.isSupported = false
-    this.isWASMSupported = typeof WebAssembly === 'object'
+    /**
+     * An array containing a pose object for every tracked person
+     * @todo Rename this to this.pose.face
+     */
+    this.faces = null
 
-    // The collection of plugins by name
-    this.plugin = {}
-
-    // Settings
+    /**
+     * Your settings
+     * - This really just acts as a namespace for plugins to pull settings from
+     * - To set a setting during instantiation, use:
+     *    const handsfree = new Handsfree({setting: {mySetting: value}})
+     */
+    this.opts = opts
     opts.settings = opts.settings || {}
     this.settings = merge(defaultSettings, opts.settings)
 
-    // Properties
-    // @see this.injectDebugger
+    /**
+     * This will store all the plugins by name: handsfree.use({name: 'myPlugin})
+     * - Adds it in here as: handsfree.plugin{myPlugin: {...}}
+     * - And if you need to acess a plugin, just use: handsfree.plugin[pluginName]
+     */
+    this.plugin = {}
+
+    /**
+     * Contains the state of the core debugger, which includes:
+     * - <div> container with
+     * -- a <video> to grab the webcam stream from
+     * -- a <canvas> to draw debug info on
+     */
     this.debug = {
-      isEnabled: opts.debug,
+      // Whether to show the core debugger (true) or not (false)
+      isEnabled: !!opts.debug,
       // Whether we're actually debugging or not
       isDebugging: false,
       // The webcam stream
@@ -36,7 +50,10 @@ class Handsfree {
       $wrap: null
     }
 
-    // BRFv4 config
+    /**
+     * Configs for BRFv4
+     * @see https://github.com/Tastenkunst/brfv4_javascript_examples
+     */
     this.brf = {
       // Will fallback to ASM if Web ASM isn't supported
       baseURL: `${Handsfree.libPath}brf/`,
@@ -52,32 +69,35 @@ class Handsfree {
       WASMBuffer: null
     }
 
-    // @FIXME we should add a cursor for every face
+    /**
+     * Cursor properties
+     * @todo This should be an array for multi-user support
+     */
     this.cursor = {
-      $el: null,
+      // Position on window
       x: -100,
-      y: -100
+      y: -100,
+      // The actual cursor element
+      $el: null
     }
-
-    // Contains all the tracked faces
-    this.faces = null
-
     // Helper object to remove jittering
     this.tweenFaces = []
 
-    // Apply config options
-    this.opts = opts
+    // True when webcam stream is set and poses are being tracked
+    // - this.isTracking && requestAnimationFrame(Handsfree.trackFaces())
+    this.isTracking = false
+    // Whether Web Assembly is supported
+    this.isWASMSupported = typeof WebAssembly === 'object'
+    // Whether handsfree is supported
+    this.isSupported = this.checkForMediaSupport()
 
-    // Error out if we don't have support
-    this.checkForMediaSupport()
-
-    // Inject elements
-    this.injectDebugger()
-    this.injectCursor()
-
-    // Initialize and read the BRFv4 Web Assembly binoary into a buffer
-    this.initAndMaybeReadWASMBinary()
+    /**
+     * Initialize the instance
+     * Let the browser know that we've finished instantiated
+     */
+    this.init()
     document.body.classList.add('handsfree-stopped')
+    window.dispatchEvent(new CustomEvent('handsfree:instantiated', opts))
   }
 
   /**
@@ -161,6 +181,16 @@ class Handsfree {
     })
   }
 }
+
+/**
+ * Configs
+ * @todo make use of environment variables too
+ */
+const defaultSettings = require('./config/default-settings')
+const pkg = require('../package.json')
+
+// Dependencies
+const {trimStart, merge} = require('lodash')
 
 // Add class to body to style loading
 document.body.classList.add('handsfree-is-loading')

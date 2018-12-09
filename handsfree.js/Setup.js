@@ -1,6 +1,13 @@
 const BRFvInitializer = require('./models/BRFv4_JS_TK110718_v4.1.0_trial.js')
 
 module.exports = Handsfree => {
+  Handsfree.prototype.init = function () {
+    // Inject elements
+    this.injectDebugger()
+    this.injectCursor()
+    this.initAndMaybeReadWASMBinary()
+  }
+  
   /**
    * Reads the Web ASM Binary into a buffer if it's supported
    */

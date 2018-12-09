@@ -1,6 +1,10 @@
 /**
  * Setup
  */
+Handsfree.prototype._mock()
+
+
+
 // Mock function calls inside constructor
 // require('../test/mock-handsfree.js')
 // Handsfree.prototype._throwError = Handsfree.prototype.throwError
