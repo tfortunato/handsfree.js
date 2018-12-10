@@ -12,4 +12,4 @@ require('./polyfills/xhr.mock')
 jest.mock('../handsfree.js/models/BRFv4_JS_TK110718_v4.1.0_trial.js')
 
 // Mock Handsfree
-require('./mock-handsfree')
+require('./mocks/handsfree')

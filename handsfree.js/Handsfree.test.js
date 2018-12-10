@@ -1,5 +1,6 @@
 /**
  * Constructor
+ * - Setup everything
  */
 describe('Handsfree Constructor', () => {
   /**
@@ -21,6 +22,8 @@ describe('Handsfree Constructor', () => {
 
 /**
  * Handsfree.prototype.start
+ * - Start trackers, initializing them if needed
+ * - Runs plugin .onStart()'s
  */
 describe('Handsfree.prototype.start', () => {
   /**
@@ -61,5 +64,51 @@ describe('Handsfree.prototype.start', () => {
     await handsfree._start()
     expect(progress).not.toBe(-1)
     window.removeEventListener('handsfree:loading', cb)
+  })
+
+  /**
+   * onStart events should not be called on plugins that are already running
+   * @see /test/mock-handsfree.js > Handsfree._mock
+   */
+  it('calls plugin onStart events only once', async () => {
+    const handsfree = new Handsfree()
+    handsfree._injectDebugger()
+    Handsfree._mock.restore(handsfree, 'onStartHooks')
+    Handsfree._mock.plugins(handsfree)
+    await handsfree._start()
+
+    expect(Handsfree._mock.spy.onStart).toBe(2)
+  })
+})
+
+/**
+ * Stop Webcam
+ * - Run all plugin hooks
+ */
+describe('Handsfree.prototype.stop', () => {
+  it('sets up body classes', () => {
+    const handsfree = new Handsfree()
+    document.body.classList.remove('handsfree-stopped')
+    document.body.classList.add('handsfree-started')
+    handsfree._stop()
+
+    expect(document.body.classList).toContain('handsfree-stopped')
+    expect(document.body.classList).not.toContain('handsfree-started')
+  })
+
+  it('runs plugin onStopHooks', () => {
+    const handsfree = new Handsfree()
+    handsfree._injectDebugger()
+    Handsfree._mock.restore(handsfree, 'onStopHooks')
+    Handsfree._mock.plugins(handsfree)
+    handsfree.debug.$webcam.srcObject = {getTracks: () => []}
+
+    handsfree.isTracking = false
+    handsfree._stop()
+    expect(Handsfree._mock.spy.onStop).toBe(0)
+
+    handsfree.isTracking = true
+    handsfree._stop()
+    expect(Handsfree._mock.spy.onStop).toBe(1)
   })
 })
