@@ -4,14 +4,20 @@
 module.exports = (handsfree) => {
   const plugins = [
     {
-      name: 'plugin-a'
+      name: 'test-disabled',
+      _isDisabled: true,
+      onStart () {Handsfree._mock.spy.onStart++},
+      onStop () {Handsfree._mock.spy.onStop++}
     },
     {
-      name: 'plugin-b',
+      name: 'test-plugin-a'
+    },
+    {
+      name: 'test-plugin-b',
       onStart () {Handsfree._mock.spy.onStart++}
     },
     {
-      name: 'plugin-c',
+      name: 'test-plugin-c',
       onStart () {Handsfree._mock.spy.onStart++},
       onStop () {Handsfree._mock.spy.onStop++}
     }

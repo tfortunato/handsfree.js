@@ -70,7 +70,7 @@ describe('Handsfree.prototype.start', () => {
    * onStart events should not be called on plugins that are already running
    * @see /test/mock-handsfree.js > Handsfree._mock
    */
-  it('calls plugin onStart events only once', async () => {
+  it('calls enabled plugin onStart events only once', async () => {
     const handsfree = new Handsfree()
     handsfree._injectDebugger()
     Handsfree._mock.restore(handsfree, 'onStartHooks')
@@ -96,7 +96,7 @@ describe('Handsfree.prototype.stop', () => {
     expect(document.body.classList).not.toContain('handsfree-started')
   })
 
-  it('runs plugin onStopHooks', () => {
+  it('runs enabled plugin onStopHooks', () => {
     const handsfree = new Handsfree()
     handsfree._injectDebugger()
     Handsfree._mock.restore(handsfree, 'onStopHooks')
