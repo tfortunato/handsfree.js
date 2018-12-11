@@ -23,6 +23,8 @@ Handsfree._mock = {
   // Handsfree._mock.plugins()
   plugins: require('./plugins'),
 
+  faces: require('../../src/store/faces/1-wink-face.json'),
+
   // Monitor number of times things were called
   spy: {
     // Number of times plugin onStart was called

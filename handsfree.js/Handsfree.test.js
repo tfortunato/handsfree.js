@@ -165,5 +165,15 @@ describe('Handsfree.prototype.trackFaces', () => {
  * Handsfree.prototype.setTouchedElement
  */
 describe('Handsfree.prototype.setTouchedElement', () => {
-  
+  it('Sets a target for every tracked face', () => {
+    const handsfree = new Handsfree()
+    Handsfree._mock.brfv4(handsfree)
+    handsfree._injectDebugger()
+
+    handsfree.faces = Handsfree._mock.faces
+    handsfree.faces[0].cursor.$target = null
+    handsfree._setTouchedElement()
+    
+    expect(handsfree.faces[0].cursor.$target).not.toBeNull()
+  })
 })
