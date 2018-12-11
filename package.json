@@ -41,6 +41,7 @@
   "jest": {
     "collectCoverage": true,
     "coverageDirectory": "coverage",
+    "testEnvironment": "jest-environment-jsdom",
     "testURL": "http://localhost",
     "transformIgnorePatterns": [
       "/public/brf/"
@@ -48,18 +49,15 @@
     "setupFiles": [
       "./test/jest-setup.js"
     ],
+    "setupTestFrameworkScriptFile": "./test/global-setup.js",
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/test/",
-      "/src/",
-      "/public/",
       "/handsfree.js/models/"
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/test/",
-      "/src/",
-      "/public/",
       "/handsfree.js/models/"
     ]
   },
