@@ -141,6 +141,29 @@ describe('Handsfree.prototype.trackFaces', () => {
   })
 
   it('keeps loop until isTracking is false', () => {
+    const handsfree = new Handsfree()
+    const raf = requestAnimationFrame
+    requestAnimationFrame = jest.fn()
+    handsfree._injectDebugger()
 
+    Handsfree._mock.plugins(handsfree)
+    Handsfree._mock.brfv4(handsfree)
+    Handsfree._mock.restore(handsfree, 'onFrameHooks')
+
+    handsfree.isTracking = false
+    handsfree._trackFaces()
+    expect(requestAnimationFrame).not.toHaveBeenCalled()
+
+    handsfree.isTracking = true
+    handsfree._trackFaces()
+    expect(requestAnimationFrame).toHaveBeenCalled()
+    requestAnimationFrame = raf
   })
+})
+
+/**
+ * Handsfree.prototype.setTouchedElement
+ */
+describe('Handsfree.prototype.setTouchedElement', () => {
+  
 })
