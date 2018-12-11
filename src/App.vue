@@ -9,8 +9,18 @@
             strong Handsfree
             small .js.org
       v-spacer
-      v-btn.primary.handsfree-show-when-stopped(large @click='startWebcam' :disabled='isHandsfreeLoading') Start Webcam
-      v-btn.primary.handsfree-show-when-started.hidden(large color='error' @click='stopWebcam') Stop Webcam
+      span.hidden-sm-and-down
+        v-btn.primary.handsfree-show-when-stopped(large @click='startWebcam' :disabled='isHandsfreeLoading')
+          v-icon.mr-2 videocam
+          | Start Webcam
+        v-btn.primary.handsfree-show-when-started(large color='error' @click='stopWebcam')
+          v-icon.mr-2 videocam_off
+          | Stop Webcam
+      span.hidden-md-and-up
+        v-btn.primary.handsfree-show-when-stopped(large @click='startWebcam' :disabled='isHandsfreeLoading')
+          v-icon videocam
+        v-btn.primary.handsfree-show-when-started(large color='error' @click='stopWebcam')
+          v-icon videocam_off
 
     v-progress-linear#loading-bar(v-model='loading.progress' :color='loading.color')
 

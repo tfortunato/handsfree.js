@@ -22,8 +22,12 @@
           p.subheading.font-weight-regular
             | A drop-in library for adding handsfree interfaces to any website, service, and Internet of Thing. Runs on any device that supports <a href="https://caniuse.com/#feat=stream">getUserMedia()</a>
           p.text-xs-center
-            v-btn.primary.handsfree-show-when-stopped(large @click='startWebcam' :disabled='isHandsfreeLoading') Start Webcam
-            v-btn.primary.handsfree-show-when-started.hidden(large color='error' @click='stopWebcam') Stop Webcam
+            v-btn.primary.handsfree-show-when-stopped(large @click='startWebcam' :disabled='isHandsfreeLoading')
+              v-icon.mr-2 videocam
+              | Start Webcam
+            v-btn.primary.handsfree-show-when-started.hidden(large color='error' @click='stopWebcam')
+              v-icon.mr-2 videocam_off
+              | Stop Webcam
 
         v-flex(mb-4 xs12 md6)
           v-card(light)
@@ -33,7 +37,9 @@
               p Smile wide to start a click and make a normal face to release it. Lean in and back to adjust brush size. <a href="https://glitch.com/~handsfree-drawing">Try the Handsfree Drawing Starter Kit on Glitch</a>.
               canvas#paperjs(style="width: 100%; height: 400px; box-shadow: 0 0 3px rgba(0,0,0,0.35)")
               div
-                v-btn.mx-0(large color='primary' @click='clearDrawing' style='width: 100%;') Clear Drawing
+                v-btn.mx-0(large color='primary' @click='clearDrawing' style='width: 100%;')
+                  v-icon.mr-2 refresh
+                  | Clear Drawing
 
       v-layout(style='margin-top: 200px' wrap)
         v-flex(xs12)
