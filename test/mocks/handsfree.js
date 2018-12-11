@@ -28,7 +28,9 @@ Handsfree._mock = {
     // Number of times plugin onStart was called
     onStart: 0,
     // Number of times plugin onStop was called
-    onStop: 0
+    onStop: 0,
+    // Number of times plugin onFrame was called
+    onFrame: 0
   },
 
   /**
@@ -38,11 +40,23 @@ Handsfree._mock = {
    * This restores a mocked method to what it was, by name:
    * Handsfree._mock.restore(handsfree, 'onStartHooks')
    * 
-   * @param mocked The instance to effect
+   * @param mocked The Handsfree instance to effect
    * @param propName The Handsfree.prototype[propName] to restore
    */
   restore (mocked, propName) {
     const mockedProp = get(mocked, `_${propName}`)
     set(mocked, propName, mockedProp)
+  },
+
+  /**
+   * Mocks BRFv4 on an instance
+   * @param mocked The Handsfree instance to effect
+   */
+  brfv4 (mocked) {
+    mocked.brf.resolution = {width: 640, height: 480}
+    mocked.brf.manager = {
+      update: jest.fn(),
+      getFaces: () => []
+    }
   }
 }

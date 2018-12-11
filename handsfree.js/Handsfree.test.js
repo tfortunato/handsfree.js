@@ -121,11 +121,7 @@ describe('Handsfree.prototype.trackFaces', () => {
     const handsfree = new Handsfree()
     const cb = jest.fn()
     handsfree._injectDebugger()
-    handsfree.brf.resolution = {width: 640, height: 480}
-    handsfree.brf.manager = {
-      update: jest.fn(),
-      getFaces: () => []
-    }
+    Handsfree._mock.brfv4(handsfree)
     window.addEventListener('handsfree-trackFaces', cb)
 
     handsfree._trackFaces()
@@ -133,7 +129,18 @@ describe('Handsfree.prototype.trackFaces', () => {
     window.removeEventListener('handsfree-trackFaces', cb)
   })
 
-  it('calls enabled plugin onFrameHooks', () => {})
+  it('calls enabled plugin onFrameHooks', () => {
+    const handsfree = new Handsfree()
+    handsfree._injectDebugger()
+    Handsfree._mock.plugins(handsfree)
+    Handsfree._mock.brfv4(handsfree)
+    Handsfree._mock.restore(handsfree, 'onFrameHooks')
 
-  it('keeps loop until isTracking is false', () => {})
+    handsfree._trackFaces()
+    expect(Handsfree._mock.spy.onFrame).toBe(2)
+  })
+
+  it('keeps loop until isTracking is false', () => {
+
+  })
 })

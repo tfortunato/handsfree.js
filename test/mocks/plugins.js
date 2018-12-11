@@ -7,7 +7,8 @@ module.exports = (handsfree) => {
       name: 'test-disabled',
       _isDisabled: true,
       onStart () {Handsfree._mock.spy.onStart++},
-      onStop () {Handsfree._mock.spy.onStop++}
+      onStop () {Handsfree._mock.spy.onStop++},
+      onFrame () {Handsfree._mock.spy.onFrame++}
     },
     {
       name: 'test-plugin-a'
@@ -19,7 +20,12 @@ module.exports = (handsfree) => {
     {
       name: 'test-plugin-c',
       onStart () {Handsfree._mock.spy.onStart++},
-      onStop () {Handsfree._mock.spy.onStop++}
+      onStop () {Handsfree._mock.spy.onStop++},
+      onFrame () {Handsfree._mock.spy.onFrame++}
+    },
+    {
+      name: 'test-plugin-d',
+      onFrame () {Handsfree._mock.spy.onFrame++}
     }
   ]
 
