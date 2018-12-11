@@ -159,6 +159,20 @@ describe('Handsfree.prototype.trackFaces', () => {
     expect(requestAnimationFrame).toHaveBeenCalled()
     requestAnimationFrame = raf
   })
+
+  it('draws faces only when debugger is on', () => {
+    const handsfree = new Handsfree()
+    Handsfree._mock.brfv4(handsfree)
+    handsfree._injectDebugger()
+
+    handsfree.debug.isDebugging = false
+    handsfree._trackFaces()
+    expect(handsfree.drawFaces).not.toHaveBeenCalled()
+
+    handsfree.debug.isDebugging = true
+    handsfree._trackFaces()
+    expect(handsfree.drawFaces).toHaveBeenCalled()
+  })
 })
 
 /**
