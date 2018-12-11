@@ -410,6 +410,7 @@ export default {
   
   mounted () {
     window.hljs = hljs
+    hljs.initHighlighting.called = false
     hljs.initHighlighting()
 
     // @TODO Let's make use of plugin enable/disables
