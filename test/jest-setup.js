@@ -1,13 +1,16 @@
+/**
+ * Configures our test suites
+ */
+// Core mocks
 require('jest-canvas-mock')
+require('./polyfills/document.currentScript.mock')
+require('./polyfills/navigator.mediaDevices.mock')
+require('./polyfills/document.elementFromPoint.mock')
+require('./polyfills/xhr.mock')
+require('./polyfills/canvas')
 
-// currentScript
-const script = document.createElement('script')
-script.setAttribute('src', '')
-Object.defineProperty(document, 'currentScript', {
-  value: script
-})
+// Mock models
+jest.mock('../handsfree.js/models/BRFv4_JS_TK110718_v4.1.0_trial.js')
 
-// elementFromPoint
-Object.defineProperty(document, 'elementFromPoint', {
-  value: function () { return {} }
-})
+// Mock Handsfree
+require('./mocks/handsfree')

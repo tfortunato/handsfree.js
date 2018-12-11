@@ -1,18 +1,13 @@
-const {assign} = require('lodash')
 const BRFvInitializer = require('./models/BRFv4_JS_TK110718_v4.1.0_trial.js')
 
 module.exports = Handsfree => {
-  /**
-   * Applies the instantiation config
-   */
-  Handsfree.prototype.applyConfig = function (opts) {
-    opts = assign({
-      debug: false
-    }, opts)
-
-    this.opts = opts
+  Handsfree.prototype.init = function () {
+    // Inject elements
+    this.injectDebugger()
+    this.injectCursor()
+    this.initAndMaybeReadWASMBinary()
   }
-
+  
   /**
    * Reads the Web ASM Binary into a buffer if it's supported
    */
@@ -39,11 +34,8 @@ module.exports = Handsfree => {
       xhr.onerror = onError
       xhr.onprogress = onProgress
       xhr.send(null)
-
-    // @FIXME These shouldn't be called, let's show an alert or something instead
     } else {
-      this.onReadyHook()
-      this.loadPlugins()
+      this.throwError('ERROR: This browser does not support Web Assembly, please try another browser...like Google Chrome!')
     }
   }
 

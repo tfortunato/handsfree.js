@@ -4,10 +4,12 @@ module.exports = Handsfree => {
    * by peaking into the available canvas API
    */
   Handsfree.prototype.checkForMediaSupport = function () {
+    let isSupported = false
+
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       try {
         let canvas = document.createElement('canvas')
-        this.isSupported = !!canvas.getContext('webgl')
+        isSupported = !!canvas.getContext('webgl')
         canvas.remove()
       } catch (e) {
         this.throwError('ERROR: This browser does not support webcams, please try another browser...like Google Chrome!')
@@ -15,6 +17,8 @@ module.exports = Handsfree => {
     } else {
       this.throwError('ERROR: This browser does not support webcams, please try another browser...like Google Chrome!')
     }
+
+    return isSupported
   }
 
   /**
