@@ -24,6 +24,7 @@
 
     v-progress-linear#loading-bar(v-model='loading.progress' :color='loading.color')
 
+    //- Left Navigation
     v-navigation-drawer(app temporary light v-model='isNavOpen')
       v-list.layout.column.fill-height
         v-list-tile(:to='{name: "Home"}')
@@ -109,7 +110,7 @@ export default {
   #loading-bar
     position: fixed
     top: 50px
-    z-index: 1
+    z-index: 2
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.35)
 
   @media screen and (max-width: 960px)
