@@ -3,6 +3,7 @@ const {forEach} = require('lodash')
 module.exports = Handsfree => {
   /**
    * Adds a plugin
+   * 
    * @param {Object} config The config object, in the form:
    * {
    *   // [required] The plugin name, which is how you access it: handsfree.plugin[pluginName]
@@ -14,6 +15,8 @@ module.exports = Handsfree => {
    *   // Called once per frame, after calculations
    *   onFrame: {Function}
    * }
+   * 
+   * @returns {Plugin Object} A reference to the plugin at handsfree.plugin[config.name]
    */
   Handsfree.prototype.use = function (config) {
     this.plugin[config.name] = config
