@@ -32,3 +32,15 @@ describe('Handsfree.prototype.injectDebugger', () => {
     expect(document.querySelector('body > .handsfree-debug-wrap > .handsfree-debugger')).toBeTruthy()
   })
 })
+
+/**
+ * Handsfree.prototype.getPointColor
+ */
+describe('Handsfree.prototype.getPointColor', () => {
+  it('should get correct point colors', () => {
+    expect(Handsfree.prototype._getPointColor(48)).toBe('#f0f')
+    expect(Handsfree.prototype._getPointColor(36)).toBe('#0f0')
+    expect(Handsfree.prototype._getPointColor(27)).toBe('#f00')
+    expect(Handsfree.prototype._getPointColor(0)).toBe('#ff0')
+  })
+})
