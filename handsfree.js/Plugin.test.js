@@ -5,7 +5,7 @@ describe('Handsfree.prototype.use', () => {
   it('adds .enable()/.disable methods', () => {
     const handsfree = new Handsfree()
     const pluginConf = {
-      name: 'test-plugin',
+      name: 'testPlugin',
       onDisable: jest.fn(),
       onEnable: jest.fn()
     }
@@ -26,53 +26,90 @@ describe('Handsfree.prototype.use', () => {
 
   it('calls onUse', () => {
     const handsfree = new Handsfree()
-    const configA = {
-      name: 'test-plugin',
+    const enabled = {
+      name: 'testPlugin',
       _isDisabled: true,
       onUse: jest.fn()
     }
-    const configB = {
-      name: 'test-plugin',
+    const disabled = {
+      name: 'testPlugin',
       onUse: jest.fn()
     }
 
-    handsfree._use(configA)
-    handsfree._use(configB)
+    handsfree._use(enabled)
+    handsfree._use(disabled)
     
-    expect(configA.onUse).not.toHaveBeenCalled()
-    expect(configB.onUse).toHaveBeenCalled()
+    expect(enabled.onUse).not.toHaveBeenCalled()
+    expect(disabled.onUse).toHaveBeenCalled()
   })
 
   it('responds to handsfree mouse events', () => {
     const handsfree = new Handsfree()
-    const configEnabled = {
-      name: 'test-plugin-enabled',
+    const enabled = {
+      name: 'testPlugin-enabled',
       onMouseDown: jest.fn(),
       onMouseDrag: jest.fn(),
       onMouseUp: jest.fn()
     }
-    const configDisabled = {
-      name: 'test-plugin-disabled',
+    const disabled = {
+      name: 'testPlugin-disabled',
       _isDisabled: true,
       onMouseDown: jest.fn(),
       onMouseDrag: jest.fn(),
       onMouseUp: jest.fn()
     }
     handsfree.faces = Handsfree._mock.faces
-    handsfree._use(configEnabled)
-    handsfree._use(configDisabled)
+    handsfree._use(enabled)
+    handsfree._use(disabled)
     
     window.dispatchEvent(new CustomEvent('handsfree:mouseDown', {detail: {}}))
     window.dispatchEvent(new CustomEvent('handsfree:mouseDrag', {detail: {}}))
     window.dispatchEvent(new CustomEvent('handsfree:mouseUp', {detail: {}}))
 
-    expect(configEnabled.onMouseDown).toHaveBeenCalled()
-    expect(configEnabled.onMouseDrag).toHaveBeenCalled()
-    expect(configEnabled.onMouseUp).toHaveBeenCalled()
-    expect(configDisabled.onMouseDown).not.toHaveBeenCalled()
-    expect(configDisabled.onMouseDrag).not.toHaveBeenCalled()
-    expect(configDisabled.onMouseUp).not.toHaveBeenCalled()
+    expect(enabled.onMouseDown).toHaveBeenCalled()
+    expect(enabled.onMouseDrag).toHaveBeenCalled()
+    expect(enabled.onMouseUp).toHaveBeenCalled()
+    expect(disabled.onMouseDown).not.toHaveBeenCalled()
+    expect(disabled.onMouseDrag).not.toHaveBeenCalled()
+    expect(disabled.onMouseUp).not.toHaveBeenCalled()
   })
 
-  it('sorts plugins alphabetically', () => {})
+  it('hooks run only for enabled plugins', () => {
+    const handsfree = new Handsfree()
+    const enabled = {
+      name: 'testPlugin-enabled',
+      onStop: jest.fn(),
+      onStart: jest.fn(),
+      onUse: jest.fn()
+    }
+    const disabled = {
+      name: 'testPlugin-disabled',
+      _isDisabled: true,
+      onStop: jest.fn(),
+      onStart: jest.fn(),
+      onUse: jest.fn()
+    }
+
+    handsfree._use(enabled)
+    handsfree._use(disabled)
+    handsfree.onStopHooks()
+    handsfree.onStartHooks()
+    handsfree.onFrameHooks()
+
+    expect(enabled.onUse).toHaveBeenCalled()
+    expect(disabled.onUse).not.toHaveBeenCalled()
+  })
+
+  it('updates faces when returning faces from frameHooks', () => {
+    const handsfree = new Handsfree()
+    handsfree.faces = [[], [], []]
+
+    handsfree._use({
+      name: 'testPlugin',
+      onFrame: () => [[]]
+    })
+    handsfree._onFrameHooks()
+
+    expect(handsfree.faces.length).toBe(1)
+  })
 })
