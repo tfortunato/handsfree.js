@@ -109,7 +109,7 @@ module.exports = Handsfree => {
    */
   Handsfree.prototype.toggleDebugger = function (state = null) {
     if (typeof state === 'boolean') this.debug.isDebugging = state
-    else this.debug.isDebugging = !this.debug.isEnabled
+    else this.debug.isDebugging = !this.debug.isDebugging
 
     this.debug.$wrap.style.display = this.debug.isDebugging ? 'inline-block' : 'none'
   }

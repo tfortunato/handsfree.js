@@ -44,3 +44,20 @@ describe('Handsfree.prototype.getPointColor', () => {
     expect(Handsfree.prototype._getPointColor(0)).toBe('#ff0')
   })
 })
+
+/**
+ * Handsfree.prototype.toggleDebugger
+ */
+describe('Handsfree.prototype.toggleDebugger', () => {
+  it('sets state based on argument', () => {
+    const handsfree = new Handsfree()
+    handsfree._injectDebugger()
+
+    handsfree._toggleDebugger(false)
+    expect(handsfree.debug.isDebugging).toBe(false)
+    handsfree._toggleDebugger(true)
+    expect(handsfree.debug.isDebugging).toBe(true)
+    handsfree._toggleDebugger()
+    expect(handsfree.debug.isDebugging).toBe(false)
+  })
+})
