@@ -54,3 +54,28 @@ describe('Handsfree.prototype.onReadyHook', () => {
     window.removeEventListener('handsfree:ready', cb)
   })
 })
+
+/**
+ * Handsfree.prototype.startBRFv4
+ */
+describe('Handsfree.prototype.startBRFv4', () => {
+  it('keep trying until the webcam is ready', () => {
+    const handsfree = new Handsfree()
+    const st = setTimeout
+    const onLoading = jest.fn()
+    handsfree._injectDebugger()
+    setTimeout = cb => cb()
+    window.addEventListener('handsfree:loading', onLoading)
+    
+    handsfree._startBRFv4()
+    expect(handsfree.startBRFv4).toHaveBeenCalled()
+    
+    handsfree.debug.$webcam = {videoWidth: 640}
+    handsfree.startBRFv4.mockClear()
+    handsfree._startBRFv4()
+    expect(handsfree.startBRFv4).not.toHaveBeenCalled()
+    expect(onLoading).toHaveBeenCalled()
+
+    window.removeEventListener('handsfree:loading', onLoading)
+  })
+})
