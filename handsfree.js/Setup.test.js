@@ -17,5 +17,15 @@ describe('Handsfree.prototype.initAndMaybeReadWASMBinary', () => {
 
   it('creates xhr request for .wasm file', () => {})
 
-  it('handles errors on ready', () => {})
+  it('handles errors on ready', () => {
+    const handsfree = new Handsfree()
+    // Random error-producing code
+    global.XMLHttpRequest(13)
+    handsfree._initAndMaybeReadWASMBinary()
+    expect(handsfree.throwError).toHaveBeenCalled()
+
+    global.XMLHttpRequest(200)
+    handsfree.throwError.mockClear()
+    expect(handsfree.throwError).not.toHaveBeenCalled()
+  })
 })
