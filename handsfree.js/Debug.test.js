@@ -16,15 +16,13 @@ describe('Handsfree.prototype.injectDebugger', () => {
 
   it('injects debugger into correct place', () => {
     const handsfree = new Handsfree()
-    let $debugger
-    let $wrap
 
     handsfree._injectDebugger()
-    $debugger = document.querySelector('body > .handsfree-debugger')
+    const $debugger = document.querySelector('body > .handsfree-debugger')
     expect($debugger).toBeTruthy()
     $debugger.remove()
 
-    $wrap = document.createElement('div')
+    const $wrap = document.createElement('div')
     $wrap.classList.add('handsfree-debug-wrap')
     document.body.appendChild($wrap)
     handsfree._injectDebugger()
