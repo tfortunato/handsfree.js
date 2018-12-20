@@ -77,5 +77,38 @@ describe('Handsfree.prototype.startBRFv4', () => {
     expect(onLoading).toHaveBeenCalled()
 
     window.removeEventListener('handsfree:loading', onLoading)
+    setTimeout = st
+  })
+})
+
+/**
+ * Handsfree.prototype.waitForSDK
+ */
+describe('Handsfree.prototype.waitForSDK', () => {
+  it('dispatches handsfree:loading', () => {
+    const handsfree = new Handsfree()
+    const cb = jest.fn()
+    window.addEventListener('handsfree:loading', cb)
+    
+    handsfree._waitForSDK()
+    expect(cb).toHaveBeenCalled()
+    window.removeEventListener('handsfree:loading', cb)
+  })
+
+  it('runs initSDK', () => {
+    const handsfree = new Handsfree()
+    const cb = jest.fn()
+    const st = setTimeout
+    setTimeout = jest.fn()
+    window.addEventListener('handsfree:loading', cb)
+
+    handsfree._waitForSDK()
+    expect(setTimeout).toHaveBeenCalled()
+    handsfree.brf.sdk.sdkReady = true
+    handsfree._waitForSDK()
+    expect(handsfree.initSDK).toHaveBeenCalled()
+    
+    window.removeEventListener('handsfree:loading', cb)
+    setTimeout = st
   })
 })

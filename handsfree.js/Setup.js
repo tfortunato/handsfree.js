@@ -90,7 +90,7 @@ module.exports = Handsfree => {
     if (this.brf.sdk && this.brf.sdk.sdkReady) {
       this.initSDK()
     } else {
-      // @FIXME let's optimize this wait time
+      // @TODO let's optimize this wait time
       setTimeout(() => this.waitForSDK(), 250)
     }
   }
