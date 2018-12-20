@@ -112,3 +112,32 @@ describe('Handsfree.prototype.waitForSDK', () => {
     setTimeout = st
   })
 })
+
+/**
+ * Handsfree.prototype.initSDK
+ */
+describe('Handsfree.prototype.initSDK', () => {
+  it('dispatches handsfree:loading and sets isTracking to true', () => {
+    const handsfree = new Handsfree()
+    const cb = jest.fn()
+    window.addEventListener('handsfree:loading', cb)
+    handsfree._injectDebugger()
+
+    handsfree.brf = {
+      sdk: {
+        Rectangle: jest.fn(),
+        BRFManager: jest.fn(() => ({
+          init: jest.fn(),
+          setNumFacesToTrack: jest.fn()
+        }))
+      }
+    }
+    
+    handsfree.isTracking = false
+    handsfree._initSDK()
+    expect(cb).toHaveBeenCalled()
+    expect(handsfree.isTracking).toBe(true)
+
+    window.removeEventListener('handsfree:loading', cb)
+  })
+})
