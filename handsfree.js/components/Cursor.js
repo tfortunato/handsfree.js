@@ -3,6 +3,8 @@ const {TweenMax} = require('gsap')
 module.exports = Handsfree => {
   /**
    * Injects the cursor the user moves around
+   * 
+   * @todo Add styles to stylesheet/string and inject that
    */
   Handsfree.prototype.injectCursor = function () {
     const $cursor = this.cursor.$el = document.createElement('div')
@@ -25,21 +27,21 @@ module.exports = Handsfree => {
    * Calculates the X/Y the user is facing
    */
   Handsfree.prototype.calculateXY = function () {
-
     this.faces.forEach((face, i) => {
 
       // Add enough helper object.
-
-      while(i >= this.tweenFaces.length) {
-
+      while (i >= this.tweenFaces.length) {
         this.tweenFaces.push({
-          x: -1, y: -1, rx: 0.0, ry: 0.0, positionList: []
-        });
+          x: -1,
+          y: -1,
+          rx: 0.0,
+          ry: 0.0,
+          positionList: []
+        })
       }
 
       // @TODO Include offsets and cursor dimensions
       // Calculate X/Y
-
       let rx          = face.rotationX * 180.0 / Math.PI; // radian to degree
       let ry          = face.rotationY * 180.0 / Math.PI;
 

@@ -1,10 +1,55 @@
 /**
- * 🔮 Handsfree.js 🔮
+ *                       ✨
+ *                        (\.   \      ,/)
+ *                         \(   |\     )/
+ *                         //\  | \   /\\
+ *                       (/ /\_#👓#_/\ \)
+ *                         \/\  ####  /\/
+ *                             `##'
  * 
- * - This is what you get when you require('handsfree')
- * - When called as a <script>, you'll get a global `Handsfree`
+ *                      🔮 Handsfree.js 🔮
+ * 
+ * @description Use computer vision to handsfree-ify websites, apps, games,
+ * tools, robotics and anything else with a webcam just...like...✨...that!
+ * 
+ * # NOTES
+ * - via Node: This is what you get when you require('handsfree')
+ * -- eg: const Handsfree = require('handsfree')
+ *        const handsfree = new Handsfree(opts)
+ * 
+ * - via <script>: This class is exposed via a global Handsfree module object
+ * -- eg: <script src="https://unpkg.com/handsfree/@<4/dist/handsfree.js"></script>
+ *        <script>const handsfree = new Handsfree(opts)</scrtip>
+ * 
+ * - **Caps matter**
+ * -- Handsfree with capital H refers to the class
+ * -- handsfree with a lower h refers to an instance, like: const handsfree = new Handsfree()
+ * 
+ * # HOW TO HELP
+ * - Search this project for: @todo
+ * - Fork the project on GitHub @see https://github.com/labofoz/handsfreejs
+ * - For improvements to the cursor, @see /handsfree.js/components/Cursor.js
+ * - For details about BRFv4 and the faces object @see https://github.com/Tastenkunst/brfv4_javascript_examples
+ * 
+ * ---
+ * 
+ * @see handsfree.js.org
+ * @see https://github.com/labofoz/handsfreejs
+ * @see https://glitch.com/@handsfreejs
+ * @see https://unpkg.com/handsfree/@<4/dist/handsfree.js
+ * @see https://twitter.com/labofoz
+ * 
  */
 class Handsfree {
+  /**
+   * Doing nothing by default (eg: new Handsfree()) would:
+   * - Inject and hide necessary video/canvas elements
+   * - Begin downloading the BRFv4 model (~9mb)
+   * 
+   * @param {Object} opts The config object, @see /README.md
+   * 
+   * @emits handsfree:instantiated Helps disconnected parts of your app know that handsfree is ready
+   */
   constructor (opts = {}) {
     /**
      * An array containing a pose object for every tracked person
@@ -102,6 +147,16 @@ class Handsfree {
 
   /**
    * Starts the webcam stream
+   * - Adds .handsfree-started and removes -handsfree-stopped from the <body>
+   * - This stream is completely killed when handsfree.stop() is called
+   * -- A new stream is therefore created every time handsfree.start() is called after handsfree.stop()
+   * -- This takes a few moments to happen (less than a second in my experience)
+   * - If models are not initialized, it'll do so first
+   * - If models are initialized, it'll start pose estimation
+   * 
+   * @todo benchmark .start() across devices/webcams
+   * 
+   * @emits handsfree:loading {detail: {progress: 0}} Useful giving user feedback
    */
   start () {
     this.toggleDebugger(this.debug.isEnabled)
@@ -128,6 +183,9 @@ class Handsfree {
 
   /**
    * Stop tracking and release webcam streams
+   * - Removes .handsfree-started and adds .handsfree-stopped to <body>
+   * - Kills all webcam streams
+   * - Disables debugger
    */
   stop () {
     document.body.classList.remove('handsfree-started')
@@ -143,6 +201,8 @@ class Handsfree {
 
   /**
    * Tracks faces
+   * - Will look for opts.settings.maxFaces
+   * - Recurses until this.isTracking is false
    */
   trackFaces () {
     const ctx = this.debug.ctx
@@ -163,6 +223,7 @@ class Handsfree {
     this.onFrameHooks(this.faces)
 
     // Dispatch global event
+    // @todo update this to handsfree:trackFaces
     window.dispatchEvent(new CustomEvent('handsfree-trackFaces', {detail: {
       scope: this,
       faces: this.faces
@@ -174,6 +235,7 @@ class Handsfree {
 
   /**
    * Returns the element under the face and stores it as face.$target
+   * - If there's no target, then null is returned
    */
   setTouchedElement () {
     this.faces.forEach((face, i) => {
@@ -199,7 +261,7 @@ document.body.classList.add('handsfree-is-loading')
 Handsfree.libPath = trimStart(document.currentScript.getAttribute('src').replace('handsfree.js', ''), '/')
 Handsfree.version = pkg.version
 
-// Remember: to kick things off you'll want to instantiate this with `new`
+// Let the magic begin ✨
 require('./Setup')(Handsfree)
 require('./Util')(Handsfree)
 require('./Debug')(Handsfree)

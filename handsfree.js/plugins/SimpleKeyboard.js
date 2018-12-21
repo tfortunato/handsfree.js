@@ -1,5 +1,6 @@
 /**
  * Adds a simple keyboard
+ * @todo This plugin needs work...it's not actually a plugin!
  */
 const Keyboard = require('simple-keyboard').default
 require('simple-keyboard/build/css/index.css')

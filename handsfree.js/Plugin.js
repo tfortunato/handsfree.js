@@ -3,6 +3,7 @@ const {forEach} = require('lodash')
 module.exports = Handsfree => {
   /**
    * Adds a plugin
+   * 
    * @param {Object} config The config object, in the form:
    * {
    *   // [required] The plugin name, which is how you access it: handsfree.plugin[pluginName]
@@ -14,6 +15,8 @@ module.exports = Handsfree => {
    *   // Called once per frame, after calculations
    *   onFrame: {Function}
    * }
+   * 
+   * @returns {Plugin Object} A reference to the plugin at handsfree.plugin[config.name]
    */
   Handsfree.prototype.use = function (config) {
     this.plugin[config.name] = config
@@ -33,11 +36,12 @@ module.exports = Handsfree => {
     !config._isDisabled && config.onUse && config.onUse(this)
 
     // Call onMouseDown, onMouseDrag, onMouseUp
-    if (config.onMouseDown) window.addEventListener('handsfree:mouseDown', (ev) => {config.onMouseDown(ev.detail.face, ev.detail.id)})
-    if (config.onMouseDrag) window.addEventListener('handsfree:mouseDrag', (ev) => {config.onMouseDrag(ev.detail.face, ev.detail.id)})
-    if (config.onMouseUp) window.addEventListener('handsfree:mouseUp', (ev) => {config.onMouseUp(ev.detail.face, ev.detail.id)})
+    if (config.onMouseDown) window.addEventListener('handsfree:mouseDown', (ev) => {!config._isDisabled && config.onMouseDown(ev.detail.face, ev.detail.id)})
+    if (config.onMouseDrag) window.addEventListener('handsfree:mouseDrag', (ev) => {!config._isDisabled && config.onMouseDrag(ev.detail.face, ev.detail.id)})
+    if (config.onMouseUp) window.addEventListener('handsfree:mouseUp', (ev) => {!config._isDisabled && config.onMouseUp(ev.detail.face, ev.detail.id)})
 
     // Sort alphabetically
+    // @TODO Let's not sort alphabetically, this is going to cause issues later!
     let newPlugins = {}
     Object.keys(this.plugin).sort().forEach(key => newPlugins[key] = this.plugin[key])
     this.plugin = newPlugins

@@ -53,14 +53,8 @@
             v-card-title
               h2 Quick Settings
             v-card-text
-              //- p Selecting any of the following will overwrite your current settings.
-              //- v-radio-group(v-model='quickSetting')
-              //-   v-radio(label='Low accuracy; High performance' value='low')
-              //-   v-radio(label='Balanced' value='balanced')
-              //-   v-radio(label='High accuracy; Low performance' value='high')
-              //-   v-radio(label='Custom' value='custom')
-              //- v-divider
               v-checkbox(label='Use animated background?' v-model='useBackground')
+              v-checkbox(label='Show webcam with debug mask?' v-model='isWebcamVisible')
 </template>
 
 <script>
@@ -75,6 +69,11 @@ export default {
      * Toggle background
      */
     useBackground () {this.toggleBackground()},
+
+    /**
+     * Toggles the webcam on/off
+     */
+    isWebcamVisible () {this.toggleWebcam()},
 
     /**
      * Set the number of faces
@@ -106,7 +105,8 @@ export default {
       statsMode: 0,
       sensitivity: 0.7,
       stabilizerFactor: 1,
-      stabilizerBuffer: 30
+      stabilizerBuffer: 30,
+      isWebcamVisible: false
     }
   },
 
@@ -163,6 +163,14 @@ export default {
       } else {
         setTimeout(() => {this.syncSettings()}, 50)
       }
+    },
+
+    /**
+     * Toggles the webcam on/off
+     */
+    toggleWebcam () {
+      window.handsfree.debug.isEnabled = this.isWebcamVisible
+      window.handsfree.toggleDebugger(this.isWebcamVisible)
     }
   }
 }
