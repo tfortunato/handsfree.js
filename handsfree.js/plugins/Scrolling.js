@@ -5,6 +5,7 @@ module.exports = {
   name: 'Scrolling',
 
   // The multiplier to scroll the page by
+  // @TODO Implement this on handsfree.js.org
   scrollSpeed: 0.1,
 
   /**
