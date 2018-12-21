@@ -52,13 +52,14 @@ module.exports = Handsfree => {
   
   /**
    * Actually starts BRFv4 (once stream dimensions are known)
+   * @emits handsfree:loading
    */
   Handsfree.prototype.startBRFv4 = function () {
     const $webcam = this.debug.$webcam
     const $canvas = this.debug.$canvas
 
     if ($webcam.videoWidth === 0) {
-      // @FIXME let's optimize this wait time
+      // @TODO let's optimize this wait time
       setTimeout(() => this.startBRFv4(), 50)
     } else {
       // Resize canvas to stream
@@ -89,7 +90,7 @@ module.exports = Handsfree => {
     if (this.brf.sdk && this.brf.sdk.sdkReady) {
       this.initSDK()
     } else {
-      // @FIXME let's optimize this wait time
+      // @TODO let's optimize this wait time
       setTimeout(() => this.waitForSDK(), 250)
     }
   }

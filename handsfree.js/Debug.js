@@ -1,6 +1,7 @@
 module.exports = Handsfree => {
   /**
    * Inject the debugger, which includes a video, canvas, and wrapping div
+   * @emits handsfree-injectDebugger
    */
   Handsfree.prototype.injectDebugger = function () {
     let $webcam
@@ -18,6 +19,7 @@ module.exports = Handsfree => {
     $canvas.classList.add('handsfree-canvas')
 
     // Apply minimal styles
+    // @TODO let's apply this via stylsheet
     $webcam.setAttribute('playsinline', 'playsinline')
     $wrap.style.display = 'none'
     $wrap.style.position = 'relative'
@@ -25,9 +27,9 @@ module.exports = Handsfree => {
     $canvas.style.transform = 'scale(-1, 1)'
     $canvas.style.position = 'absolute'
     $canvas.style.top = '0px'
-    $canvas.style.left = '-25%'
-    $canvas.style.width = '150%'
-    $canvas.style.height = 'auto'
+    $canvas.style.left = '0%'
+    $canvas.style.width = '100%'
+    $canvas.style.height = 'inherit'
 
     // Inject
     $parent = document.querySelector('.handsfree-debug-wrap')
@@ -37,6 +39,7 @@ module.exports = Handsfree => {
     $wrap.appendChild($webcam)
     $wrap.appendChild($canvas)
 
+    // @TODO Let's deprecate this event in favor of handsfree:injectDebugger
     this.debug.ctx = $canvas.getContext('2d')
     window.dispatchEvent(new CustomEvent('handsfree-injectDebugger', {detail: {
       scope: this,
@@ -106,7 +109,7 @@ module.exports = Handsfree => {
    */
   Handsfree.prototype.toggleDebugger = function (state = null) {
     if (typeof state === 'boolean') this.debug.isDebugging = state
-    else this.debug.isDebugging = !this.debug.isEnabled
+    else this.debug.isDebugging = !this.debug.isDebugging
 
     this.debug.$wrap.style.display = this.debug.isDebugging ? 'inline-block' : 'none'
   }

@@ -31,7 +31,7 @@ window.addEventListener('load', () => {
      * Start path, select new color
      */
     onMouseDown (face, faceIndex) {
-      if (face.cursor.$target !== $canvas) return
+      if (!$canvas || face.cursor.$target !== $canvas) return
 
       this.setLastPoint(face, faceIndex)
       path = new paper.Path()
@@ -49,7 +49,7 @@ window.addEventListener('load', () => {
      * Draw the path
      */
     onMouseDrag (face, faceIndex) {
-      if (face.cursor.$target !== $canvas) return
+      if (!$canvas || face.cursor.$target !== $canvas) return
       const newPoint = this.getPoint(face)
 
       if (newPoint.getDistance(this.getLastPoint(faceIndex)) > tool.minDistance) {
