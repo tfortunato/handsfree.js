@@ -16,3 +16,14 @@ describe('Handsfree.prototype.checkForMediaSupport', () => {
     document.createElement = createElement
   })
 })
+
+describe('Handsfree.prototype.throwError', () => {
+  it('throws error', () => {
+    const consoleErr = console.error
+    console.error = jest.fn()
+
+    try {Handsfree.prototype._throwError()} catch (e) {}
+    expect(console.error).toHaveBeenCalled()
+    alert = consoleErr
+  })
+})
