@@ -4,7 +4,7 @@ module.exports = Handsfree => {
   /**
    * Injects the cursor the user moves around
    * 
-   * @todo Add styles to stylesheet/string and inject that
+   * @todo Add styles to stylesheet/string and inject that @see https://github.com/BrowseHandsfree/handsfreeJS/issues/17
    */
   Handsfree.prototype.injectCursor = function () {
     const $cursor = this.cursor.$el = document.createElement('div')

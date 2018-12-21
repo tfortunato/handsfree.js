@@ -41,7 +41,7 @@ module.exports = Handsfree => {
     if (config.onMouseUp) window.addEventListener('handsfree:mouseUp', (ev) => {!config._isDisabled && config.onMouseUp(ev.detail.face, ev.detail.id)})
 
     // Sort alphabetically
-    // @TODO Let's not sort alphabetically, this is going to cause issues later!
+    // @TODO Let's not sort alphabetically, this is going to cause issues later! @see https://github.com/BrowseHandsfree/handsfreeJS/issues/49
     let newPlugins = {}
     Object.keys(this.plugin).sort().forEach(key => newPlugins[key] = this.plugin[key])
     this.plugin = newPlugins

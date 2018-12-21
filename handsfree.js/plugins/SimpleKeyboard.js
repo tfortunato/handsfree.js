@@ -1,6 +1,6 @@
 /**
  * Adds a simple keyboard
- * @todo This plugin needs work...it's not actually a plugin!
+ * @todo This plugin needs work...it's not actually a plugin! @see https://github.com/BrowseHandsfree/handsfreeJS/issues/43
  */
 const Keyboard = require('simple-keyboard').default
 require('simple-keyboard/build/css/index.css')
