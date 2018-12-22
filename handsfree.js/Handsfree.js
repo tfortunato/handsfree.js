@@ -237,11 +237,23 @@ class Handsfree {
   /**
    * Returns the element under the face and stores it as face.$target
    * - If there's no target, then null is returned
+   * 
+   * @todo move this to Cursor.js
    */
   setTouchedElement () {
     this.faces.forEach((face, i) => {
       this.faces[i].cursor.$target = document.elementFromPoint(face.cursor.x, face.cursor.y)
     })
+  }
+
+  /**
+   * Adds a listener to `handsfree:${eventName}`
+   * 
+   * @param {String}   eventName The event name to call, appended to `handsfree:`
+   * @param {Function} callback  The callback to call
+   */
+  on (eventName, callback) {
+    window.addEventListener(`handsfree:${eventName}`, callback)
   }
 }
 

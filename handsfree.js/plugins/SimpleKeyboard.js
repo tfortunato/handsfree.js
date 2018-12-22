@@ -1,26 +1,44 @@
 /**
  * Adds a simple keyboard
- * @todo This plugin needs work...it's not actually a plugin! @see https://github.com/BrowseHandsfree/handsfreeJS/issues/43
+ * - Use handsfree.dispatch('SimpleKeyboard:injectKeyboard') to re-render keyboard
+ * - Keyboards are injected into .handsfree-simple-keyboard
+ * - They are then given .handsfree-simple-keyboard-rendered to signal to CSS that it has a keyboard
+ * 
+ * @listens SimpleKeyboard:injectKeyboard Injects the keyboard into all .handsfree-simple-keyboard
  */
 const Keyboard = require('simple-keyboard').default
 require('simple-keyboard/build/css/index.css')
 
-/**
- * Look for all "handsfree-simple-keyboard" and generate an input and keyboard div
- */
-document.querySelectorAll('.handsfree-simple-keyboard').forEach($el => {
-  const $input = document.createElement('input')
-  const $keyboard = document.createElement('div')
-  $keyboard.classList.add('simple-keyboard')
+module.exports = {
+  name: 'SimpleKeyboard',
 
-  $el.appendChild($input)
-  $el.appendChild($keyboard)
+  /**
+   * @param {Handsfree} handsfree The calling handsfree instance
+   * @listens SimpleKeyboard:injectKeyboard
+   */
+  onUse (handsfree) {
+    this.injectKeyboard()
+    handsfree.on('SimpleKeyboard:injectKeyboard', this.injectKeyboard)
+  },
 
-  new Keyboard({
-    onChange: input => {
-      $input.value = input
-    }
-  })
-})
+  /**
+   * Injects the keyboard
+   * - Adds .handsfree-simple-keyboard-rendered to prevent duplicates
+   */
+  injectKeyboard () {
+    document.querySelectorAll('.handsfree-simple-keyboard').forEach($el => {
+      const $input = document.createElement('input')
+      const $keyboard = document.createElement('div')
+      $keyboard.classList.add('simple-keyboard')
 
-module.exports = {}
+      $el.appendChild($input)
+      $el.appendChild($keyboard)
+
+      new Keyboard({
+        onChange: input => {
+          $input.value = input
+        }
+      })
+    })
+  }
+}

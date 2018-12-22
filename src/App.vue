@@ -61,18 +61,21 @@
 
     v-content
       .handsfree-debug-wrap
+      Keyboard
       router-view
 </template>
 
 <script>
 import Home from './components/Home'
+import Keyboard from './components/Keyboard'
 import {mapState} from 'vuex'
 
 export default {
   name: 'App',
 
   components: {
-    Home
+    Home,
+    Keyboard
   },
 
   computed: mapState([

@@ -375,9 +375,10 @@
             v-card-title(primary-title)
               h2.headline.mb-0 Simple Keyboard
             v-card-text
-              p The <code>SimpleKeyboard</code> plugin adds a simple keyboard to the page. The keyboard is rendered into any element with <code>.handsfree-simple-keyboard</code>, allowing you to inject it into modals or hide the keyboard until it's needed. <strong>Click with a smile gesture :)</strong>
-
-    .handsfree-simple-keyboard(style='width: 100%; color: #000')
+              p The <code>SimpleKeyboard</code> plugin adds a simple keyboard to the page. The keyboard is rendered into any element with <code>.handsfree-simple-keyboard</code>, allowing you to inject it into modals or hide the keyboard until it's needed.
+              p To activate the keyboard, click inside an input element and click again outside it to close it.
+              p
+                v-text-field(full-width solo placeholder='Click here to activate keyboard' hide-details)
 
     v-container(style='margin-top: 200px; margin-bottom: 200px')
       v-layout(justify-center)
