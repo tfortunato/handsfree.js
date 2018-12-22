@@ -39,8 +39,10 @@ describe('Handsfree.prototype.use', () => {
     handsfree._use(enabled)
     handsfree._use(disabled)
     
-    expect(enabled.onUse).not.toHaveBeenCalled()
-    expect(disabled.onUse).toHaveBeenCalled()
+    setTimeout(() => {
+      expect(enabled.onUse).not.toHaveBeenCalled()
+      expect(disabled.onUse).toHaveBeenCalled()
+    }, 0)
   })
 
   it('responds to handsfree mouse events', () => {
@@ -96,8 +98,10 @@ describe('Handsfree.prototype.use', () => {
     handsfree.onStartHooks()
     handsfree.onFrameHooks()
 
-    expect(enabled.onUse).toHaveBeenCalled()
-    expect(disabled.onUse).not.toHaveBeenCalled()
+    setTimeout(() => {
+      expect(enabled.onUse).toHaveBeenCalled()
+      expect(disabled.onUse).not.toHaveBeenCalled()
+    }, 0)
   })
 
   it('updates faces when returning faces from frameHooks', () => {
@@ -111,5 +115,11 @@ describe('Handsfree.prototype.use', () => {
     handsfree._onFrameHooks()
 
     expect(handsfree.faces.length).toBe(1)
+  })
+
+  it('prioritizes plugins by .priority', () => {
+    const handsfree = new Handsfree()
+    Handsfree._mock.plugins(handsfree)
+    expect(Handsfree._mock.spy.onUse[0]).toBe('test-plugin-a')
   })
 })
