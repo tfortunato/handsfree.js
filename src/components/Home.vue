@@ -189,8 +189,12 @@
                 code.javascript.
                   const myPlugin = handsfree.use({
                     // Must be unique. Spaces and special characters are fine
-                    // Plugins are called alphabetically - to make a plugin load before another prefix it with a number
                     name: '',
+
+                    // The plugins execution priority
+                    // - Lower numbers run before higher numbers
+                    // - Numbers can be negative and fractional
+                    priority: 10,
 
                     // Set to true to have this plugin disabled by default
                     _isDisabled: false,
