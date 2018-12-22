@@ -3,7 +3,7 @@
  * @type {Object}
  */
 module.exports = {
-  name: '0-SmileClick',
+  name: 'SmileClick',
 
   priority: 9,
   

@@ -1,4 +1,4 @@
-const {forEach, merge} = require('lodash')
+const {forEach, merge, sortBy} = require('lodash')
 
 module.exports = Handsfree => {
   /**
@@ -46,10 +46,12 @@ module.exports = Handsfree => {
     if (config.onMouseDrag) window.addEventListener('handsfree:mouseDrag', (ev) => {!config._isDisabled && config.onMouseDrag(ev.detail.face, ev.detail.id)})
     if (config.onMouseUp) window.addEventListener('handsfree:mouseUp', (ev) => {!config._isDisabled && config.onMouseUp(ev.detail.face, ev.detail.id)})
     
-    // Sort alphabetically
-    // @TODO Let's not sort alphabetically, this is going to cause issues later! @see https://github.com/BrowseHandsfree/handsfreeJS/issues/49
+    // Prioritize plugins
     let newPlugins = {}
-    Object.keys(this.plugin).sort().forEach(key => newPlugins[key] = this.plugin[key])
+    let oldPlugins = Object.values(this.plugin)
+    sortBy(oldPlugins, 'priority').forEach(plugin => {
+      newPlugins[plugin.name] = plugin
+    })
     this.plugin = newPlugins
     
     // Call onUse hook
