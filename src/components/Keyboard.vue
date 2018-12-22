@@ -17,4 +17,8 @@ export default {
   left: 0
   right: 0
   z-index: 10
+  color: #444
+
+.handsfree-simple-keyboard-is-visible .handsfree-simple-keyboard
+  bottom: 0
 </style>

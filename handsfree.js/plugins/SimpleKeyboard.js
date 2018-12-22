@@ -1,8 +1,9 @@
 /**
  * Adds a simple keyboard
- * - Use handsfree.dispatch('SimpleKeyboard:injectKeyboard') to re-render keyboard
- * - Keyboards are injected into .handsfree-simple-keyboard
- * - They are then given .handsfree-simple-keyboard-rendered to signal to CSS that it has a keyboard
+ * - Use `handsfree.dispatch('SimpleKeyboard:injectKeyboard')` to re-render keyboard
+ * - Keyboards are injected into `.handsfree-simple-keyboard`
+ * - They are then given `.handsfree-simple-keyboard-rendered` to signal to CSS that it has a keyboard
+ * - Adds `body.handsfree-simple-keyboard-is-visible` `on('SimpleKeyboard:show')`
  * 
  * @listens SimpleKeyboard:injectKeyboard Injects the keyboard into all .handsfree-simple-keyboard
  */
@@ -18,7 +19,23 @@ module.exports = {
    */
   onUse (handsfree) {
     handsfree.on('SimpleKeyboard:injectKeyboard', this.injectKeyboard)
+    handsfree.on('SimpleKeyboard:show', this.show)
+    handsfree.on('SimpleKeyboard:hide', this.hide)
     handsfree.dispatch('SimpleKeyboard:injectKeyboard')
+  },
+
+  /**
+   * Shows the keyboard
+   */
+  show () {
+    document.body.classList.add('handsfree-simple-keyboard-is-visible')
+  },
+
+  /**
+   * Hides the keyboard
+   */
+  hide () {
+    document.body.classList.remove('handsfree-simple-keyboard-is-visible')
   },
 
   /**
