@@ -1,4 +1,4 @@
-const {forEach} = require('lodash')
+const {forEach, merge} = require('lodash')
 
 module.exports = Handsfree => {
   /**
@@ -19,33 +19,42 @@ module.exports = Handsfree => {
    * @returns {Plugin Object} A reference to the plugin at handsfree.plugin[config.name]
    */
   Handsfree.prototype.use = function (config) {
-    this.plugin[config.name] = config
-    
-    // Add disable(), enable(), and _isDisabled
-    config._isDisabled = config._isDisabled || false
-    config.disable = function () {
-      this._isDisabled = true
-      this.onDisable && this.onDisable(this)
-    }
-    config.enable = function () {
-      this._isDisabled = false
-      this.onEnable && this.onEnable(this)
-    }
-    
-    // Call onUse hook
-    !config._isDisabled && config.onUse && config.onUse(this)
+    // Setup defaults
+    this.plugin[config.name] = merge({
+      // The priority this plugin's methods should be called in, lower go first
+      priority: 10,
 
+      // Whether the plugin is disabled (true) or not (false)
+      // - Disabled plugins don't run their hooks
+      _isDisabled: false,
+
+      // Helper for disabling the plugin
+      disable: function () {
+        this._isDisabled = true
+        this.onDisable && this.onDisable(this)
+      },
+
+      // Helper for enabling the plugin
+      enable: function () {
+        this._isDisabled = false
+        this.onEnable && this.onEnable(this)
+      }
+    }, config)
+    
     // Call onMouseDown, onMouseDrag, onMouseUp
     if (config.onMouseDown) window.addEventListener('handsfree:mouseDown', (ev) => {!config._isDisabled && config.onMouseDown(ev.detail.face, ev.detail.id)})
     if (config.onMouseDrag) window.addEventListener('handsfree:mouseDrag', (ev) => {!config._isDisabled && config.onMouseDrag(ev.detail.face, ev.detail.id)})
     if (config.onMouseUp) window.addEventListener('handsfree:mouseUp', (ev) => {!config._isDisabled && config.onMouseUp(ev.detail.face, ev.detail.id)})
-
+    
     // Sort alphabetically
     // @TODO Let's not sort alphabetically, this is going to cause issues later! @see https://github.com/BrowseHandsfree/handsfreeJS/issues/49
     let newPlugins = {}
     Object.keys(this.plugin).sort().forEach(key => newPlugins[key] = this.plugin[key])
     this.plugin = newPlugins
-
+    
+    // Call onUse hook
+    !config._isDisabled && config.onUse && setTimeout(() => config.onUse(this), 0)
+    
     return this.plugin[config.name]
   }
 

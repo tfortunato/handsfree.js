@@ -5,6 +5,8 @@
 module.exports = {
   name: '0-SmileClick',
 
+  priority: 9,
+  
   mouseDowned: [],
   mouseDown: [],
   mouseDrag: [],

@@ -70,40 +70,40 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     onUse () {
       // Add the wrapper
-      this.$wrap = document.createElement('div')
-      this.$wrap.classList.add('handsfree-boids-debugger-wrap')
-      this.$wrap.width = window.innerWidth
-      document.body.appendChild(this.$wrap)
+      BoidsDebugger.$wrap = document.createElement('div')
+      BoidsDebugger.$wrap.classList.add('handsfree-boids-debugger-wrap')
+      BoidsDebugger.$wrap.width = window.innerWidth
+      document.body.appendChild(BoidsDebugger.$wrap)
 
       // Add the canvas
       for (let i = 1; i > -1; i--) {
-        this.canvas[i].$ = document.createElement('canvas')
-        this.canvas[i].ctx = this.canvas[i].$.getContext('2d')
-        this.$wrap.appendChild(this.canvas[i].$)
+        BoidsDebugger.canvas[i].$ = document.createElement('canvas')
+        BoidsDebugger.canvas[i].ctx = BoidsDebugger.canvas[i].$.getContext('2d')
+        BoidsDebugger.$wrap.appendChild(BoidsDebugger.canvas[i].$)
       }
-      this.canvas[0].$.classList.add('handsfree-boids-debugger-primary-canvas')
-      this.canvas[1].$.classList.add('handsfree-boids-debugger-secondary-canvas')
+      BoidsDebugger.canvas[0].$.classList.add('handsfree-boids-debugger-primary-canvas')
+      BoidsDebugger.canvas[1].$.classList.add('handsfree-boids-debugger-secondary-canvas')
       document.body.addEventListener('mousedown', () => {
-        this.mouseDown = true
-        this.trackingSpeedMod = 0.009
+        BoidsDebugger.mouseDown = true
+        BoidsDebugger.trackingSpeedMod = 0.009
       })
       document.body.addEventListener('mouseup', () => {
-        this.mouseDown = false
+        BoidsDebugger.mouseDown = false
       })
 
       // Reponsive
-      setInterval(() => this.animateBoids(), 1000/29.9)
-      window.addEventListener('resize', () => this.onResize())
-      this.onResize()
+      setInterval(() => BoidsDebugger.animateBoids(), 1000/29.9)
+      window.addEventListener('resize', () => BoidsDebugger.onResize())
+      BoidsDebugger.onResize()
 
       // update point to where the mouse cursor is
-      document.onmousemove = e => this.returnPoint = {x: e.pageX, y: e.pageY}
+      document.onmousemove = e => BoidsDebugger.returnPoint = {x: e.pageX, y: e.pageY}
 
       // Start boid loop
-      setTimeout(() => this.createInitialBoids(), 0)
+      setTimeout(() => BoidsDebugger.createInitialBoids(), 0)
       setTimeout(() => {
-        this.rateOfChange = 0.98
-        this.doYourOwnThingTimer = 0
+        BoidsDebugger.rateOfChange = 0.98
+        BoidsDebugger.doYourOwnThingTimer = 0
       }, 3000)
     },
 
