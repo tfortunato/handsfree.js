@@ -13,19 +13,28 @@ require('simple-keyboard/build/css/index.css')
 module.exports = {
   name: 'SimpleKeyboard',
 
+  // Collection of keyboards
+  keyboards: [],
+
   /**
+   * Setup events
+   * 
    * @param {Handsfree} handsfree The calling handsfree instance
    * @listens SimpleKeyboard:injectKeyboard
    */
   onUse (handsfree) {
-    handsfree.on('SimpleKeyboard:injectKeyboard', this.injectKeyboard)
-    handsfree.on('SimpleKeyboard:show', this.show)
+    handsfree.on('SimpleKeyboard:injectKeyboard', () => this.injectKeyboard(this))
+    handsfree.on('SimpleKeyboard:show', () => this.show())
     handsfree.on('SimpleKeyboard:hide', this.hide)
+    handsfree.on('SimpleKeyboard:set', this.set)
+
     handsfree.dispatch('SimpleKeyboard:injectKeyboard')
+    this.listenToFocusEvents()
   },
 
   /**
    * Shows the keyboard
+   * - Adds `body.handsfree-simple-keyboard-is-visible`
    */
   show () {
     document.body.classList.add('handsfree-simple-keyboard-is-visible')
@@ -33,16 +42,26 @@ module.exports = {
 
   /**
    * Hides the keyboard
+   * - Removes `body.handsfree-simple-keyboard-is-visible`
    */
   hide () {
     document.body.classList.remove('handsfree-simple-keyboard-is-visible')
   },
 
   /**
+   * Sets the value of the keyboard
+   */
+  set (value) {
+    this.keyboards.forEach(board => {
+      board.keyboard.setInput(value)
+    })
+  },
+
+  /**
    * Injects the keyboard
    * - Adds .handsfree-simple-keyboard-rendered to prevent duplicates
    */
-  injectKeyboard () {
+  injectKeyboard (handsfree) {
     document.querySelectorAll('.handsfree-simple-keyboard:not(.handsfree-simple-keyboard-rendered)').forEach($el => {
       const $input = document.createElement('input')
       const $keyboard = document.createElement('div')
@@ -52,11 +71,29 @@ module.exports = {
       $el.appendChild($keyboard)
       $el.classList.add('handsfree-simple-keyboard-rendered')
 
-      new Keyboard({
-        onChange: input => {
-          $input.value = input
-        }
+      handsfree.keyboards.push({
+        $input,
+        $keyboard,
+        keyboard: new Keyboard({
+          onChange: input => {
+            $input.value = input
+          }
+        })
       })
+    })
+  },
+
+  /**
+   * Adds event listeners to input focus events, to know when to trigger show/hide events
+   */
+  listenToFocusEvents () {
+    document.addEventListener('focusin', ev => {
+      const name = ev.target.nodeName
+      const type = ev.target.type
+      
+      if (name === 'INPUT' && type === 'text') {
+        this.show(ev.target.value)
+      }
     })
   }
 }
