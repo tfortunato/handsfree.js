@@ -247,13 +247,27 @@ class Handsfree {
   }
 
   /**
+   * Dispatches an event to `handsfree:${eventName}`
+   * 
+   * @param {String} eventName The event name to dispatch, appended to `handsfree:`
+   * @param {Any} args Any extra arguments to pass
+   */
+  dispatch (eventName, ...args) {
+    window.dispatchEvent(new CustomEvent(`handsfree:${eventName}`, {detail: args}))
+  }
+
+  /**
    * Adds a listener to `handsfree:${eventName}`
+   * - The callback receives the arguments, not the event object
+   * - Passes over any additional arguments
    * 
    * @param {String}   eventName The event name to call, appended to `handsfree:`
    * @param {Function} callback  The callback to call
    */
   on (eventName, callback) {
-    window.addEventListener(`handsfree:${eventName}`, callback)
+    window.addEventListener(`handsfree:${eventName}`, ev => {
+      callback.apply(this, ev.detail)
+    })
   }
 }
 

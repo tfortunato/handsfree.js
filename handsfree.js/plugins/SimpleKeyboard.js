@@ -17,8 +17,8 @@ module.exports = {
    * @listens SimpleKeyboard:injectKeyboard
    */
   onUse (handsfree) {
-    this.injectKeyboard()
     handsfree.on('SimpleKeyboard:injectKeyboard', this.injectKeyboard)
+    handsfree.dispatch('SimpleKeyboard:injectKeyboard')
   },
 
   /**
@@ -26,13 +26,14 @@ module.exports = {
    * - Adds .handsfree-simple-keyboard-rendered to prevent duplicates
    */
   injectKeyboard () {
-    document.querySelectorAll('.handsfree-simple-keyboard').forEach($el => {
+    document.querySelectorAll('.handsfree-simple-keyboard:not(.handsfree-simple-keyboard-rendered)').forEach($el => {
       const $input = document.createElement('input')
       const $keyboard = document.createElement('div')
       $keyboard.classList.add('simple-keyboard')
 
       $el.appendChild($input)
       $el.appendChild($keyboard)
+      $el.classList.add('handsfree-simple-keyboard-rendered')
 
       new Keyboard({
         onChange: input => {
