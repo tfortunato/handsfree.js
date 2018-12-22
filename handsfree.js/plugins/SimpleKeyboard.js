@@ -24,7 +24,7 @@ module.exports = {
    */
   onUse (handsfree) {
     handsfree.on('SimpleKeyboard:injectKeyboard', () => this.injectKeyboard(this))
-    handsfree.on('SimpleKeyboard:show', () => this.show())
+    handsfree.on('SimpleKeyboard:show', value => this.show(value))
     handsfree.on('SimpleKeyboard:hide', this.hide)
     handsfree.on('SimpleKeyboard:set', this.set)
 
@@ -36,8 +36,9 @@ module.exports = {
    * Shows the keyboard
    * - Adds `body.handsfree-simple-keyboard-is-visible`
    */
-  show () {
+  show (value) {
     document.body.classList.add('handsfree-simple-keyboard-is-visible')
+    this.set(value)
   },
 
   /**
@@ -54,6 +55,7 @@ module.exports = {
   set (value) {
     this.keyboards.forEach(board => {
       board.keyboard.setInput(value)
+      board.$input.value = value
     })
   },
 
@@ -66,6 +68,7 @@ module.exports = {
       const $input = document.createElement('input')
       const $keyboard = document.createElement('div')
       $keyboard.classList.add('simple-keyboard')
+      $input.classList.add('simple-keyboard-input')
 
       $el.appendChild($input)
       $el.appendChild($keyboard)
@@ -91,7 +94,7 @@ module.exports = {
       const name = ev.target.nodeName
       const type = ev.target.type
       
-      if (name === 'INPUT' && type === 'text') {
+      if (name === 'INPUT' && type === 'text' && !ev.target.classList.contains('simple-keyboard-input')) {
         this.show(ev.target.value)
       }
     })
