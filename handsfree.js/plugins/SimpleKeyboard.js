@@ -16,6 +16,9 @@ module.exports = {
   // Collection of keyboards
   keyboards: [],
 
+  // The target input element receiving content
+  $target: null,
+
   /**
    * Setup events
    * 
@@ -52,7 +55,7 @@ module.exports = {
   /**
    * Sets the value of the keyboard
    */
-  set (value) {
+  set (value = '') {
     this.keyboards.forEach(board => {
       board.keyboard.setInput(value)
       board.$input.value = value
@@ -80,6 +83,7 @@ module.exports = {
         keyboard: new Keyboard({
           onChange: input => {
             $input.value = input
+            this.$target.value = input
           }
         })
       })
@@ -90,13 +94,17 @@ module.exports = {
    * Adds event listeners to input focus events, to know when to trigger show/hide events
    */
   listenToFocusEvents () {
-    document.addEventListener('focusin', ev => {
+    const callback = ev => {
       const name = ev.target.nodeName
       const type = ev.target.type
       
       if (name === 'INPUT' && type === 'text' && !ev.target.classList.contains('simple-keyboard-input')) {
         this.show(ev.target.value)
+        this.$target = ev.target
       }
-    })
+    }
+
+    document.addEventListener('click', callback)
+    document.addEventListener('focusin', callback)
   }
 }
