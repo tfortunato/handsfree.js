@@ -6,6 +6,8 @@
  * - Adds `body.handsfree-simple-keyboard-is-visible` `on('SimpleKeyboard:show')`
  * 
  * @listens SimpleKeyboard:injectKeyboard Injects the keyboard into all .handsfree-simple-keyboard
+ * @emits handsfree:SimpleKeyboard:change(value) 
+ * @see https://franciscohodge.com/projects/simple-keyboard/documentation/
  */
 const Keyboard = require('simple-keyboard').default
 require('simple-keyboard/build/css/index.css')
@@ -14,6 +16,7 @@ module.exports = {
   name: 'SimpleKeyboard',
 
   // Collection of keyboards
+  // {$input, $keyboard, keyboard}
   keyboards: [],
 
   // The target input element receiving content
@@ -22,16 +25,20 @@ module.exports = {
   /**
    * Setup events
    * 
-   * @param {Handsfree} handsfree The calling handsfree instance
    * @listens SimpleKeyboard:injectKeyboard
+   * @listens SimpleKeyboard:show
+   * @listens SimpleKeyboard:hide
+   * @listens SimpleKeyboard:set
+   * 
+   * @emits SimpleKeyboard:injectKeyboard
    */
-  onUse (handsfree) {
-    handsfree.on('SimpleKeyboard:injectKeyboard', () => this.injectKeyboard(this))
-    handsfree.on('SimpleKeyboard:show', value => this.show(value))
-    handsfree.on('SimpleKeyboard:hide', this.hide)
-    handsfree.on('SimpleKeyboard:set', this.set)
+  onUse () {
+    this.$handsfree.on('SimpleKeyboard:injectKeyboard', () => this.injectKeyboard(this))
+    this.$handsfree.on('SimpleKeyboard:show', value => this.show(value))
+    this.$handsfree.on('SimpleKeyboard:hide', this.hide)
+    this.$handsfree.on('SimpleKeyboard:set', value => this.set(value))
 
-    handsfree.dispatch('SimpleKeyboard:injectKeyboard')
+    this.$handsfree.dispatch('SimpleKeyboard:injectKeyboard')
     this.listenToFocusEvents()
   },
 
@@ -39,9 +46,9 @@ module.exports = {
    * Shows the keyboard
    * - Adds `body.handsfree-simple-keyboard-is-visible`
    */
-  show (value) {
+  show () {
     document.body.classList.add('handsfree-simple-keyboard-is-visible')
-    this.set(value)
+    this.set(this.$target.value)
   },
 
   /**
@@ -54,11 +61,17 @@ module.exports = {
 
   /**
    * Sets the value of the keyboard
+   * 
+   * @param {String} value The new value to use
+   * @emits handsfree:SimpleKeyboard:change(value) 
    */
   set (value = '') {
     this.keyboards.forEach(board => {
       board.keyboard.setInput(value)
-      board.$input.value = value
+      this.$target.value = board.$keyboard.value = board.$input.value = value
+      // Required on the target for reactive frameworks like React/Vue
+      this.$target.dispatchEvent(new Event('input'))
+      this.$handsfree.dispatch('SimpleKeyboard:change', value)
     })
   },
 
@@ -81,9 +94,24 @@ module.exports = {
         $input,
         $keyboard,
         keyboard: new Keyboard({
-          onChange: input => {
-            $input.value = input
-            this.$target.value = input
+          /**
+           * Set the value
+           */
+          onChange: value => this.set(value),
+          
+          /**
+           * Handle the `{enter}` key
+           * @see https://franciscohodge.com/projects/simple-keyboard/documentation/
+           */
+          onKeyPress: button => {
+            if (button === '{enter}') {
+              this.$target.dispatchEvent(new KeyboardEvent('keyup', {
+                bubbles: true,
+                cancelable: true,
+                keyCode: 13
+              }))
+              this.$handsfree.dispatch('SimpleKeyboard:hide')
+            }
           }
         })
       })
@@ -99,8 +127,8 @@ module.exports = {
       const type = ev.target.type
       
       if (name === 'INPUT' && type === 'text' && !ev.target.classList.contains('simple-keyboard-input')) {
-        this.show(ev.target.value)
         this.$target = ev.target
+        this.show(ev.target.value)
       }
     }
 

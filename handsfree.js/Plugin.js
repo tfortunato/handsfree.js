@@ -20,10 +20,13 @@ module.exports = Handsfree => {
    */
   Handsfree.prototype.use = function (config) {
     // Setup defaults
-    this.plugin[config.name] = merge({
+    this.plugin[config.name] = config = merge({
       // The priority this plugin's methods should be called in, lower go first
       priority: 10,
 
+      // The reference to the handsfree instance
+      $handsfree: this,
+      
       // Whether the plugin is disabled (true) or not (false)
       // - Disabled plugins don't run their hooks
       _isDisabled: false,
