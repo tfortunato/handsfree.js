@@ -10,7 +10,8 @@
  * @see https://franciscohodge.com/projects/simple-keyboard/documentation/
  */
 const Keyboard = require('simple-keyboard').default
-require('simple-keyboard/build/css/index.css')
+// @todo File this as a bug: Requiring this css file breaks jest, I'm assuming because we mocked simple-keyboard?
+if (Keyboard) require('simple-keyboard/build/css/index.css')
 
 module.exports = {
   name: 'SimpleKeyboard',

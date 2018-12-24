@@ -39,6 +39,7 @@ describe('Handsfree.prototype.use', () => {
     handsfree._use(enabled)
     handsfree._use(disabled)
     
+    // @Todo Test this again without set timeout!
     setTimeout(() => {
       expect(enabled.onUse).not.toHaveBeenCalled()
       expect(disabled.onUse).toHaveBeenCalled()
@@ -98,6 +99,7 @@ describe('Handsfree.prototype.use', () => {
     handsfree.onStartHooks()
     handsfree.onFrameHooks()
 
+    // @Todo Test this again without set timeout!
     setTimeout(() => {
       expect(enabled.onUse).toHaveBeenCalled()
       expect(disabled.onUse).not.toHaveBeenCalled()
