@@ -26,8 +26,8 @@ beforeEach(() => {
   // Restore methods and fast forward
   Handsfree._mock.restore(handsfree, 'on')
   Handsfree._mock.restore(handsfree, 'dispatch')
-  handsfree._use(plugin)
   plugin.$handsfree = handsfree
+  handsfree._use(plugin)
   jest.runAllTimers()
 })
 
@@ -86,7 +86,20 @@ describe('SimpleKeyboard.injectKeyboard', () => {
     expect(document.querySelectorAll('.simple-keyboard').length).toBe(1)
   })
 
-  it('closes keyboard when {enter} is pressed', () => {})
+  it('closes keyboard when {enter} is pressed', () => {
+    const $container = document.createElement('div')
+    const cb = jest.fn()    
+    $container.classList.add('handsfree-simple-keyboard')
+    document.body.appendChild($container)
+    window.addEventListener('handsfree:SimpleKeyboard:hide', cb)
+
+    handsfree.dispatch('SimpleKeyboard:injectKeyboard')
+    expect(cb).not.toHaveBeenCalled()
+    handsfree.plugin.SimpleKeyboard.keyboards[0].keyboard.onKeyPress('{enter}')
+    plugin.keyboards[0].keyboard.onKeyPress('{enter}')
+    expect(cb).toHaveBeenCalled()
+  })
+
   it('updates values on key press', () => {})
 })
 
@@ -95,9 +108,7 @@ describe('SimpleKeyboard.injectKeyboard', () => {
  * - Triggered via `$handsfree.on('SimpleKeyboard:set')`
  */
 describe('SimpleKeyboard.set', () => {
-  it('Sets the input and dispatches event', () => {
-    
-  })
+  it('Sets the input and dispatches event', () => {})
 })
 
 describe('SimpleKeyboard.listenToFocusEvents', () => {

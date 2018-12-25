@@ -12,8 +12,10 @@ require('./polyfills/window.scrollTo.mock')
 // Mock models
 jest.mock('../handsfree.js/models/BRFv4_JS_TK110718_v4.1.0_trial.js')
 jest.mock('simple-keyboard', () => ({
-  default: function () {
+  default: function (config) {
     this.setInput = jest.fn()
+    this.onChange = config.onChange
+    this.onKeyPress = config.onKeyPress
   }
 }))
 

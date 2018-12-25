@@ -34,7 +34,7 @@ module.exports = {
    * @emits SimpleKeyboard:injectKeyboard
    */
   onUse () {
-    this.$handsfree.on('SimpleKeyboard:injectKeyboard', () => this.injectKeyboard(this))
+    this.$handsfree.on('SimpleKeyboard:injectKeyboard', () => this.injectKeyboard())
     this.$handsfree.on('SimpleKeyboard:show', value => this.show(value))
     this.$handsfree.on('SimpleKeyboard:hide', this.hide)
     this.$handsfree.on('SimpleKeyboard:set', value => this.set(value))
@@ -80,7 +80,7 @@ module.exports = {
    * Injects the keyboard
    * - Adds .handsfree-simple-keyboard-rendered to prevent duplicates
    */
-  injectKeyboard (plugin) {
+  injectKeyboard () {
     document.querySelectorAll('.handsfree-simple-keyboard:not(.handsfree-simple-keyboard-rendered)').forEach($el => {
       const $input = document.createElement('input')
       const $keyboard = document.createElement('div')
@@ -91,7 +91,7 @@ module.exports = {
       $el.appendChild($keyboard)
       $el.classList.add('handsfree-simple-keyboard-rendered')
 
-      plugin.keyboards.push({
+      this.keyboards.push({
         $input,
         $keyboard,
         keyboard: new Keyboard({
