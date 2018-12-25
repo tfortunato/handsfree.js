@@ -55,8 +55,16 @@ describe('SimpleKeyboard.show', () => {
   })
 })
 
+/**
+ * SimpleKeyboard.hide
+ * - Triggered via `$handsfree.on('SimpleKeyboard:hide')`
+ */
 describe('SimpleKeyboard.hide', () => {
-  it('removes keyboard visible body class', () => {})
+  it('removes keyboard visible body class', () => {
+    handsfree.dispatch('SimpleKeyboard:show')
+    handsfree.dispatch('SimpleKeyboard:hide')
+    expect(document.body.classList).not.toContain('handsfree-simple-keyboard-is-visible')
+  })
 })
 
 describe('SimpleKeyboard.set', () => {
