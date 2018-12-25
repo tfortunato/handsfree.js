@@ -11,7 +11,7 @@
  */
 const Keyboard = require('simple-keyboard').default
 // @todo File this as a bug: Requiring this css file breaks jest, I'm assuming because we mocked simple-keyboard?
-if (Keyboard) require('simple-keyboard/build/css/index.css')
+if (Keyboard.render) require('simple-keyboard/build/css/index.css')
 
 module.exports = {
   name: 'SimpleKeyboard',
@@ -80,7 +80,7 @@ module.exports = {
    * Injects the keyboard
    * - Adds .handsfree-simple-keyboard-rendered to prevent duplicates
    */
-  injectKeyboard (handsfree) {
+  injectKeyboard (plugin) {
     document.querySelectorAll('.handsfree-simple-keyboard:not(.handsfree-simple-keyboard-rendered)').forEach($el => {
       const $input = document.createElement('input')
       const $keyboard = document.createElement('div')
@@ -91,7 +91,7 @@ module.exports = {
       $el.appendChild($keyboard)
       $el.classList.add('handsfree-simple-keyboard-rendered')
 
-      handsfree.keyboards.push({
+      plugin.keyboards.push({
         $input,
         $keyboard,
         keyboard: new Keyboard({

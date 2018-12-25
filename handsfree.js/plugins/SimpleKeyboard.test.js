@@ -14,6 +14,10 @@ beforeEach(() => {
   document.body.appendChild($target)
   plugin.$target = $target
 
+  // Create keyboard container
+  const $containers = document.querySelectorAll('.handsfree-simple-keyboard') || []
+  $containers.forEach(container => container.remove())
+  
   // Fake click event
   clickEvent = new MouseEvent('click', {
     target: $target    
@@ -67,14 +71,33 @@ describe('SimpleKeyboard.hide', () => {
   })
 })
 
-describe('SimpleKeyboard.set', () => {
-  it('Sets the input and dispatches event', () => {})
-})
-
+/**
+ * SimpleKeyboard.injectKeyboard
+ * - Adds .handsfree-simple-keyboard-rendered to prevent duplicates
+ */
 describe('SimpleKeyboard.injectKeyboard', () => {
-  it('only injects keyboard to containers without keyboards already', () => {})
+  it('only injects keyboard to containers without keyboards already', () => {
+    const $container = document.createElement('div')
+    $container.classList.add('handsfree-simple-keyboard')
+    document.body.appendChild($container)
+    
+    handsfree.dispatch('SimpleKeyboard:injectKeyboard')
+    handsfree.dispatch('SimpleKeyboard:injectKeyboard')
+    expect(document.querySelectorAll('.simple-keyboard').length).toBe(1)
+  })
+
   it('closes keyboard when {enter} is pressed', () => {})
   it('updates values on key press', () => {})
+})
+
+/**
+ * SimpleKeyboard.set
+ * - Triggered via `$handsfree.on('SimpleKeyboard:set')`
+ */
+describe('SimpleKeyboard.set', () => {
+  it('Sets the input and dispatches event', () => {
+    
+  })
 })
 
 describe('SimpleKeyboard.listenToFocusEvents', () => {
