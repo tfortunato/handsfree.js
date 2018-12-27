@@ -153,6 +153,11 @@ const myPlugin = handsfree.use({
   // - Using the same name as an existing one overwrites it
   name: '',
 
+  // The plugins execution priority
+  // - Lower numbers run before higher numbers
+  // - Numbers can be negative and fractional
+  priority: 10,
+
   // Set to true to have this plugin disabled by default
   // - Disabled plugins do not run any of their hooks
   _isDisabled: false,

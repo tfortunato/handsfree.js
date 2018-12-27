@@ -32,7 +32,9 @@ Handsfree._mock = {
     // Number of times plugin onStop was called
     onStop: 0,
     // Number of times plugin onFrame was called
-    onFrame: 0
+    onFrame: 0,
+    // Array containing plugins called, in order (use Handsfree._mock.spy.onUse.length for count)
+    onUse: []
   },
 
   /**

@@ -23,14 +23,15 @@
  * 
  * - **Caps matter**
  * -- Handsfree with capital H refers to the class
- * -- handsfree with a lower h refers to an instance, like: const handsfree = new Handsfree()
+ * -- We use handsfree with a lower h to refer to an instance, like: const handsfree = new Handsfree()
  * 
  * # HOW TO HELP
- * - Search this project for: @todo
- * - Fork the project on GitHub @see https://github.com/labofoz/handsfreejs
  * - For improvements to the cursor, @see /handsfree.js/components/Cursor.js
  * - For details about BRFv4 and the faces object @see https://github.com/Tastenkunst/brfv4_javascript_examples
  * 
+ * - Star and fork the project on GitHub @see https://github.com/labofoz/handsfreejs
+ * - Check out existing issues @see https://github.com/labofoz/handsfreejs/issues
+ * - Search this project for "@todo"
  * ---
  * 
  * @see handsfree.js.org
@@ -53,7 +54,7 @@ class Handsfree {
   constructor (opts = {}) {
     /**
      * An array containing a pose object for every tracked person
-     * @todo Rename this to this.pose.face
+     * @todo Rename this to this.pose.face @see https://github.com/BrowseHandsfree/handsfreeJS/issues/45
      */
     this.faces = null
 
@@ -97,7 +98,7 @@ class Handsfree {
 
     /**
      * Configs for BRFv4
-     * @see https://github.com/Tastenkunst/brfv4_javascript_examples
+     * @see https://tastenkunst.github.io/brfv4_docs/
      */
     this.brf = {
       // Will fallback to ASM if Web ASM isn't supported
@@ -116,7 +117,7 @@ class Handsfree {
 
     /**
      * Cursor properties
-     * @todo This should be an array for multi-user support
+     * @todo This should be an array for multi-user support @see https://github.com/BrowseHandsfree/handsfreeJS/issues/46
      */
     this.cursor = {
       // Position on window
@@ -153,8 +154,6 @@ class Handsfree {
    * -- This takes a few moments to happen (less than a second in my experience)
    * - If models are not initialized, it'll do so first
    * - If models are initialized, it'll start pose estimation
-   * 
-   * @todo benchmark .start() across devices/webcams
    * 
    * @emits handsfree:loading {detail: {progress: 0}} Useful giving user feedback
    */
@@ -222,8 +221,10 @@ class Handsfree {
     this.setTouchedElement()
     this.onFrameHooks(this.faces)
 
-    // Dispatch global event
-    // @todo update this to handsfree:trackFaces
+    /**
+     * Dispatch global event
+     * @todo update this to handsfree:trackFaces @see https://github.com/BrowseHandsfree/handsfreeJS/issues/47
+     */
     window.dispatchEvent(new CustomEvent('handsfree-trackFaces', {detail: {
       scope: this,
       faces: this.faces
@@ -236,17 +237,43 @@ class Handsfree {
   /**
    * Returns the element under the face and stores it as face.$target
    * - If there's no target, then null is returned
+   * 
+   * @todo move this to Cursor.js
    */
   setTouchedElement () {
     this.faces.forEach((face, i) => {
       this.faces[i].cursor.$target = document.elementFromPoint(face.cursor.x, face.cursor.y)
     })
   }
+
+  /**
+   * Dispatches an event to `handsfree:${eventName}`
+   * 
+   * @param {String} eventName The event name to dispatch, appended to `handsfree:`
+   * @param {Any} args Any extra arguments to pass
+   */
+  dispatch (eventName, ...args) {
+    window.dispatchEvent(new CustomEvent(`handsfree:${eventName}`, {detail: args}))
+  }
+
+  /**
+   * Adds a listener to `handsfree:${eventName}`
+   * - The callback receives the arguments, not the event object
+   * - Passes over any additional arguments
+   * 
+   * @param {String}   eventName The event name to call, appended to `handsfree:`
+   * @param {Function} callback  The callback to call
+   */
+  on (eventName, callback) {
+    window.addEventListener(`handsfree:${eventName}`, ev => {
+      callback.apply(this, ev.detail)
+    })
+  }
 }
 
 /**
  * Configs
- * @todo make use of environment variables too
+ * @todo make use of environment variables too @see https://github.com/BrowseHandsfree/handsfreeJS/issues/48
  */
 const defaultSettings = require('./config/default-settings')
 const pkg = require('../package.json')

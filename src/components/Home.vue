@@ -189,8 +189,12 @@
                 code.javascript.
                   const myPlugin = handsfree.use({
                     // Must be unique. Spaces and special characters are fine
-                    // Plugins are called alphabetically - to make a plugin load before another prefix it with a number
                     name: '',
+
+                    // The plugins execution priority
+                    // - Lower numbers run before higher numbers
+                    // - Numbers can be negative and fractional
+                    priority: 10,
 
                     // Set to true to have this plugin disabled by default
                     _isDisabled: false,
@@ -371,9 +375,10 @@
             v-card-title(primary-title)
               h2.headline.mb-0 Simple Keyboard
             v-card-text
-              p The <code>SimpleKeyboard</code> plugin adds a simple keyboard to the page. The keyboard is rendered into any element with <code>.handsfree-simple-keyboard</code>, allowing you to inject it into modals or hide the keyboard until it's needed. <strong>Click with a smile gesture :)</strong>
-
-    .handsfree-simple-keyboard(style='width: 100%; color: #000')
+              p The <code>SimpleKeyboard</code> plugin adds a simple keyboard to the page. The keyboard is rendered into any element with <code>.handsfree-simple-keyboard</code>, allowing you to inject it into modals or hide the keyboard until it's needed.
+              p To activate the keyboard, click inside an input element and click again outside it to close it.
+              p
+                v-text-field(full-width solo placeholder='Click here to activate keyboard' hide-details)
 
     v-container(style='margin-top: 200px; margin-bottom: 200px')
       v-layout(justify-center)

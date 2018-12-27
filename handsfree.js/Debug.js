@@ -19,7 +19,7 @@ module.exports = Handsfree => {
     $canvas.classList.add('handsfree-canvas')
 
     // Apply minimal styles
-    // @TODO let's apply this via stylsheet
+    // @TODO let's apply this via stylsheet @see https://github.com/BrowseHandsfree/handsfreeJS/issues/17
     $webcam.setAttribute('playsinline', 'playsinline')
     $wrap.style.display = 'none'
     $wrap.style.position = 'relative'
@@ -39,7 +39,10 @@ module.exports = Handsfree => {
     $wrap.appendChild($webcam)
     $wrap.appendChild($canvas)
 
-    // @TODO Let's deprecate this event in favor of handsfree:injectDebugger
+    /**
+     * Dispatch global event
+     * @todo update this to handsfree:injectDebugger @see https://github.com/BrowseHandsfree/handsfreeJS/issues/47
+     */
     this.debug.ctx = $canvas.getContext('2d')
     window.dispatchEvent(new CustomEvent('handsfree-injectDebugger', {detail: {
       scope: this,
