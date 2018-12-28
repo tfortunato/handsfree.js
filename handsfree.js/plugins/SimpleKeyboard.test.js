@@ -4,9 +4,11 @@
  * - Adds a fake $target input
  */
 beforeEach(() => {
-  // Fresh testing components
+  // Fresh testing components, mocking injectKeyboard
   handsfree = new Handsfree()
-  plugin = Plugin
+  plugin = cloneDeep(Plugin)
+  plugin._injectKeyboard = plugin.injectKeyboard
+  plugin.injectKeyboard = jest.fn()
 
   // Add fake $target
   $target = document.createElement('input')
@@ -18,13 +20,17 @@ beforeEach(() => {
   const $containers = document.querySelectorAll('.handsfree-simple-keyboard') || []
   $containers.forEach(container => container.remove())
   
-  // Restore methods and fast forward
+  // Restore methods (remember to ._use(plugin))
   Handsfree._mock.restore(handsfree, 'on')
   Handsfree._mock.restore(handsfree, 'dispatch')
-  plugin.$handsfree = handsfree
-  handsfree._use(plugin)
-  jest.runAllTimers()
+  plugin = handsfree._use(plugin)
+  jest.runAllTimers()  
 })
+
+/**
+ * Turn off listeners
+ */
+afterEach(() => {handsfree._off()})
 
 /**
  * SimpleKeyboard.onUse
@@ -62,6 +68,7 @@ describe('SimpleKeyboard.hide', () => {
   it('removes keyboard visible body class', () => {
     handsfree.dispatch('SimpleKeyboard:show')
     handsfree.dispatch('SimpleKeyboard:hide')
+
     expect(document.body.classList).not.toContain('handsfree-simple-keyboard-is-visible')
   })
 })
@@ -71,43 +78,42 @@ describe('SimpleKeyboard.hide', () => {
  * - Adds .handsfree-simple-keyboard-rendered to prevent duplicates
  */
 describe('SimpleKeyboard.injectKeyboard', () => {
-  it('only injects keyboard to containers without keyboards already', () => {
+  beforeEach(() => {
     const $container = document.createElement('div')
     $container.classList.add('handsfree-simple-keyboard')
     document.body.appendChild($container)
-    
+    plugin.injectKeyboard = plugin._injectKeyboard
+  })
+  
+  it('only injects keyboard to containers without keyboards already', () => {
     handsfree.dispatch('SimpleKeyboard:injectKeyboard')
     handsfree.dispatch('SimpleKeyboard:injectKeyboard')
     expect(document.querySelectorAll('.simple-keyboard').length).toBe(1)
   })
 
-  /**
-   * @todo I'm stuck on this one, which probably means that the workflow needs
-   * to be simplified. I think it's some scope/object-reference issue:
-   * 
-   * - Expected: `handsfree.dispatch('SimpleKeyboard:injectKeyboard')` should add
-   *            `.keyboards ` to that `handsfree` instance (eg, `handsfree.plugin.SimpleKeyboard.keyboards`)
-   * 
-   * - Actual: `handsfree.plugin.SimpleKeyboard.keyboards.length === 0`
-   * 
-   * - If you `consel.log(this.keyboards)` at the end of the `injectKeyboard` method
-   *    you'll notice that `this.keyboards.length === 1`.
-   */
-  // it('closes keyboard when {enter} is pressed', () => {
-  //   const $container = document.createElement('div')
-  //   const cb = jest.fn()    
-  //   $container.classList.add('handsfree-simple-keyboard')
-  //   document.body.appendChild($container)
-  //   window.addEventListener('handsfree:SimpleKeyboard:hide', cb)
-  //   handsfree.dispatch('SimpleKeyboard:injectKeyboard')
-  //   console.log('dispatched', handsfree.plugin.SimpleKeyboard.keyboards)
-  //   console.log('dispatched', plugin.keyboards)
-  //   expect(cb).not.toHaveBeenCalled()
-  //   plugin.keyboards[0].keyboard.onKeyPress('{enter}')
-  //   expect(cb).toHaveBeenCalled()
-  // })
+  it('closes keyboard when {enter} is pressed', () => {
+    const cb = jest.fn()    
+    window.addEventListener('handsfree:SimpleKeyboard:hide', cb)
 
-  it('updates values on key press', () => {})
+    plugin.injectKeyboard()
+    plugin.keyboards[0].keyboard.onKeyPress('a')
+    expect(cb).not.toHaveBeenCalled()
+    plugin.keyboards[0].keyboard.onKeyPress('{enter}')
+    expect(cb).toHaveBeenCalled()
+
+    window.removeEventListener('handsfree:SimpleKeyboard:hide', cb)
+  })
+
+  it('updates values on key press', () => {
+    const cb = jest.fn()    
+    window.addEventListener('handsfree:SimpleKeyboard:hide', cb)
+
+    plugin.injectKeyboard()
+    plugin.keyboards[0].keyboard.onChange('abc')
+    expect(plugin.$target.value).toBe('abc')
+
+    window.removeEventListener('handsfree:SimpleKeyboard:hide', cb)
+  })
 })
 
 /**
@@ -130,6 +136,7 @@ describe('SimpleKeyboard.listenToFocusEvents', () => {
 jest.useFakeTimers()
 jest.mock('simple-keyboard')
 const Plugin = require('./SimpleKeyboard')
+const {cloneDeep} = require('lodash')
 let handsfree
 let plugin
 let $target

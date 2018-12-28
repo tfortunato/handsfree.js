@@ -76,6 +76,14 @@ class Handsfree {
     this.plugin = {}
 
     /**
+     * Contains a collection of all the handsfree.on(eventName, callback)
+     * - Everytime you `handsfree.on(eventName, callback)`, it's added to
+     *   as: `this.listening[eventName].push(callback)`
+     * - Calling `handsfree.off()` will stop listening to events
+     */
+    this.listening = {}
+
+    /**
      * Contains the state of the core debugger, which includes:
      * - <div> container with
      * -- a <video> to grab the webcam stream from
@@ -252,7 +260,7 @@ class Handsfree {
    * @param {String} eventName The event name to dispatch, appended to `handsfree:`
    * @param {Any} args Any extra arguments to pass
    */
-  dispatch (eventName, ...args) {
+  dispatch (eventName, args) {
     window.dispatchEvent(new CustomEvent(`handsfree:${eventName}`, {detail: args}))
   }
 
@@ -265,9 +273,28 @@ class Handsfree {
    * @param {Function} callback  The callback to call
    */
   on (eventName, callback) {
-    window.addEventListener(`handsfree:${eventName}`, ev => {
-      callback.apply(this, ev.detail)
-    })
+    const handler = ev => callback.apply(this, ev.detail)
+    window.addEventListener(`handsfree:${eventName}`, handler)
+
+    if (!this.listening[eventName]) this.listening[eventName] = []
+    this.listening[eventName].push(handler)
+  }
+
+  /**
+   * Stops listening to events
+   * @param {String} eventName The event name to stop listening to
+   * - Leave empty to turn off ALL events
+   */
+  off (eventName = null) {
+    if (eventName) {
+      this.listening[eventName].forEach(callback => {
+        window.removeEventListener(`handsfree:${eventName}`, callback)
+      })
+    } else {
+      forEach(this.listening, (callback, eventName) => {
+        window.removeEventListener(`handsfree:${eventName}`, callback)
+      })
+    }
   }
 }
 
@@ -279,7 +306,7 @@ const defaultSettings = require('./config/default-settings')
 const pkg = require('../package.json')
 
 // Dependencies
-const {trimStart, merge} = require('lodash')
+const {trimStart, merge, forEach} = require('lodash')
 
 // Add class to body to style loading
 document.body.classList.add('handsfree-is-loading')

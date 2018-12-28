@@ -20,7 +20,7 @@ module.exports = Handsfree => {
    */
   Handsfree.prototype.use = function (config) {
     // Setup defaults
-    this.plugin[config.name] = config = merge({
+    config = this.plugin[config.name] = merge({
       // The priority this plugin's methods should be called in, lower go first
       priority: 10,
 
