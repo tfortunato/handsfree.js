@@ -62,8 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     orbSize: 7,
 
-    onDisable () {this.$wrap.style.display = 'none'},
-    onEnable () {this.$wrap.style.display = 'block'},
+    onDisable () {if (this.$wrap) this.$wrap.style.display = 'none'},
+    onEnable () {if (this.$wrap) this.$wrap.style.display = 'block'},
     
     /**
      * Setup the canvas and boids
