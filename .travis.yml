@@ -3,6 +3,6 @@ node_js:
   - "8"
 install:
   - npm install -g codecov jest
-  - npm install babel-preset-env jest-canvas-mock lodash custom-event-polyfill gsap
+  - npm install babel-preset-env jest-canvas-mock lodash custom-event-polyfill gsap simple-keyboard
 script:
   - jest --coverage --detectOpenHandles && codecov
