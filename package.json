@@ -82,6 +82,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babylonjs": "^3.3.0",
+    "babylonjs-loaders": "^3.3.0",
     "cannon": "^0.6.2",
     "earcut": "^2.1.4",
     "eslint": "^5.8.0",
