@@ -10,8 +10,7 @@
  * @see https://franciscohodge.com/projects/simple-keyboard/documentation/
  */
 const Keyboard = require('simple-keyboard').default
-// @todo File this as a bug: Requiring this css file breaks jest, I'm assuming because we mocked simple-keyboard?
-if (Keyboard.render) require('simple-keyboard/build/css/index.css')
+require('simple-keyboard/build/css/index.css')
 
 module.exports = {
   name: 'SimpleKeyboard',
@@ -22,6 +21,11 @@ module.exports = {
 
   // The target input element receiving content
   $target: null,
+
+  // Cache different callbacks
+  callbacks: {
+    focusin: []
+  },
 
   /**
    * Setup events
@@ -129,11 +133,22 @@ module.exports = {
       
       if (name === 'INPUT' && type === 'text' && !ev.target.classList.contains('simple-keyboard-input')) {
         this.$target = ev.target
-        this.show(ev.target.value)
+        this.show()
       }
     }
+    this.callbacks.focusin.push(callback)
 
     document.addEventListener('click', callback)
     document.addEventListener('focusin', callback)
+  },
+
+  /**
+   * Stop listening to document.addEventListener
+   */
+  unlistenToFocusEvents () {
+    this.callbacks.focusin.forEach(callback => {
+      document.removeEventListener('focusin', callback)
+      document.removeEventListener('click', callback)
+    })
   }
 }
