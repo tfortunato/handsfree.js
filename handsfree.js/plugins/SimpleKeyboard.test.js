@@ -131,6 +131,9 @@ describe('SimpleKeyboard.set', () => {
     plugin.set('test')
     expect(cb).toHaveBeenCalled()
     expect(plugin.$target.value).toBe('test')
+
+    plugin.set()
+    expect(plugin.$target.value).toBe('')
   })
 })
 
@@ -173,6 +176,29 @@ describe('SimpleKeyboard.listenToFocusEvents', () => {
     $input.value = 'test2'
     expect(plugin.show).toHaveBeenCalled()
     expect(plugin.$target.value).toBe('test2')
+  })
+})
+
+/**
+ * SimpleKeyboard.unlistentToFocusEvents
+ */
+describe('SimpleKeyboard.unlistentToFocusEvents', () => {
+  it('removes listeners', () => {
+    const $container = document.createElement('div')
+    $container.classList.add('handsfree-simple-keyboard')
+    document.body.appendChild($container)
+    let $input = document.createElement('input')
+    document.body.appendChild($input)
+
+    plugin.show = jest.fn()
+    plugin.listenToFocusEvents()
+
+    $input.value = 'test'
+    $input.setAttribute('type', 'text')
+    plugin.unlistenToFocusEvents()
+    $input.dispatchEvent(new MouseEvent('click', {bubbles: true}))
+
+    expect(plugin.show).not.toHaveBeenCalled()
   })
 })
 
