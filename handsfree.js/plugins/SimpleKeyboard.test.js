@@ -30,7 +30,10 @@ beforeEach(() => {
 /**
  * Turn off listeners
  */
-afterEach(() => {handsfree._off()})
+afterEach(() => {
+  handsfree._off()
+  plugin.unlistenToFocusEvents()
+})
 
 /**
  * SimpleKeyboard.onUse
@@ -123,8 +126,7 @@ describe('SimpleKeyboard.set', () => {
 
     $container.classList.add('handsfree-simple-keyboard')
     document.body.appendChild($container)
-    plugin.injectKeyboard = plugin._injectKeyboard
-    plugin.injectKeyboard()
+    plugin._injectKeyboard()
 
     plugin.set('test')
     expect(cb).toHaveBeenCalled()
@@ -136,8 +138,42 @@ describe('SimpleKeyboard.set', () => {
  * SimpleKeyboard.listenToFocusEvents
  */
 describe('SimpleKeyboard.listenToFocusEvents', () => {
-  it('responds to click and focusin events', () => {})
-  it('affects input[type="text"]', () => {})
+  it('responds to click and focusin events', () => {
+    const $container = document.createElement('div')
+    $container.classList.add('handsfree-simple-keyboard')
+    document.body.appendChild($container)
+    let $input = document.createElement('input')
+    document.body.appendChild($input)
+
+    plugin._injectKeyboard()
+    plugin.listenToFocusEvents()
+    plugin.show = jest.fn()
+
+    // input[value='test'], onClick
+    $input.value = 'test'
+    $input.setAttribute('type', 'button')
+    $input.dispatchEvent(new MouseEvent('click', {bubbles: true}))
+    expect(plugin.show).not.toHaveBeenCalled()
+    expect(plugin.$target.value).toBe('')
+
+    // input[value='test'], onFocus
+    $input.dispatchEvent(new FocusEvent('focusin', {bubbles: true}))
+    expect(plugin.show).not.toHaveBeenCalled()
+    expect(plugin.$target.value).toBe('')
+    
+    // input[value='test'], onClick
+    $input.setAttribute('type', 'text')
+    $input.dispatchEvent(new MouseEvent('click', {bubbles: true}))
+    expect(plugin.show).toHaveBeenCalled()
+    expect(plugin.$target.value).toBe('test')
+
+    // input[value='test'], onFocus
+    plugin.show.mockClear()
+    $input.dispatchEvent(new FocusEvent('focusin', {bubbles: true}))
+    $input.value = 'test2'
+    expect(plugin.show).toHaveBeenCalled()
+    expect(plugin.$target.value).toBe('test2')
+  })
 })
 
 // Spare parts
