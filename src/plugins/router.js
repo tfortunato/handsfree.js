@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../components/Home.vue'
+import Home from '../components/home/Landing.vue'
 import HomeV1 from '../components/_retired/Home-v1.vue'
 import YouTubeLanding from '../components/youtube/Landing.vue'
 import YouTubeSingle from '../components/youtube/Single.vue'

@@ -450,8 +450,6 @@ App.$store.dispatch('onReady', () => {})
 
 
 
-
-
 # More coming soon
 
 - [@Labofoz](https://twitter.com/labofoz)
