@@ -47,8 +47,6 @@ export default {
       const handsfree = window.handsfree
       this.setupThree()
       
-      handsfree.plugin['boids-debugger'].disable()
-
       handsfree.use({
         name: 'holodeck',
 

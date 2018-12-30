@@ -66,7 +66,6 @@
 </template>
 
 <script>
-import Home from './components/Home'
 import Keyboard from './components/Keyboard'
 import {mapState} from 'vuex'
 
@@ -74,7 +73,6 @@ export default {
   name: 'App',
 
   components: {
-    Home,
     Keyboard
   },
 
