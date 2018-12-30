@@ -260,7 +260,7 @@ class Handsfree {
    * @param {String} eventName The event name to dispatch, appended to `handsfree:`
    * @param {Any} args Any extra arguments to pass
    */
-  dispatch (eventName, args) {
+  dispatch (eventName, ...args) {
     window.dispatchEvent(new CustomEvent(`handsfree:${eventName}`, {detail: args}))
   }
 
@@ -273,7 +273,7 @@ class Handsfree {
    * @param {Function} callback  The callback to call
    */
   on (eventName, callback) {
-    const handler = ev => callback.apply(this, ev.detail)
+    const handler = ev => callback.call(this, ...ev.detail)
     window.addEventListener(`handsfree:${eventName}`, handler)
 
     if (!this.listening[eventName]) this.listening[eventName] = []

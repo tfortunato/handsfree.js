@@ -39,8 +39,7 @@ afterEach(() => {handsfree._off()})
 describe('SimpleKeyboard.onUse', () => {
   it('dispatches SimpleKeyboard:injectKeyboard', () => {
     const cb = jest.fn()
-    window.addEventListener('handsfree:SimpleKeyboard:injectKeyboard', cb)
-
+    handsfree.on('SimpleKeyboard:injectKeyboard', cb)
     plugin.onUse()
     expect(cb).toHaveBeenCalled()
   })
@@ -93,26 +92,22 @@ describe('SimpleKeyboard.injectKeyboard', () => {
 
   it('closes keyboard when {enter} is pressed', () => {
     const cb = jest.fn()    
-    window.addEventListener('handsfree:SimpleKeyboard:hide', cb)
+    handsfree.on('SimpleKeyboard:hide', cb)
 
     plugin.injectKeyboard()
     plugin.keyboards[0].keyboard.onKeyPress('a')
     expect(cb).not.toHaveBeenCalled()
     plugin.keyboards[0].keyboard.onKeyPress('{enter}')
     expect(cb).toHaveBeenCalled()
-
-    window.removeEventListener('handsfree:SimpleKeyboard:hide', cb)
   })
 
   it('updates values on key press', () => {
     const cb = jest.fn()    
-    window.addEventListener('handsfree:SimpleKeyboard:hide', cb)
+    handsfree.on('SimpleKeyboard:hide', cb)
 
     plugin.injectKeyboard()
     plugin.keyboards[0].keyboard.onChange('abc')
     expect(plugin.$target.value).toBe('abc')
-
-    window.removeEventListener('handsfree:SimpleKeyboard:hide', cb)
   })
 })
 
@@ -121,7 +116,20 @@ describe('SimpleKeyboard.injectKeyboard', () => {
  * - Triggered via `$handsfree.on('SimpleKeyboard:set')`
  */
 describe('SimpleKeyboard.set', () => {
-  it('Sets the input and dispatches event', () => {})
+  it('Sets the input and dispatches event', () => {
+    const cb = jest.fn()
+    const $container = document.createElement('div')
+    handsfree.on('SimpleKeyboard:change', cb)
+
+    $container.classList.add('handsfree-simple-keyboard')
+    document.body.appendChild($container)
+    plugin.injectKeyboard = plugin._injectKeyboard
+    plugin.injectKeyboard()
+
+    plugin.set('test')
+    expect(cb).toHaveBeenCalled()
+    expect(plugin.$target.value).toBe('test')
+  })
 })
 
 /**
