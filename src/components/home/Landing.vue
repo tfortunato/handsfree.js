@@ -15,11 +15,11 @@ v-container(grid-list-lg)
   v-layout.fade-in(:class='{"faded-out": !isTitleVisible}')
     v-flex.text-xs-center(xs12 style='margin-top: 100px; text-shadow: 1px 1px 3px rgba(0,0,0,0.35)')
       p
-        small Presented by <a href="https://twitter.com/labofoz">@LabofOz</a>
+        small Powered by <a href="https://github.com/Tastenkunst/brfv4_javascript_examples/">BRFv4</a> & <a href="https://js.tensorflow.org/">TensorFlow.js</a>
       h1.font-weight-bold.mt-0.mb-3 Handsfree.js
+      p A drop-in library for creating handsfree interfaces for the web and internet of things.
       p
-        small with support from <a href="https://glitch.com">Glitch.com</a>, the <a href="https://www.cmu.edu/cfa/studio/index.html">STUDIO at CMU</a>, and <a href="https://opencollective.com/handsfreejs">you!</a>
-      p
+        small with support from <a href="https://glitch.com">Glitch.com</a>, the <a href="https://www.cmu.edu/cfa/studio/index.html">STUDIO at CMU</a>, and <a href="https://opencollective.com/handsfreejs">you</a>
 </template>
 
 <script>
