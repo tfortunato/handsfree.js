@@ -1,11 +1,22 @@
 <template lang="pug">
 v-container(grid-list-lg)
   canvas(ref='canvas')
+  //- Loading
+  div.loading-mask(:class='{"fade-out": !isLoading}')
+
+  v-layout(v-if='!isTitleVisible' :class='{"fade-out": !isLoading}' style='position: relative; z-index: 2')
+    v-flex.text-xs-center(xs12 style='margin-top: 100px; text-shadow: 1px 1px 3px rgba(0,0,0,0.35)')
+      p
+        img(src='/favicon.png' width=128)
+      p loading...
+      //- @todo Add pro-tips and other fun intermittent info
+  
+  //- Title
   v-layout.fade-in(:class='{"faded-out": !isTitleVisible}')
     v-flex.text-xs-center(xs12 style='margin-top: 100px; text-shadow: 1px 1px 3px rgba(0,0,0,0.35)')
       p
         small Presented by <a href="https://twitter.com/labofoz">@LabofOz</a>
-      h1.display-2.font-weight-bold.mt-0.mb-3 Handsfree.js
+      h1.font-weight-bold.mt-0.mb-3 Handsfree.js
       p
         small with support from <a href="https://glitch.com">Glitch.com</a>, the <a href="https://www.cmu.edu/cfa/studio/index.html">STUDIO at CMU</a>, and <a href="https://opencollective.com/handsfreejs">you!</a>
       p
@@ -42,6 +53,9 @@ export default {
     return {
       // Used to set .hidden on the hero text
       isTitleVisible: false,
+
+      // Whether we're loading (true) or not (false)
+      isLoading: true,
       
       // Babylon objects
       babylon: {
@@ -57,16 +71,27 @@ export default {
    */
   mounted () {
     this.$store.dispatch('onReady', () => {
+      const Component = this
       const engine = this.babylon.engine = new BABYLON.Engine(this.$refs.canvas, true)
       const scene = this.babylon.scene = new BABYLON.Scene(engine)
+
+      // Loading screen
+      const handsfreeLoadingScreen = function () {
+        this.displayLoadingUI = function () {Component.isLoading = true}
+        this.hideLoadingUI = function () {Component.isLoading = false}
+      }
+      engine.loadingScreen = new handsfreeLoadingScreen()
+      // engine.loadingUIText = 'rendering metaverse...'
 
       // Add whales
       BABYLON.SceneLoader.Append('/3d/blue-whale/', 'scene.gltf', scene, scene => {
         const camera = this.babylon.camera = new BABYLON.FreeCamera('camera', new BABYLON.Vector3(0, 0.5, -4), scene)
         camera.setTarget(new BABYLON.Vector3(0, 1, 0))
         camera.attachControl(this.$refs.canvas, false)
-        scene.clearColor = new BABYLON.Color3(.8, .3, .1)
+        scene.clearColor = new BABYLON.Color3(.16078, .10196, .18431)
         this.babylon.light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0), scene)
+
+        this.isLoading = false
 
         // Start the render loop
         let framesRendered = 0
@@ -76,6 +101,7 @@ export default {
         })
       })
 
+      // Shader
       BABYLON.Effect.ShadersStore['basicFragmentShader'] = cloudFragShader
 
       // Resize
@@ -95,6 +121,17 @@ export default {
 </script>
 
 <style scoped lang="stylus">
+>>>.loading-mask
+  position: fixed
+  z-index: 1
+  background: #291a2f
+  opacity: 1
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+  transition: opacity 1s ease
+
 >>>h1
   color: #fff
   font-size: 72px
@@ -118,4 +155,8 @@ export default {
 
   &.faded-out
     opacity: 0
+
+>>>.fade-out
+  opacity: 0
+  transition: opacity 1s ease
 </style>
