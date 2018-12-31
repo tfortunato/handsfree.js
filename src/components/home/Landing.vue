@@ -1,30 +1,35 @@
 <template lang="pug">
 v-container(grid-list-lg)
   canvas(ref='canvas')
-  //- Loading
-  div.loading-mask(:class='{"fade-out": !isLoading}')
+  .handsfree-show-when-stopped
+    //- Loading
+    div.loading-mask(:class='{"fade-out": !isLoading}')
 
-  v-layout(v-if='!isTitleVisible' :class='{"fade-out": !isLoading}' style='position: relative; z-index: 2')
-    v-flex.text-xs-center(xs12 style='margin-top: 100px; text-shadow: 1px 1px 3px rgba(0,0,0,0.35)')
-      p
-        img(src='/favicon.png' width=128)
-      p loading...
-      //- @todo Add pro-tips and other fun intermittent info
-  
-  //- Title
-  v-layout.fade-in(:class='{"faded-out": !isTitleVisible}')
-    v-flex.text-xs-center(xs12 style='margin-top: 100px; text-shadow: 1px 1px 3px rgba(0,0,0,0.35)')
-      p
-        small Powered by <a href="https://github.com/Tastenkunst/brfv4_javascript_examples/">BRFv4</a> & <a href="https://js.tensorflow.org/">TensorFlow.js</a>
-      h1.font-weight-bold.mt-0.mb-3 Handsfree.js
-      p A drop-in library for creating handsfree interfaces for the web and internet of things.
-      p
-        small with support from <a href="https://glitch.com">Glitch.com</a>, the <a href="https://www.cmu.edu/cfa/studio/index.html">STUDIO at CMU</a>, and <a href="https://opencollective.com/handsfreejs">you</a>
+    v-layout(v-if='!isTitleVisible' :class='{"fade-out": !isLoading}' style='position: relative; z-index: 2')
+      v-flex.text-xs-center(xs12 style='margin-top: 100px; text-shadow: 1px 1px 3px rgba(0,0,0,0.35)')
+        p
+          img(src='/favicon.png' width=128)
+        p loading...
+        //- @todo Add pro-tips and other fun intermittent info
+    
+    //- Title
+    v-layout.fade-in(:class='{"faded-out": !isTitleVisible}' style='position: relative; z-index: 3')
+      v-flex.text-xs-center(xs12 style='margin-top: 100px; text-shadow: 1px 1px 3px rgba(0,0,0,0.35)')
+        p
+          small With support from <a href="https://glitch.com">Glitch.com</a>, the <a href="https://www.cmu.edu/cfa/studio/index.html">STUDIO at CMU</a>, and <a href="https://opencollective.com/handsfreejs">you</a>:
+        h1.font-weight-bold.mt-0.mb-3 Handsfree.js
+        p A library for creating handsfree interfaces for the web and Internet of Things.
+        p
+          WebcamToggle
+        p
+          small Powered by <a href="https://github.com/Tastenkunst/brfv4_javascript_examples/">BRFv4</a> & <a href="https://js.tensorflow.org/">TensorFlow.js</a>
 </template>
 
 <script>
-const BABYLON = require('babylonjs')
+import WebcamToggle from '../WebcamToggle'
+const {mapState} = require('vuex')
 const {debounce} = require('lodash')
+const BABYLON = require('babylonjs')
 const cloudFragShader = require('../../../public/shaders/iq-clouds/shader.frag')
 require('babylonjs-loaders')
 
@@ -37,6 +42,14 @@ require('babylonjs-loaders')
  */
 export default {
   name: 'HomeLanding',
+
+  components: {
+    WebcamToggle
+  },
+  
+  computed: mapState([
+    'isHandsfreeLoading'
+  ]),
 
   /**
    * Free memory and disable plugins
@@ -115,7 +128,10 @@ export default {
      */
     resizeCanvas: debounce(function () {
       if (this.babylon.engine) this.babylon.engine.resize()
-    }, 100, {leading: true, trailing: true})
+    }, 100, {leading: true, trailing: true}),
+
+    startWebcam () {this.$store.dispatch('startHandsfree')},
+    stopWebcam () {this.$store.dispatch('stopHandsfree')}
   }
 }
 </script>

@@ -10,12 +10,7 @@
             small .js.org
       v-spacer
       span.hidden-sm-and-down
-        v-btn.primary.handsfree-show-when-stopped(large @click='startWebcam' :disabled='isHandsfreeLoading')
-          v-icon.mr-2 videocam
-          | Start Webcam
-        v-btn.primary.handsfree-show-when-started(large color='error' @click='stopWebcam')
-          v-icon.mr-2 videocam_off
-          | Stop Webcam
+        WebcamToggle
       span.hidden-md-and-up
         v-btn.primary.handsfree-show-when-stopped(large @click='startWebcam' :disabled='isHandsfreeLoading')
           v-icon videocam
@@ -67,13 +62,15 @@
 
 <script>
 import Keyboard from './components/Keyboard'
+import WebcamToggle from './components/WebcamToggle'
 import {mapState} from 'vuex'
 
 export default {
   name: 'App',
 
   components: {
-    Keyboard
+    Keyboard,
+    WebcamToggle
   },
 
   computed: mapState([
