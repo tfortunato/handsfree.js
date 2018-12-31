@@ -1,28 +1,28 @@
 <template lang="pug">
 v-container(grid-list-lg)
+  //- Canvas
   canvas(ref='canvas')
-  .handsfree-show-when-stopped
-    //- Loading
-    div.loading-mask(:class='{"fade-out": !isLoading}')
+  
+  //- Loading
+  div.loading-mask(:class='{"fade-out": !isLoading}')
+  v-layout(v-if='!isTitleVisible' :class='{"fade-out": !isLoading}' style='position: relative; z-index: 2')
+    v-flex.text-xs-center(xs12 style='margin-top: 100px; text-shadow: 1px 1px 3px rgba(0,0,0,0.35)')
+      p
+        img(src='/favicon.png' width=128)
+      p loading...
+      //- @todo Add pro-tips and other fun intermittent info
 
-    v-layout(v-if='!isTitleVisible' :class='{"fade-out": !isLoading}' style='position: relative; z-index: 2')
-      v-flex.text-xs-center(xs12 style='margin-top: 100px; text-shadow: 1px 1px 3px rgba(0,0,0,0.35)')
-        p
-          img(src='/favicon.png' width=128)
-        p loading...
-        //- @todo Add pro-tips and other fun intermittent info
-    
-    //- Title
-    v-layout.fade-in(:class='{"faded-out": !isTitleVisible}' style='position: relative; z-index: 3')
-      v-flex.text-xs-center(xs12 style='margin-top: 100px; text-shadow: 1px 1px 3px rgba(0,0,0,0.35)')
-        p
-          small With support from <a href="https://glitch.com">Glitch.com</a>, the <a href="https://www.cmu.edu/cfa/studio/index.html">STUDIO at CMU</a>, and <a href="https://opencollective.com/handsfreejs">you</a>:
-        h1.font-weight-bold.mt-0.mb-3 Handsfree.js
-        p A library for creating handsfree interfaces for the web and Internet of Things.
-        p
-          WebcamToggle
-        p
-          small Powered by <a href="https://github.com/Tastenkunst/brfv4_javascript_examples/">BRFv4</a> & <a href="https://js.tensorflow.org/">TensorFlow.js</a>
+  //- Title
+  v-layout.flex.handsfree-show-when-stopped.fade-in(:class='{"faded-out": !isTitleVisible}' style='position: relative; z-index: 3')
+    v-flex.text-xs-center(xs12 style='margin-top: 100px; text-shadow: 1px 1px 3px rgba(0,0,0,0.35)')
+      p.fade-in-delayed
+        small With support from <a href="https://glitch.com">Glitch.com</a>, the <a href="https://www.cmu.edu/cfa/studio/index.html">STUDIO at CMU</a>, and <a href="https://opencollective.com/handsfreejs">you</a>:
+      h1.font-weight-bold.mt-0.mb-3.fade-in-delayed Handsfree.js
+      p.fade-in-delayed A library for creating handsfree interfaces for the web and Internet of Things ✨
+      p.fade-in-delayed
+        WebcamToggle
+      p.fade-in-delayed
+        small Powered by <a href="https://github.com/Tastenkunst/brfv4_javascript_examples/">BRFv4</a> & <a href="https://js.tensorflow.org/">TensorFlow.js</a>
 </template>
 
 <script>
@@ -137,6 +137,7 @@ export default {
 </script>
 
 <style scoped lang="stylus">
+// @todo Move these into helper files
 >>>.loading-mask
   position: fixed
   z-index: 1
@@ -165,6 +166,10 @@ export default {
   left: 0
   z-index: -1
 
+.fade-in-delayed
+  opacity: 0
+  top: -20px
+
 >>>.fade-in
   opacity: 1
   transition: opacity 0.5s ease
@@ -172,7 +177,24 @@ export default {
   &.faded-out
     opacity: 0
 
+    .fade-in-delayed
+      opacity: 0
+      top: -20px
+
+  .fade-in-delayed
+    opacity: 1
+    position: relative
+    top: 0px
+    transition: opacity 0.75s ease, top 0.75s ease
+
+  for item in 1 2 3 4 5
+    .fade-in-delayed:nth-child({item})
+      transition-delay: 0.045s * item
+
 >>>.fade-out
   opacity: 0
-  transition: opacity 1s ease
+  transition: opacity 1s ease 
+
+body.handsfree-stopped .handsfree-show-when-stopped
+  display: flex
 </style>
