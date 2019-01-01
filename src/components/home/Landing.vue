@@ -2,6 +2,7 @@
 v-container(grid-list-lg)
   //- Canvas
   canvas(ref='canvas')
+  Handsfree
   
   //- Loading
   div.loading-mask(:class='{"fade-out": !isLoading}')
@@ -27,8 +28,9 @@ v-container(grid-list-lg)
 
 <script>
 import WebcamToggle from '../WebcamToggle'
-const {mapState} = require('vuex')
-const {debounce} = require('lodash')
+import Handsfree from './handsfree'
+import {mapState} from 'vuex'
+import {debounce} from 'lodash'
 const BABYLON = require('babylonjs')
 const cloudFragShader = require('../../../public/shaders/iq-clouds/shader.frag')
 require('babylonjs-loaders')
@@ -44,6 +46,7 @@ export default {
   name: 'HomeLanding',
 
   components: {
+    Handsfree,
     WebcamToggle
   },
   
@@ -94,10 +97,15 @@ export default {
         this.hideLoadingUI = function () {Component.isLoading = false}
       }
       engine.loadingScreen = new handsfreeLoadingScreen()
-      // engine.loadingUIText = 'rendering metaverse...'
 
       // Add whales
       BABYLON.SceneLoader.Append('/3d/blue-whale/', 'scene.gltf', scene, scene => {
+        this.$store.commit('set', ['spacewhale.entity.player', scene.meshes[0]])
+        this.$store.state.spacewhale.entity.player.rotation.set(new BABYLON.Vector3(100, 0, 0))
+        // Null out so that we can SET (not ADD) rotation values
+        scene.meshes[0].rotationQuaternion = null
+        scene.meshes[0].rotation.set(0, 0, 0)
+        
         const camera = this.babylon.camera = new BABYLON.FreeCamera('camera', new BABYLON.Vector3(0, 0.5, -4), scene)
         camera.setTarget(new BABYLON.Vector3(0, 1, 0))
         camera.attachControl(this.$refs.canvas, false)
