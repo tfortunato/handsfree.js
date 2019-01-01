@@ -32,8 +32,8 @@ import Handsfree from './handsfree'
 import {mapState} from 'vuex'
 import {debounce} from 'lodash'
 const BABYLON = require('babylonjs')
-const cloudFragShader = require('../../../public/shaders/iq-clouds/shader.frag')
 require('babylonjs-loaders')
+require('babylonjs-materials')
 
 /**
  * The main landing page
@@ -100,30 +100,42 @@ export default {
 
       // Add whales
       BABYLON.SceneLoader.Append('/3d/blue-whale/', 'scene.gltf', scene, scene => {
+        // Create and orient player/whale
         this.$store.commit('set', ['spacewhale.entity.player', scene.meshes[0]])
         this.$store.state.spacewhale.entity.player.rotation.set(new BABYLON.Vector3(100, 0, 0))
-        // Null out so that we can SET (not ADD) rotation values
         scene.meshes[0].rotationQuaternion = null
         scene.meshes[0].rotation.set(0, 0, 0)
-        
+
+        // Camera
         const camera = this.babylon.camera = new BABYLON.FreeCamera('camera', new BABYLON.Vector3(0, 0.5, -4), scene)
         camera.setTarget(new BABYLON.Vector3(0, 1, 0))
         camera.attachControl(this.$refs.canvas, false)
         scene.clearColor = new BABYLON.Color3(.16078, .10196, .18431)
-        this.babylon.light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0), scene)
+        this.babylon.light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(-0.25, 0.15, 1), scene)
 
-        this.isLoading = false
-
+        // Skybox
+        const sky = {
+          material: new BABYLON.SkyMaterial('skyMaterial', scene),
+          box: BABYLON.Mesh.CreateBox('skyBox', 1000, scene)
+        }
+        this.$store.commit('set', ['spacewhale.entity.skybox', sky])
+        sky.material.backFaceCulling = false
+        sky.material.luminance = 0.01
+        sky.material.turbidity = 10
+        sky.material.inclination = 0.51
+        sky.material.azimuth = 0.83
+        sky.material.rayleigh = 6
+        sky.box.material = sky.material
+        window.sky = sky
+        
         // Start the render loop
+        this.isLoading = false
         let framesRendered = 0
         engine.runRenderLoop(() => {
           scene.render()
-          this.isTitleVisible = framesRendered++ > 200
+          this.isTitleVisible = framesRendered++ > 190
         })
       })
-
-      // Shader
-      BABYLON.Effect.ShadersStore['basicFragmentShader'] = cloudFragShader
 
       // Resize
       window.addEventListener('resize', () => this.resizeCanvas())
@@ -157,6 +169,9 @@ export default {
   height: 100%
   transition: opacity 1s ease
 
+  &.fade-out
+    pointer-events: none
+
 >>>h1
   color: #fff
   font-size: 72px
@@ -172,7 +187,7 @@ export default {
   position: fixed
   top: 0
   left: 0
-  z-index: -1
+  z-index: 0
 
 .fade-in-delayed
   opacity: 0

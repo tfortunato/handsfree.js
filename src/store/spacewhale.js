@@ -8,7 +8,13 @@ export default {
   state: {
     entity: {
       // The Babylone player entity
-      player: null
+      player: null,
+
+      // The skybox
+      sky: {
+        box: null,
+        material: null
+      }
     }
   }
 }
