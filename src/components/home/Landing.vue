@@ -210,12 +210,12 @@ export default {
         engine.loadingScreen = new handsfreeLoadingScreen()
 
         // Add whales
-        BABYLON.SceneLoader.Append('/3d/blue-whale/', 'scene.gltf', scene, scene => {
+        BABYLON.SceneLoader.ImportMesh(null, '/3d/blue-whale/', 'scene.gltf', scene, (meshes) => {
           // Create and orient player/whale
-          this.$store.commit('set', ['spacewhale.entity.player', scene.meshes[0]])
+          this.$store.commit('set', ['spacewhale.entity.player', meshes[0]])
           this.$store.state.spacewhale.entity.player.rotation.set(new BABYLON.Vector3(100, 0, 0))
-          scene.meshes[0].rotationQuaternion = null
-          scene.meshes[0].rotation.set(0, 0, 0)
+          meshes[0].rotationQuaternion = null
+          meshes[0].rotation.set(0, 0, 0)
 
           // Camera
           const camera = this.babylon.camera = new BABYLON.FreeCamera('camera', new BABYLON.Vector3(0, 0.5, -4), scene)
@@ -238,14 +238,14 @@ export default {
           sky.material.azimuth = 0.83
           sky.material.rayleigh = 6
           sky.box.material = sky.material
-          window.sky = sky
           
           // Start the render loop
           this.isLoading = false
           let framesRendered = 0
+          setTimeout(() => scene._animationTime = 2500, 0)
           engine.runRenderLoop(() => {
             scene.render()
-            this.isTitleVisible = framesRendered++ > 190
+            this.isTitleVisible = framesRendered++ > 50
           })
         })
 

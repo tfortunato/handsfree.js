@@ -83,9 +83,6 @@ export default {
 </script>
 
 <style lang="stylus">
-.handsfree-cursor
-  display: none
-
 .handsfree-debug-wrap
   canvas, video
     width: 100% !important
