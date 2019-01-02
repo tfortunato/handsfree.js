@@ -1,6 +1,6 @@
 <template lang="pug">
-  v-app(dark)
-    v-toolbar#main-nav(light app)
+  v-app
+    v-toolbar#main-nav(app style='z-index: 99')
       v-toolbar-side-icon(@click.stop='isNavOpen = !isNavOpen')
       v-toolbar-title.headline.text-uppercase
         router-link(to='/' style='text-decoration: none; color: inherit')
@@ -20,7 +20,7 @@
     v-progress-linear#loading-bar(v-model='loading.progress' :color='loading.color')
 
     //- Left Navigation
-    v-navigation-drawer(app temporary light v-model='isNavOpen')
+    v-navigation-drawer(app temporary v-model='isNavOpen' style='z-index: 100')
       v-list.layout.column.fill-height
         v-list-tile(:to='{name: "Home"}')
           v-list-tile-action
