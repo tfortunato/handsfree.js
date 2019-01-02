@@ -108,6 +108,7 @@ export default {
 
         // Camera
         const camera = this.babylon.camera = new BABYLON.FreeCamera('camera', new BABYLON.Vector3(0, 0.5, -4), scene)
+        this.$store.commit('set', ['spacewhale.camera', camera])
         camera.setTarget(new BABYLON.Vector3(0, 1, 0))
         camera.attachControl(this.$refs.canvas, false)
         scene.clearColor = new BABYLON.Color3(.16078, .10196, .18431)

@@ -27,9 +27,16 @@ export default {
 
         // These are just temp values
         tween: {
-          x: 0,
-          y: 0,
-          z: 0
+          camera: {
+            x: 0,
+            y: 0,
+            z: 0
+          },
+          player: {
+            x: 0,
+            y: 0,
+            z: 0
+          }
         },
 
         /**
@@ -39,7 +46,8 @@ export default {
           faces.forEach(face => {
             if (store.state.spacewhale.entity.player) {
               this.tweenPOV(face)
-              store.state.spacewhale.entity.player.rotation.set(this.tween.x, -this.tween.y + Math.PI, -this.tween.z)
+              store.state.spacewhale.entity.player.rotation.set(this.tween.player.x, -this.tween.player.y + Math.PI, -this.tween.player.z)
+              store.state.spacewhale.camera.rotation.set(-this.tween.camera.x, -this.tween.camera.y, -this.tween.camera.z)
             }
           })
         },
@@ -50,10 +58,19 @@ export default {
         tweenPOV (face) {
           // 1000 / 1000 - slow response time, lots of smoothing
           // 1 / 1000 - instant response time, very "jittery"
-          TweenMax.to(this.tween, 100 / 100, {
-            x: -face.rotationX * 3,
-            y: -face.rotationY * 1.5,
+          TweenMax.to(this.tween.player, 100 / 100, {
+            x: face.rotationX * -3,
+            y: face.rotationY * -1.5,
             z: face.rotationZ * 2.35,
+            ease: 'Linear.easeNone',
+            overwrite: true,
+            immediate: true
+          })
+
+          TweenMax.to(this.tween.camera, 100 / 100, {
+            x: -face.rotationX,
+            y: -face.rotationY * .75,
+            z: face.rotationZ * -.75,
             ease: 'Linear.easeNone',
             overwrite: true,
             immediate: true
