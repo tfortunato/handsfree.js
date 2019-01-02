@@ -56,8 +56,8 @@ export default {
          * Because of face tracking inaccuracies we apply smoothing here
          */
         tweenPOV (face) {
-          // 1000 / 1000 - slow response time, lots of smoothing
-          // 1 / 1000 - instant response time, very "jittery"
+          // 100 / 100 - slow response time, lots of smoothing
+          // 1 / 100 - instant response time, very "jittery"
           TweenMax.to(this.tween.player, 100 / 100, {
             x: face.rotationX * -3,
             y: face.rotationY * -1.5,

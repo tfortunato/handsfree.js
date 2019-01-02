@@ -41,7 +41,7 @@ v-container(grid-list-lg)
       v-flex(md6)
         v-card
           v-card-title
-            h2.text-xs-center 🐳 You are now the Space Whale 🐳
+            h2.text-xs-center.full-width 🐳 You are now the Space Whale 🐳
           v-card-text
             ol
               li.fade-in-delayed The Space Whale will fly towards the direction you're facing
@@ -55,7 +55,31 @@ v-container(grid-list-lg)
       v-card
         v-card-title
           h2 What is Handsfree.js?
-          p <strong>Handsfree.js</strong> is a set of APIs around <a href="https://github.com/Tastenkunst/brfv4_javascript_examples/">BRFv4</a> (face tracking), <a href="https://github.com/tensorflow/tfjs-models/tree/master/posenet">PoseNet</a> (full-body pose estimation), and <a href="https://webgazer.cs.brown.edu/">WebGazer</a> (eye tracking) for the purpose of creating handsfree interfaces, tools, games, and experiences.
+        v-card-text
+          p <strong>Handsfree.js</strong> is a set of APIs around face tracking (<a href="https://github.com/Tastenkunst/brfv4_javascript_examples/">BRFv4</a>), eye tracking (<a href="https://webgazer.cs.brown.edu/">WebGazer</a>), and full-body pose estimation (<a href="https://github.com/tensorflow/tfjs-models/tree/master/posenet">PoseNet</a>) for the purpose of creating handsfree interfaces, tools, games, and experiences!
+          p In <strong>handsfree.js</strong>, you get a <code>pose</code> object for every tracked person. These <code>pose</code> objects contain useful pose properties like your head's pitch, yaw, and roll.
+          p Each <code>pose</code> also has a <code>pose.cursor</code> which contain an <code>{x, y}</code> representing which pixel an imaginary laser attached to that pose would land on. You can use these cursors to dispatch native events (like clicks), allowing your users to interact with your standard HTML5 projects out-the-box!
+
+    v-flex(xs12 md6 lg4)
+
+    v-flex(xs12 md6 lg4)
+      v-card
+        v-card-title
+          h2 Space Whales?
+        v-card-text
+          p <strong>Handsfree.js</strong> can be used to interface with the web, Internet of Things, and even robotics.
+          p To keep everything consistent, I'll be using the Space Whale theme to introduce you to all the different concepts, tips, and tricks around <strong>Handsfree.js</strong>!
+          p And on that note, let's dive into the code 🐳
+
+  //- WIP
+  div.push-t-50
+  v-layout(row justify-center style='z-index: 3')
+    v-flex(xs12 md6 lg4)
+      v-card
+        v-card-title.text-xs-center
+          h2.full-width 🚧 Work in Progress 🚧
+        v-card-text
+          p <strong>Handsfree.js</strong> is getting overhauled for the New Year. I'll have more info soon but for now check out the old docs: <a href="https://handsfree.js.org/#/home-v1">https://handsfree.js.org/#/home-v1</a>
 
   //- Tweets
   div.push-t-50
