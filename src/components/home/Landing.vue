@@ -76,15 +76,9 @@ div
         v-flex(xs12 md8)
           v-stepper(v-model='tutorialStep')
             v-stepper-header
-              v-stepper-step(:complete='tutorialStep > 1' step='1' editable) Installation
-              v-divider
-              v-stepper-step(:complete='tutorialStep > 2' step='2' editable) Settings
-              v-divider
-              v-stepper-step(:complete='tutorialStep > 3' step='3' editable) Adding Plugins
-              v-divider
-              v-stepper-step(:complete='tutorialStep > 4' step='4' editable) Window Events
-              v-divider
-              v-stepper-step(:complete='tutorialStep > 5' step='5' editable) Getting Elements
+              template(v-for='(step, i) in steps')
+                v-stepper-step(:complete='tutorialStep > i + 1' :step='i + 1' editable) {{step}}
+                v-divider(v-if='i < steps.length - 1')
           
             v-stepper-items
               //- Step 1
@@ -397,6 +391,11 @@ div
 
                     p You can do anything with the target including manipulating it (eg with jQuery) and dispatching events with the <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events">dispatchEvent API</a>.
 
+            v-stepper-header
+              template(v-for='(step, i) in steps')
+                v-stepper-step(:complete='tutorialStep > i + 1' :step='i + 1' editable) {{step}}
+                v-divider(v-if='i < steps.length - 1')
+
   v-container(grid-list-lg)
     //- Tweets
     div.push-t-50
@@ -498,6 +497,14 @@ export default {
 
       // Whether we're loading (true) or not (false)
       isLoading: true,
+
+      steps: [
+        'Installation',
+        'Settings',
+        'Plugins',
+        'Events',
+        '$target'
+      ],
       
       // Stepper
       tutorialStep: 1
