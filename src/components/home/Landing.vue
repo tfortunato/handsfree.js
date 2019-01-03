@@ -75,17 +75,6 @@ div
             p <strong>Mission:</strong> To research and develop accessible, hands-free computer interfaces.
             p So on that note, let's dive further and explore how to use handsfree.js 🐳
 
-    //- WIP
-    div.push-t-50
-    v-layout(row wrap justify-center style='z-index: 3')
-      v-flex(xs12 md6 lg4)
-        v-card
-          v-card-title.text-xs-center
-            h2.full-width 🚧 This is a Work in Progress 🚧
-          v-card-text
-            p <strong>Handsfree.js</strong> is getting overhauled for the New Year. I'll have more info soon but for now check out the old docs: <a href="https://handsfree.js.org/#/home-v1">https://handsfree.js.org/#/home-v1</a>
-
-
   //- Main content
   .push-t-50(style='background: #fff; position: relative')
     v-container(grid-list-lg)
