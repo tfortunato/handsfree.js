@@ -2,20 +2,11 @@
 div
   v-container(grid-list-lg)
     //- Canvas
-    canvas(ref='canvas')
+    canvas(ref='canvas' :class='{"fade-in": !isLoading}')
     Handsfree
     
-    //- Loading
-    div.loading-mask(:class='{"fade-out": !isLoading}')
-    v-layout(v-if='!isTitleVisible' :class='{"fade-out": !isLoading}' style='position: relative; z-index: 2')
-      v-flex.text-xs-center(xs12 style='margin-top: 100px; text-shadow: 1px 1px 3px rgba(0,0,0,0.35); color: #fff')
-        p
-          img(src='/favicon.png' width=128)
-        p loading...
-        //- @todo Add pro-tips and other fun intermittent info
-
     //- Title
-    v-layout.handsfree-show-when-stopped.fade-in(:class='{"faded-out": !isTitleVisible}' style='position: relative; z-index: 3')
+    v-layout.fade-in(style='position: relative; z-index: 3')
       v-flex.text-xs-center(xs12 style='margin-top: 100px; text-shadow: 1px 1px 3px rgba(0,0,0,0.35); color: #fff')
         p.fade-in-delayed
           small With support from <a href="https://glitch.com">Glitch.com</a>, the <a href="https://www.cmu.edu/cfa/studio/index.html">STUDIO at CMU</a>, and <a href="https://opencollective.com/handsfreejs">you</a>:
@@ -36,6 +27,9 @@ div
             a.github-button(href='https://github.com/browsehandsfree/handsfreejs' data-show-count='true' aria-label='Star browsehandsfree/handsfreejs on GitHub' data-icon='octicon-star') GitHub
         p.fade-in-delayed
           WebcamToggle
+        p(v-if='isLoading') 
+          | Whistling in the Space Whales
+          v-progress-circular.ml-3(indeterminate color='primary')
 
     .handsfree-show-when-started
       v-layout.fade-in(align-center justify-center row wrap style='z-index: 3; color: #fff')
@@ -75,319 +69,333 @@ div
             p <strong>Mission:</strong> To research and develop accessible, hands-free computer interfaces.
             p So on that note, let's dive further and explore how to use handsfree.js 🐳
 
-  //- Main content
+  //- Instructions
   .push-t-50(style='background: #fff; position: relative')
     v-container(grid-list-lg)
       v-layout(justify-center)
         v-flex(xs12 md8)
-          v-card.flex(light)
-            v-card-title(primary-title)
-              h2.headline.mb-0 Installation
-            v-card-text
-              h3 With HTML:
-              p This is how we encourage you to use Handsfree.js when using standard web technologies or when experimenting on sites like <a href="https://glitch.com/~handsfree-starter">Glitch.com (check out the Handsfree Starter!)</a>:
-              pre 
-                code.xml.
-                 &lt;!-- Latest with version patches (Recommended for production) --&gt;
-                  &lt;script src="https://unpkg.com/handsfree@&lt;3.1/dist/handsfree.js">&lt;/script&gt;
+          v-stepper(v-model='tutorialStep')
+            v-stepper-header
+              v-stepper-step(:complete='tutorialStep > 1' step='1') Installation
+              v-divider
+              v-stepper-step(:complete='tutorialStep > 2' step='2') Settings
+              v-divider
+              v-stepper-step(:complete='tutorialStep > 3' step='3') Adding Plugins
+              v-divider
+              v-stepper-step(:complete='tutorialStep > 4' step='4') Window Events
+              v-divider
+              v-stepper-step(:complete='tutorialStep > 5' step='5') Getting Elements
+          
+            v-stepper-items
+              //- Step 1
+              v-stepper-content(step='1')
+                v-card
+                  v-card-title(primary-title)
+                    h2.headline.mb-0 Installation
+                  v-card-text
+                    h3 With HTML:
+                    p This is how we encourage you to use Handsfree.js when using standard web technologies or when experimenting on sites like <a href="https://glitch.com/~handsfree-starter">Glitch.com (check out the Handsfree Starter!)</a>:
+                    pre 
+                      code.xml.
+                       &lt;!-- Latest with version patches (Recommended for production) --&gt;
+                        &lt;script src="https://unpkg.com/handsfree@&lt;3.1/dist/handsfree.js">&lt;/script&gt;
 
-                  &lt;!-- Latest with new features (Recommended for development) --&gt;
-                  &lt;script src="https://unpkg.com/handsfree@&lt;4/dist/handsfree.js">&lt;/script&gt;
+                        &lt;!-- Latest with new features (Recommended for development) --&gt;
+                        &lt;script src="https://unpkg.com/handsfree@&lt;4/dist/handsfree.js">&lt;/script&gt;
 
-                  &lt;!-- Latest with potential backwards incompatability (Recommended for testers) --&gt;
-                  &lt;script src="https://unpkg.com/handsfree/dist/handsfree.js">&lt;/script&gt;
+                        &lt;!-- Latest with potential backwards incompatability (Recommended for testers) --&gt;
+                        &lt;script src="https://unpkg.com/handsfree/dist/handsfree.js">&lt;/script&gt;
 
-                  &lt;script&gt;
-                    handsfree = new Handsfree()
-                    handsfree.start()
-                  &lt;/script>
+                        &lt;script&gt;
+                          handsfree = new Handsfree()
+                          handsfree.start()
+                        &lt;/script>
 
-              h3 With Node:
-              p When developing for the Internet of Things or non-browser based environments, we encourage you to use the below method:
-              pre
-                code.bash npm install handsfree
+                    h3 With Node:
+                    p When developing for the Internet of Things or non-browser based environments, we encourage you to use the below method:
+                    pre
+                      code.bash npm install handsfree
 
-              div then:
-              pre 
-                code.javascript.
-                 import Handsfree from 'handsfree'
-                  const handsfree = new Handsfree()
-                  handsfree.start()
+                    div then:
+                    pre 
+                      code.javascript.
+                       import Handsfree from 'handsfree'
+                        const handsfree = new Handsfree()
+                        handsfree.start()
 
-      v-layout(justify-center style='margin-top: 200px')
-        v-flex(xs12 md8)
-          v-card(light)
-            v-card-title(primary-title)
-              h2.headline.mb-0 Settings
-            v-card-text
-              p When instantiating <code>Handsfree</code>, you can pass in a config object.
-              pre
-                code.javascript.
-                 const handsfree = new Handsfree({
-                    // Whether to show (true) the debugger (face mask over video) or not (false)
-                    debug: false,
+              //- Step 2
+              v-stepper-content(step='2')
+                v-card
+                  v-card-title(primary-title)
+                    h2.headline.mb-0 Settings
+                  v-card-text
+                    p When instantiating <code>Handsfree</code>, you can pass in a config object.
+                    pre
+                      code.javascript.
+                       const handsfree = new Handsfree({
+                          // Whether to show (true) the debugger (face mask over video) or not (false)
+                          debug: false,
 
-                    // Available settings
-                    settings: {
-                      // Maximum number of faces to track
-                      maxFaces: 1,
+                          // Available settings
+                          settings: {
+                            // Maximum number of faces to track
+                            maxFaces: 1,
 
-                      sensitivity: {
-                        // A factor to adjust the cursors move speed by
-                        xy: 0.7,
-                        // How much wider (+) or narrower (-) a smile needs to be to click
-                        click: 0
-                      },
+                            sensitivity: {
+                              // A factor to adjust the cursors move speed by
+                              xy: 0.7,
+                              // How much wider (+) or narrower (-) a smile needs to be to click
+                              click: 0
+                            },
 
-                      stabilizer: {
-                        // How much stabilization to use: 0 = none, 3 = heavy
-                        factor: 1,
-                        // Number of frames to stabilizer over
-                        buffer: 30
-                      }
-                    }
-                  })
+                            stabilizer: {
+                              // How much stabilization to use: 0 = none, 3 = heavy
+                              factor: 1,
+                              // Number of frames to stabilizer over
+                              buffer: 30
+                            }
+                          }
+                        })
 
-              p Settings can later be updated with <code>handsfree.settings['my.setting'] = newValue;</code>
-            
-      v-layout(justify-center style='margin-top: 200px')
-        v-flex(xs12 md8)
-          v-card(light)
-            v-card-title(primary-title)
-              h2.headline.mb-0 Adding Plugins
-            v-card-text
-              p Handsfree.js is built around plugins. Plugins have several callbacks that hook into different events, and are added with <code>handsfree.use(config)</code>.
-              p Each callback receives two arguments, <code>(faces, instance)</code>. <code>instance</code> refers to the <code>new Handsfree</code> instance you created. <code>faces</code> contains the following:
-              pre
-                code.javascript.
-                  {
-                    cursor: {
-                      // Where on the screen the user is pointed at
-                      x: 0,
-                      y: 0,
+                    p Settings can later be updated with <code>handsfree.settings['my.setting'] = newValue;</code>
+              
+              //- Step 3
+              v-stepper-content(step='3')
+                v-card
+                  v-card-title(primary-title)
+                    h2.headline.mb-0 Adding Plugins
+                  v-card-text
+                    p Handsfree.js is built around plugins. Plugins have several callbacks that hook into different events, and are added with <code>handsfree.use(config)</code>.
+                    p Each callback receives two arguments, <code>(faces, instance)</code>. <code>instance</code> refers to the <code>new Handsfree</code> instance you created. <code>faces</code> contains the following:
+                    pre
+                      code.javascript.
+                       {
+                          cursor: {
+                            // Where on the screen the user is pointed at
+                            x: 0,
+                            y: 0,
+                            
+                            // The target currently under the mouse
+                            $target: 0,
+                            
+                            // Mouse states for this face
+                            state: {
+                              // The first frame of a click
+                              mouseDown: false,
+                              // Every subsequent frame of a click
+                              mouseDrag: false,
+                              // When the click is finally released
+                              mouseUp: false
+                            }
+                          },
+                          
+                          // A list of all 64 landmarks
+                          points: [{x, y}, ...],
+                        
+                          // The head's pitch (facing up/down)
+                          rotationX: 0,
+                          // The head's yaw (facing left/right)
+                          rotationY: 0,
+                          // The head's roll (as if doing a cartwheel while facing straight ahead)
+                          rotationZ: 0,
+                        
+                          // The heads overall size within the camera
+                          scale: 0,
+                        
+                          // Where the head is relative to the left edge of the video feed
+                          translationX: 0,
+                          // Where the head is relative to the top edge of the video feed
+                          translationY: 0
+                        }
+                        
+                    p Here are the landmark points, with #27 being the reference point for rotation/translation:
+                    p
+                      img(src='../../assets/img/brfv4_landmarks.jpg')
+
+                    p The following are the available plugin methods:
+                    pre
+                      code.javascript.
+                       const myPlugin = handsfree.use({
+                          // Must be unique. Spaces and special characters are fine
+                          name: '',
+
+                          // The plugins execution priority
+                          // - Lower numbers run before higher numbers
+                          // - Numbers can be negative and fractional
+                          priority: 10,
+
+                          // Set to true to have this plugin disabled by default
+                          _isDisabled: false,
+
+                          // Called once when the use method is called and after the plugin is added to the instance
+                          onUse: () => {},
+
+                          // Called once per frame, after calculations, along with the detected face object
+                          // To overwrite/modify the properties of faces for use within other plugins, return the faces object
+                          onFrame: (faces, handsfree) => {},
+
+                          // Called any time Handsfree.start() is called
+                          onStart: (handsfree) => {},
+
+                          // Called any time Handsfree.stop() is called
+                          onStop: (handsfree) => {},
+
+                          // Called when .disable() is explicitely called on this plugin
+                          onDisable: (handsfree) => {},
+
+                          // Called when .enable() is explicitely called on this plugin
+                          onEnable: (handsfree) => {},
+
+                          // Called the first frame a face clicks
+                          onMouseDown: (face, faceIndex) => {},
+
+                          // Called every frame after a face clicks and is still in "click mode"
+                          onMouseDrag: (face, faceIndex) => {},
+
+                          // Called after a face releases a click
+                          onMouseUp: (face, faceIndex) => {}
+                        })
+
+                    p Additionally, every plugin has a <code>.disable()</code> and an <code>.enable()</code> method, which sets a <code>._isDisabled</code> flag to either true or false:
+                    pre
+                      code.javascript.
+                       handsfree.plugin['my-plugin'].disable() // handsfree.plugin['my-plugin']._isDisabled === true
+                        handsfree.plugin['my-plugin'].enable() // handsfree.plugin['my-plugin']._isDisabled === false
+                        
+                    p Here's what our page scrolling plugin looks like:
+                    pre
+                      code.javascript.
+                       handsfree.use({
+                          // Required. The unique name for this plugin.
+                          // If it's not unique, then it overwrites the previous version of the plugin.
+                          name: 'scrolling',
+                        
+                          // The multiplier to scroll the page by
+                          // Adjust with this.scrollSpeed or handsfree.plugin.scrolling.scrollSpeed
+                          scrollSpeed: 0.1,
+                        
+                          /**
+                            * Scrolls the page when the cursor is above/below the screen
+                            * @param {Array}     faces    The array of face objects
+                            * @param {Handsfree} instance The handsfree instance
+                            */
+                          onFrame (faces, instance) {
+                            faces.forEach(face => {
+                              let x = face.cursor.x
+                              let y = face.cursor.y
+                        
+                              // Then add the points to the cursor!
+                              instance.cursor.$el.style.left = x + 'px'
+                              instance.cursor.$el.style.top = y + 'px'
+                        
+                              // Scroll the page
+                              if (y < 0)
+                                window.scrollTo(0, window.scrollY + y * this.scrollSpeed)
+                              else if (y > window.innerHeight)
+                                window.scrollTo(0, window.scrollY + (y - window.innerHeight) * this.scrollSpeed)
+                            })
+                          }
+                        })
+
+              //- Step 4
+              v-stepper-content(step='4')
+                v-card
+                  v-card-title(primary-title)
+                    h2.headline.mb-0 Window Events
+                  v-card-text
+                      p If you don't have access to the handsfree instance, or if you don't want to create a plugin, an alternative is to just listen to the following window events:
                       
-                      // The target currently under the mouse
-                      $target: 0,
-                      
-                      // Mouse states for this face
-                      state: {
-                        // The first frame of a click
-                        mouseDown: false,
-                        // Every subsequent frame of a click
-                        mouseDrag: false,
-                        // When the click is finally released
-                        mouseUp: false
-                      }
-                    },
-                    
-                    // A list of all 64 landmarks
-                    points: [{x, y}, ...],
-                  
-                    // The head's pitch (facing up/down)
-                    rotationX: 0,
-                    // The head's yaw (facing left/right)
-                    rotationY: 0,
-                    // The head's roll (as if doing a cartwheel while facing straight ahead)
-                    rotationZ: 0,
-                  
-                    // The heads overall size within the camera
-                    scale: 0,
-                  
-                    // Where the head is relative to the left edge of the video feed
-                    translationX: 0,
-                    // Where the head is relative to the top edge of the video feed
-                    translationY: 0
-                  }
-                  
-              p Here are the landmark points, with #27 being the reference point for rotation/translation:
-              p
-                img(src='../../assets/img/brfv4_landmarks.jpg')
+                      pre
+                        code.javascript.
+                         /**
+                          * Called for every chunk while BRFv4 is loading
+                          * - Good for showing load progress
+                          */
+                          window.addEventListener('handsfree:loading', (ev) => {
+                            const progress = ev.data.progress
+                            // Display progress
+                          })
 
-              p The following are the available plugin methods:
-              pre
-                code.javascript.
-                  const myPlugin = handsfree.use({
-                    // Must be unique. Spaces and special characters are fine
-                    name: '',
+                          /**
+                          * Called after handsfree is instantiated and ready to be used
+                          * - Models are loaded and ready to be used
+                          * - Use this to enable a [onclick="handsfree.start()"]
+                          * - Also good for ending a loading screen
+                          */
+                          window.addEventListener('handsfree:ready', () => {
+                            // Enable .start() buttons
+                          })
 
-                    // The plugins execution priority
-                    // - Lower numbers run before higher numbers
-                    // - Numbers can be negative and fractional
-                    priority: 10,
+                          /**
+                          * Called the first frame that a face clicks
+                          */
+                          window.addEventListener('handsfree:mouseDown', (ev) => {
+                            const face = ev.detail.face
+                            const faceIndex = ev.detail.faceIndex
 
-                    // Set to true to have this plugin disabled by default
-                    _isDisabled: false,
+                            // Do things with face and faceIndex here
+                          })
 
-                    // Called once when the use method is called and after the plugin is added to the instance
-                    onUse: () => {},
+                          /**
+                          * Called every frame after a face clicks and is still in "click mode"
+                          */
+                          window.addEventListener('handsfree:mouseDrag', (ev) => {
+                            const face = ev.detail.face
+                            const faceIndex = ev.detail.faceIndex
 
-                    // Called once per frame, after calculations, along with the detected face object
-                    // To overwrite/modify the properties of faces for use within other plugins, return the faces object
-                    onFrame: (faces, handsfree) => {},
+                            // Do things with face and faceIndex here
+                          })
 
-                    // Called any time Handsfree.start() is called
-                    onStart: (handsfree) => {},
+                          /**
+                          * Called when a face releases a click
+                          */
+                          window.addEventListener('handsfree:mouseUp', (ev) => {
+                            const face = ev.detail.face
+                            const faceIndex = ev.detail.faceIndex
 
-                    // Called any time Handsfree.stop() is called
-                    onStop: (handsfree) => {},
+                            // Do things with face and faceIndex here
+                          })
 
-                    // Called when .disable() is explicitely called on this plugin
-                    onDisable: (handsfree) => {},
+                          /**
+                          * Bind to the handsfree-trackFaces event, which is called once per frame
+                          * @param {Handsfree} ev.detail.scope The handsfree instance
+                          * @param {Object}    ev.detail.faces An array of face objects
+                          */
+                          window.addEventListener('handsfree-trackFaces', (ev) => {
+                            // Do code with the handsfree instance: ev.detail.scope
+                            // or with the faces ev.detail.faces.forEach(face => {})
+                          })
+                          
+                          /**
+                          * Bind to the handsfree-injectDebugger event
+                          * @param {Handsfree}       ev.detail.scope The handsfree instance
+                          * @param {Canvas2DContent} ev.detail.canvasContext The 2D debug canvas context
+                          */
+                          window.addEventListener('handsfree-injectDebugger', (ev) => {
+                            // Do code with the handsfree instance: ev.detail.scope
+                            // or draw into the canvas with ev.detail.canvasContext
+                          })
 
-                    // Called when .enable() is explicitely called on this plugin
-                    onEnable: (handsfree) => {},
+              //- Step 5
+              v-stepper-content(step='5')
+                v-card
+                  v-card-title(primary-title)
+                    h2.headline.mb-0 Getting Elements
+                  v-card-text
+                    p You can get the element currently underneath the cursor with <code>.cursor.$target</code>:
+                    pre
+                      code.javascript.
+                       // Outside of plugins
+                        const $target = handsfree.faces[n].cursor.$target
+                        
+                        // Inside plugins
+                        handsfree.use({
+                          onFrame (face) {
+                            const $target = face.cursor.$target
+                          }
+                        })
 
-                    // Called the first frame a face clicks
-                    onMouseDown: (face, faceIndex) => {},
-
-                    // Called every frame after a face clicks and is still in "click mode"
-                    onMouseDrag: (face, faceIndex) => {},
-
-                    // Called after a face releases a click
-                    onMouseUp: (face, faceIndex) => {}
-                  })
-
-              p Additionally, every plugin has a <code>.disable()</code> and an <code>.enable()</code> method, which sets a <code>._isDisabled</code> flag to either true or false:
-              pre
-                code.javascript.
-                 handsfree.plugin['my-plugin'].disable() // handsfree.plugin['my-plugin']._isDisabled === true
-                  handsfree.plugin['my-plugin'].enable() // handsfree.plugin['my-plugin']._isDisabled === false
-                  
-              p Here's what our page scrolling plugin looks like:
-              pre
-                code.javascript.
-                  handsfree.use({
-                    // Required. The unique name for this plugin.
-                    // If it's not unique, then it overwrites the previous version of the plugin.
-                    name: 'scrolling',
-                  
-                    // The multiplier to scroll the page by
-                    // Adjust with this.scrollSpeed or handsfree.plugin.scrolling.scrollSpeed
-                    scrollSpeed: 0.1,
-                  
-                    /**
-                      * Scrolls the page when the cursor is above/below the screen
-                      * @param {Array}     faces    The array of face objects
-                      * @param {Handsfree} instance The handsfree instance
-                      */
-                    onFrame (faces, instance) {
-                      faces.forEach(face => {
-                        let x = face.cursor.x
-                        let y = face.cursor.y
-                  
-                        // Then add the points to the cursor!
-                        instance.cursor.$el.style.left = x + 'px'
-                        instance.cursor.$el.style.top = y + 'px'
-                  
-                        // Scroll the page
-                        if (y < 0)
-                          window.scrollTo(0, window.scrollY + y * this.scrollSpeed)
-                        else if (y > window.innerHeight)
-                          window.scrollTo(0, window.scrollY + (y - window.innerHeight) * this.scrollSpeed)
-                      })
-                    }
-                  })
-
-      v-layout(justify-center style='margin-top: 200px')
-        v-flex(xs12 md8)
-          v-card(light)
-            v-card-title(primary-title)
-              h2.headline.mb-0 Window Events
-            v-card-text
-                p If you don't have access to the handsfree instance, or if you don't want to create a plugin, an alternative is to just listen to the following window events:
-                
-                pre
-                  code.javascript.
-                    /**
-                     * Called for every chunk while BRFv4 is loading
-                     * - Good for showing load progress
-                     */
-                    window.addEventListener('handsfree:loading', (ev) => {
-                      const progress = ev.data.progress
-                      // Display progress
-                    })
-
-                    /**
-                     * Called after handsfree is instantiated and ready to be used
-                     * - Models are loaded and ready to be used
-                     * - Use this to enable a [onclick="handsfree.start()"]
-                     * - Also good for ending a loading screen
-                     */
-                    window.addEventListener('handsfree:ready', () => {
-                      // Enable .start() buttons
-                    })
-
-                    /**
-                     * Called the first frame that a face clicks
-                     */
-                    window.addEventListener('handsfree:mouseDown', (ev) => {
-                      const face = ev.detail.face
-                      const faceIndex = ev.detail.faceIndex
-
-                      // Do things with face and faceIndex here
-                    })
-
-                    /**
-                     * Called every frame after a face clicks and is still in "click mode"
-                     */
-                    window.addEventListener('handsfree:mouseDrag', (ev) => {
-                      const face = ev.detail.face
-                      const faceIndex = ev.detail.faceIndex
-
-                      // Do things with face and faceIndex here
-                    })
-
-                    /**
-                     * Called when a face releases a click
-                     */
-                    window.addEventListener('handsfree:mouseUp', (ev) => {
-                      const face = ev.detail.face
-                      const faceIndex = ev.detail.faceIndex
-
-                      // Do things with face and faceIndex here
-                    })
-
-                    /**
-                    * Bind to the handsfree-trackFaces event, which is called once per frame
-                    * @param {Handsfree} ev.detail.scope The handsfree instance
-                    * @param {Object}    ev.detail.faces An array of face objects
-                    */
-                    window.addEventListener('handsfree-trackFaces', (ev) => {
-                      // Do code with the handsfree instance: ev.detail.scope
-                      // or with the faces ev.detail.faces.forEach(face => {})
-                    })
-                    
-                    /**
-                    * Bind to the handsfree-injectDebugger event
-                    * @param {Handsfree}       ev.detail.scope The handsfree instance
-                    * @param {Canvas2DContent} ev.detail.canvasContext The 2D debug canvas context
-                    */
-                    window.addEventListener('handsfree-injectDebugger', (ev) => {
-                      // Do code with the handsfree instance: ev.detail.scope
-                      // or draw into the canvas with ev.detail.canvasContext
-                    })
-
-      v-layout(justify-center style='margin-top: 200px')
-        v-flex(xs12 md8)
-          v-card(light)
-            v-card-title(primary-title)
-              h2.headline.mb-0 Getting Elements
-            v-card-text
-              p You can get the element currently underneath the cursor with <code>.cursor.$target</code>:
-              pre
-                code.javascript.
-                  // Outside of plugins
-                  const $target = handsfree.faces[n].cursor.$target
-                  
-                  // Inside plugins
-                  handsfree.use({
-                    onFrame (face) {
-                      const $target = face.cursor.$target
-                    }
-                  })
-
-              p You can do anything with the target including manipulating it (eg with jQuery) and dispatching events with the <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events">dispatchEvent API</a>.
-
+                    p You can do anything with the target including manipulating it (eg with jQuery) and dispatching events with the <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events">dispatchEvent API</a>.
 
   v-container(grid-list-lg)
     //- Tweets
@@ -414,7 +422,7 @@ div
     div.push-t-50
     v-layout(justify-center)
       v-flex(xs12 md8)
-        v-card(light)
+        v-card
           v-card-text
             p.text-xs-center
               img(src='/favicon.png' width=100)
@@ -478,18 +486,21 @@ export default {
 
   data () {
     return {
+      // Babylon objects
+      babylon: {
+        engine: null,
+        scene: null,
+        light: null
+      },
+
       // Used to set .hidden on the hero text
       isTitleVisible: false,
 
       // Whether we're loading (true) or not (false)
       isLoading: true,
       
-      // Babylon objects
-      babylon: {
-        engine: null,
-        scene: null,
-        light: null
-      }
+      // Stepper
+      tutorialStep: 1
     }
   },
 
@@ -627,6 +638,8 @@ export default {
   top: 0
   left: 0
   z-index: 0
+  opacity: 0
+  transition: opacity 1s ease
 
 .fade-in-delayed
   opacity: 0
