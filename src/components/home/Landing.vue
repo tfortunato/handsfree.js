@@ -71,13 +71,13 @@ div
 
   //- Instructions
   .push-t-50(style='background: #fff; position: relative')
-    v-container(grid-list-lg)
+    v-container(ref='instructions' grid-list-lg)
       v-layout(justify-center)
         v-flex(xs12 md8)
-          v-stepper(v-model='tutorialStep')
+          v-stepper(v-model='currentStep')
             v-stepper-header
               template(v-for='(step, i) in steps')
-                v-stepper-step(:complete='tutorialStep > i + 1' :step='i + 1' editable) {{step}}
+                v-stepper-step(:complete='currentStep > i + 1' :step='i + 1' editable) {{step}}
                 v-divider(v-if='i < steps.length - 1')
           
             v-stepper-items
@@ -393,7 +393,7 @@ div
 
             v-stepper-header
               template(v-for='(step, i) in steps')
-                v-stepper-step(:complete='tutorialStep > i + 1' :step='i + 1' editable) {{step}}
+                v-stepper-step(:complete='currentStep > i + 1' :step='i + 1' editable) {{step}}
                 v-divider(v-if='i < steps.length - 1')
 
   v-container(grid-list-lg)
@@ -472,6 +472,13 @@ export default {
     'isHandsfreeLoading'
   ]),
 
+  watch: {
+    /**
+     * Scroll the page to the top of the 
+     */
+    currentStep () {window.scrollTo(0, window.pageYOffset + this.$refs.instructions.getBoundingClientRect().top - 100)}
+  },
+
   /**
    * Free memory and disable plugins
    */
@@ -507,7 +514,7 @@ export default {
       ],
       
       // Stepper
-      tutorialStep: 1
+      currentStep: 1
     }
   },
 
