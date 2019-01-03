@@ -76,15 +76,15 @@ div
         v-flex(xs12 md8)
           v-stepper(v-model='tutorialStep')
             v-stepper-header
-              v-stepper-step(:complete='tutorialStep > 1' step='1') Installation
+              v-stepper-step(:complete='tutorialStep > 1' step='1' editable) Installation
               v-divider
-              v-stepper-step(:complete='tutorialStep > 2' step='2') Settings
+              v-stepper-step(:complete='tutorialStep > 2' step='2' editable) Settings
               v-divider
-              v-stepper-step(:complete='tutorialStep > 3' step='3') Adding Plugins
+              v-stepper-step(:complete='tutorialStep > 3' step='3' editable) Adding Plugins
               v-divider
-              v-stepper-step(:complete='tutorialStep > 4' step='4') Window Events
+              v-stepper-step(:complete='tutorialStep > 4' step='4' editable) Window Events
               v-divider
-              v-stepper-step(:complete='tutorialStep > 5' step='5') Getting Elements
+              v-stepper-step(:complete='tutorialStep > 5' step='5' editable) Getting Elements
           
             v-stepper-items
               //- Step 1
