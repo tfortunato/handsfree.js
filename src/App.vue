@@ -1,6 +1,6 @@
 <template lang="pug">
-  v-app(dark)
-    v-toolbar#main-nav(light app)
+  v-app
+    v-toolbar#main-nav(app style='z-index: 99')
       v-toolbar-side-icon(@click.stop='isNavOpen = !isNavOpen')
       v-toolbar-title.headline.text-uppercase
         router-link(to='/' style='text-decoration: none; color: inherit')
@@ -10,12 +10,7 @@
             small .js.org
       v-spacer
       span.hidden-sm-and-down
-        v-btn.primary.handsfree-show-when-stopped(large @click='startWebcam' :disabled='isHandsfreeLoading')
-          v-icon.mr-2 videocam
-          | Start Webcam
-        v-btn.primary.handsfree-show-when-started(large color='error' @click='stopWebcam')
-          v-icon.mr-2 videocam_off
-          | Stop Webcam
+        WebcamToggle
       span.hidden-md-and-up
         v-btn.primary.handsfree-show-when-stopped(large @click='startWebcam' :disabled='isHandsfreeLoading')
           v-icon videocam
@@ -25,7 +20,7 @@
     v-progress-linear#loading-bar(v-model='loading.progress' :color='loading.color')
 
     //- Left Navigation
-    v-navigation-drawer(app temporary light v-model='isNavOpen')
+    v-navigation-drawer(app temporary v-model='isNavOpen' style='z-index: 100')
       v-list.layout.column.fill-height
         v-list-tile(:to='{name: "Home"}')
           v-list-tile-action
@@ -66,16 +61,16 @@
 </template>
 
 <script>
-import Home from './components/Home'
 import Keyboard from './components/Keyboard'
+import WebcamToggle from './components/WebcamToggle'
 import {mapState} from 'vuex'
 
 export default {
   name: 'App',
 
   components: {
-    Home,
-    Keyboard
+    Keyboard,
+    WebcamToggle
   },
 
   computed: mapState([

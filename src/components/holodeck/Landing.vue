@@ -43,15 +43,7 @@ export default {
   
   beforeRouteLeave (to, from, next) {
     window.handsfree.plugin.holodeck.disable()
-    window.handsfree.plugin['boids-debugger'].enable()
     next()
-  },
-
-  mounted () {
-    // Disable the boids plugin
-    this.$store.dispatch('onReady', () => {
-      window.handsfree.plugin['boids-debugger'].disable()
-    })
   }
 }
 </script>

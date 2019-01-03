@@ -2,11 +2,13 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import {set} from 'lodash'
 import youtube from '../store/youtube'
+import spacewhale from '../store/spacewhale'
 
 Vue.use(Vuex)
 const store = new Vuex.Store({
   modules: {
-    youtube
+    youtube,
+    spacewhale
   },
 
   state: {

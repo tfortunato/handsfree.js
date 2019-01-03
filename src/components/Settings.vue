@@ -53,7 +53,6 @@
             v-card-title
               h2 Quick Settings
             v-card-text
-              v-checkbox(label='Use animated background?' v-model='useBackground')
               v-checkbox(label='Show webcam with debug mask?' v-model='isWebcamVisible')
 </template>
 
@@ -65,11 +64,6 @@ export default {
   name: 'Settings',
 
   watch: {
-    /**
-     * Toggle background
-     */
-    useBackground () {this.toggleBackground()},
-
     /**
      * Toggles the webcam on/off
      */
@@ -98,7 +92,6 @@ export default {
   
   data () {
     return {
-      useBackground: true,
       quickSetting: 'custom',
       maxFaces: 1,
       smileClickSensitivity: 0,
@@ -128,18 +121,6 @@ export default {
   },
 
   methods: {
-    /**
-     * Toggle the Boids background animation
-     */
-    toggleBackground () {
-      const plugin = window.handsfree.plugin['boids-debugger']
-      if (this.useBackground) {
-        plugin.enable()
-      } else {
-        plugin.disable()
-      }
-    },
-
     /**
      * Update the stats description
      */

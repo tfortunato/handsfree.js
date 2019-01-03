@@ -2,6 +2,19 @@ const path = require('path')
 
 module.exports = {
   configureWebpack: {
+    module: {
+      rules: [
+        {
+          test: /\.frag$/,
+          use: [
+            {
+              loader: 'raw-loader'
+            }
+          ]
+        }
+      ]
+    },
+    
     entry: {
       handsfree: ['idempotent-babel-polyfill', path.join(__dirname, 'handsfree.js/Handsfree.js')]
     },
