@@ -9,7 +9,7 @@ div
     v-layout.fade-in(style='position: relative; z-index: 3')
       v-flex.text-xs-center(xs12 style='margin-top: 100px; text-shadow: 1px 1px 3px rgba(0,0,0,0.35); color: #fff')
         p.fade-in-delayed
-          small With support from <a href="https://glitch.com">Glitch.com</a>, the <a href="https://www.cmu.edu/cfa/studio/index.html">STUDIO at CMU</a>, and <a href="https://opencollective.com/handsfreejs">you</a>:
+          small With support from <a href="https://glitch.com">Glitch.com</a>, the <a href="https://www.cmu.edu/cfa/studio/index.html">STUDIO at CMU</a>, and you (link soon!):
         h1.font-weight-bold.mt-0.mb-2.fade-in-delayed Handsfree.js
         p.fade-in-delayed
           small Powered by <a href="https://github.com/Tastenkunst/brfv4_javascript_examples/">BRFv4</a> & <a href="https://js.tensorflow.org/">TensorFlow.js</a>
