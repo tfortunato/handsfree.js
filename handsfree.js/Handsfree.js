@@ -327,3 +327,6 @@ require('./Debug')(Handsfree)
 require('./Plugin')(Handsfree)
 require('./components/Cursor')(Handsfree)
 module.exports = Handsfree
+
+// Finally, include stylesheets
+require('../public/handsfree.styl')

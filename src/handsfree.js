@@ -8,7 +8,6 @@
  *
  * @see https://codepen.io/scorch/pen/aWzJgW
  */
-require('./assets/styles/handsfree.styl')
 const facesOfOz = require('./store/faces/1-wink-face.json')
 
 document.addEventListener('DOMContentLoaded', () => {
