@@ -259,6 +259,21 @@ There are 64 landmark points, reflected in the following image:
 ![image from BRFv4](src/assets/img/brfv4_landmarks.jpg)
 
 ## Events
+### handsfree:trackFaces `since v4.0`
+An alternative to plugins is to listen in on the window's `handsfree:trackFaces` event:
+
+```js
+/**
+ * Bind to the handsfree:trackFaces event
+ * @param {Handsfree} ev.detail.scope The handsfree instance
+ * @param {Object}    ev.detail.faces An array of face objects
+ */
+window.addEventListener('handsfree:trackFaces', (ev) => {
+  // Do code with the handsfree instance: ev.detail.scope
+  // or with the faces ev.detail.faces.forEach(face => {})
+})
+```
+
 ### handsfree:loading
 The BRFv4 model is around 9Mb, so this helper helps give your users feedback! This event is called for every downloaded chunk, with the progress expresses as %XXX.XX
 
@@ -323,6 +338,19 @@ window.addEventListener('handsfree:mouseUp', (ev) => {
   const faceIndex = ev.detail.faceIndex
 
   // Do things with face and faceIndex here
+})
+```
+
+## Dispatching Events
+You can use `handsfree.dispatch(eventName)` to trigger events. This helper is the equivalent of using `window.dispatchEvent()`. One thing to note is that eventNames are namespaced with `handsfree:`, for instance:
+
+```js
+// This...
+handsfree.dispatch('SimpleKeyboard:change', 'abc')
+
+// ...and this are equivalent
+window.dispatchEvent(new CustomEvent('handsfree:SimpleKeyboard:change'), {
+  detail: 'abc'
 })
 ```
 

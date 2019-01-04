@@ -233,6 +233,11 @@ class Handsfree {
      * Dispatch global event
      * @todo update this to handsfree:trackFaces @see https://github.com/BrowseHandsfree/handsfreeJS/issues/47
      */
+    window.dispatchEvent(new CustomEvent('handsfree:trackFaces', {detail: {
+      scope: this,
+      faces: this.faces
+    }}))
+    // @deprecated Will be deprecated in v5
     window.dispatchEvent(new CustomEvent('handsfree-trackFaces', {detail: {
       scope: this,
       faces: this.faces
