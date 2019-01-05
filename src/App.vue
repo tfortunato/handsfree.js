@@ -99,7 +99,7 @@ export default {
           icon: 'blur_on'
         },
         {
-          title: 'Space Whales 3D Test',
+          title: 'Space Whales',
           to: {name: "spaceWhalesLanding"},
           icon: 'blur_on'
         }
