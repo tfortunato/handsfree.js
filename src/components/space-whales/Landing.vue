@@ -621,10 +621,6 @@ export default {
 </script>
 
 <style scoped lang="stylus">
->>>.twitter-tweet-rendered
-  margin-left: auto
-  margin-right: auto
-
 // @todo Move these into helper files
 >>>.loading-mask
   position: fixed
