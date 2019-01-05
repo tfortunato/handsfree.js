@@ -25,17 +25,23 @@
         v-list-tile(:to='{name: "Home"}')
           v-list-tile-action
             img(src='/favicon.png' width=48)
-          v-list-tile-title Handsfree.js
+          v-list-tile-title Home
 
-        v-list-tile(:to='{name: "youtubeLanding"}')
-          v-list-tile-action
-            v-icon ondemand_video
-          v-list-tile-title YouTube
-
-        v-list-tile(:to='{name: "holodeckLanding"}')
-          v-list-tile-action
-            v-icon blur_on
-          v-list-tile-title 3D Perspective Test
+        v-list-group
+          v-list-tile(slot='activator')
+            v-list-tile-action
+              v-icon category
+            v-list-tile-content
+              v-list-tile-title Demos
+            
+          v-list-tile(
+          v-for='demo in demos'
+          :to='demo.to'
+          :key='demo.title'
+          :prepend-icon='demo.icon'
+          no-action)
+            v-list-tile-action
+            v-list-tile-title(v-html='demo.title')
 
         v-list-tile(:to='{name: "settings"}')
           v-list-tile-action
@@ -80,6 +86,20 @@ export default {
 
   data () {
     return {
+      // Collection of demos
+      demos: [
+        {
+          title: 'YouTube Client',
+          to: {name: "youtubeLanding"},
+          icon: 'ondemand_video'
+        },
+        {
+          title: '"VR Display" <small>(in progress)</small>',
+          to: {name: "holodeckLanding"},
+          icon: 'blur_on'
+        }
+      ],
+      
       // The favicon next to the title
       favicon: '/favicon.png',
       
