@@ -94,8 +94,13 @@ export default {
           icon: 'ondemand_video'
         },
         {
-          title: '"VR Display" <small>(in progress)</small>',
+          title: '"VR Display"',
           to: {name: "holodeckLanding"},
+          icon: 'blur_on'
+        },
+        {
+          title: 'Space Whales 3D Test',
+          to: {name: "spaceWhalesLanding"},
           icon: 'blur_on'
         }
       ],

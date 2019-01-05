@@ -439,6 +439,6 @@ export default {
 </script>
 
 <style scoped lang="stylus">
-  h1
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5)
+h1
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5)
 </style>
