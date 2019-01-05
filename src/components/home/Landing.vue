@@ -5,11 +5,9 @@ div
       v-flex(mb-4 xs12 md6)
         p.mb-3.text-xs-center
           img(src='https://media.giphy.com/media/AFXBi87gYqWMth1T6m/giphy.gif')
-        p.text-xs-center
-          small With support from <a href="https://glitch.com">Glitch.com</a>, the <a href="https://www.cmu.edu/cfa/studio/index.html">STUDIO at CMU</a>, and <a href="https://opencollective.com/handsfreejs">you</a>:
         h1.text-xs-center.display-2.font-weight-bold.mb-3 Handsfree.js
         p.text-xs-center
-          | Made possible by <a href="https://github.com/Tastenkunst/brfv4_javascript_examples">BRFv4</a> and <a href="https://js.tensorflow.org/">TensorFlow.js</a>
+          | With support from <a href="https://glitch.com">Glitch.com</a>, the <a href="https://www.cmu.edu/cfa/studio/index.html">STUDIO at CMU</a>, and <a href="https://opencollective.com/handsfreejs">you</a>:
         p.text-xs-center
           a(href='https://www.npmjs.com/package/handsfree')
             img.mr-2(src='https://img.shields.io/npm/v/handsfree.svg')
@@ -30,6 +28,8 @@ div
           v-btn.primary.handsfree-show-when-started.hidden(large color='error' @click='stopWebcam')
             v-icon.mr-2 videocam_off
             | Stop Webcam
+        p.text-xs-center
+          small Powered by <a href="https://github.com/Tastenkunst/brfv4_javascript_examples">BRFv4</a> and <a href="https://js.tensorflow.org/">TensorFlow.js</a>
 
       v-flex(mb-4 xs12 md6)
         v-card(light)
