@@ -8,7 +8,6 @@
  *
  * @see https://codepen.io/scorch/pen/aWzJgW
  */
-require('./assets/styles/handsfree.styl')
 const facesOfOz = require('./store/faces/1-wink-face.json')
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -17,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const BoidsDebugger = handsfree.use({
     name: 'boids-debugger',
 
-    _isDisabled: true,
+    _isDisabled: false,
 
     // The canvas context
     canvas: [

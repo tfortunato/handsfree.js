@@ -1,3 +1,5 @@
+@import 'libs'
+
 html, body
   background: #110921
 
@@ -22,19 +24,12 @@ img
   max-width: 100%
   vertical-align: middle
 
-.handsfree-simple-keyboard
-  background: #ddd
-  padding: 10px
-
-  input
-    width: 100%
-    display: block
-    padding: 10px
-    background: #fff
-    margin-bottom: 10px
-
-  .simple-keyboard.hg-theme-default .hg-button
-    height: 70px
+// Theme-Specific
+// - The background is dark, but we're using a light theme, so this
+//   makes it so that text not inside cards are visible 
+.flex
+  > h1, > h2, > p
+    color: #fff
 
 // Helpers
 .unlink
