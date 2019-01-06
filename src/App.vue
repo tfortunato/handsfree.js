@@ -1,5 +1,6 @@
 <template lang="pug">
   v-app
+    Handsfree
     v-toolbar#main-nav(app style='z-index: 99')
       v-toolbar-side-icon(@click.stop='isNavOpen = !isNavOpen')
       v-toolbar-title.headline.text-uppercase
@@ -69,6 +70,7 @@
 <script>
 import Keyboard from './components/Keyboard'
 import WebcamToggle from './components/WebcamToggle'
+import Handsfree from './handsfree'
 import {mapState} from 'vuex'
 
 export default {
@@ -76,6 +78,7 @@ export default {
 
   components: {
     Keyboard,
+    Handsfree,
     WebcamToggle
   },
 

@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const BoidsDebugger = handsfree.use({
     name: 'boids-debugger',
 
-    _isDisabled: true,
+    _isDisabled: false,
 
     // The canvas context
     canvas: [

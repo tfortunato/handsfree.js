@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  v-container(grid-list-lg)
+  v-container(grid-list-lg @click='isHidden = !isHidden')
     //- Canvas
     canvas(ref='canvas' :class='{"fade-in": !isLoading}')
     Handsfree
@@ -15,11 +15,11 @@ div
             | Whistling in the Space Whales
             v-progress-circular.ml-3(indeterminate color='primary')
 
-        .fade-in(:class='{"faded-out": isLoading}')
+        .fade-in(:class='{"faded-out": isLoading || !isHidden}')
           h1.font-weight-bold.mt-0.mb-2.fade-in-delayed Space Whales
-          p.fade-in-delayed An audio-visual experience.
-          ol
+          ol(style='width: 400px; margin: auto; text-align: left')
             li.fade-in-delayed The Space Whale will fly towards the direction you're facing
+            li.fade-in-delayed Click to toggle this message
             li.fade-in-delayed <strong>This is a work in progress, follow me at <a href="https://twitter.com/labofoz">@labofoz</a></strong>
 </template>
 
@@ -52,13 +52,6 @@ export default {
     'isHandsfreeLoading'
   ]),
 
-  watch: {
-    /**
-     * Scroll the page to the top of the 
-     */
-    currentStep () {window.scrollTo(0, window.pageYOffset + this.$refs.instructions.getBoundingClientRect().top - 100)}
-  },
-
   /**
    * Free memory and disable plugins
    */
@@ -85,16 +78,8 @@ export default {
       // Whether we're loading (true) or not (false)
       isLoading: true,
 
-      steps: [
-        'Install',
-        'Config',
-        'Plugins',
-        'Events',
-        '$target'
-      ],
-      
-      // Stepper
-      currentStep: 1
+      // Whether the user has manually hidden the title or not
+      isHidden: true
     }
   },
 
@@ -259,5 +244,4 @@ export default {
 @media screen and (max-width: 724px)
   >>>h1
     font-size: 36px
-
 </style>
