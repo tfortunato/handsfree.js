@@ -321,10 +321,10 @@ Handsfree.libPath = trimStart(document.currentScript.getAttribute('src').replace
 Handsfree.version = pkg.version
 
 // Let the magic begin ✨
-require('./Setup')(Handsfree)
-require('./Util')(Handsfree)
-require('./Debug')(Handsfree)
-require('./Plugin')(Handsfree)
+require('./methods/Setup')(Handsfree)
+require('./methods/Util')(Handsfree)
+require('./methods/Debug')(Handsfree)
+require('./methods/Plugin')(Handsfree)
 require('./components/Cursor')(Handsfree)
 module.exports = Handsfree
 
