@@ -3,18 +3,18 @@
   <p>A platform for creating handsfree user interfaces, tools, games, and experiences for the web and IoT 🤯</p>
   <p>Made possible by <a href="https://github.com/Tastenkunst/brfv4_javascript_examples">BRFv4</a></p>
 <p>
-  <img class="mr-1" src="https://img.shields.io/github/release-pre/browsehandsfree/handsfreejs.svg"> <img class="mr-1" src="https://img.shields.io/github/last-commit/browsehandsfree/handsfreejs.svg"> <img class="mr-1" src="https://img.shields.io/github/commits-since/browsehandsfree/handsfreejs/0.0.1.svg">
-  <img src="https://img.shields.io/github/repo-size/browsehandsfree/handsfreejs.svg">
+  <img class="mr-1" src="https://img.shields.io/github/release-pre/labofoz/handsfree.js.svg"> <img class="mr-1" src="https://img.shields.io/github/last-commit/labofoz/handsfree.js.svg"> <img class="mr-1" src="https://img.shields.io/github/commits-since/labofoz/handsfree.js/0.0.1.svg">
+  <img src="https://img.shields.io/github/repo-size/labofoz/handsfree.js.svg">
 </p>
 <p>
-  <img class="mr-1" src="https://img.shields.io/github/issues-raw/browsehandsfree/handsfreejs.svg"> <img class="mr-1" src="https://img.shields.io/github/issues/browsehandsfree/handsfreejs/✨ enhancement.svg"> <img src="https://img.shields.io/github/issues-pr-raw/browsehandsfree/handsfreejs.svg">
+  <img class="mr-1" src="https://img.shields.io/github/issues-raw/labofoz/handsfree.js.svg"> <img class="mr-1" src="https://img.shields.io/github/issues/labofoz/handsfree.js/✨ enhancement.svg"> <img src="https://img.shields.io/github/issues-pr-raw/labofoz/handsfree.js.svg">
 </p>
 <p>
-  <img class="mr-1" src="https://img.shields.io/github/issues/browsehandsfree/handsfreejs/🐞 bug.svg"> <img src="https://img.shields.io/github/issues/browsehandsfree/handsfreejs/👷 help wanted.svg">
+  <img class="mr-1" src="https://img.shields.io/github/issues/labofoz/handsfree.js/🐞 bug.svg"> <img src="https://img.shields.io/github/issues/labofoz/handsfree.js/👷 help wanted.svg">
 </p>
 <p>
-  <img src="https://travis-ci.org/BrowseHandsfree/handsfreeJS.svg?branch=master">
-  <img src="https://img.shields.io/codecov/c/github/BrowseHandsfree/handsfreeJS/master.svg?style=flat">
+  <img src="https://travis-ci.org/labofoz/handsfree.js.svg?branch=master">
+  <img src="https://img.shields.io/codecov/c/github/labofoz/handsfree.js/master.svg?style=flat">
 </p>
 </div>
 
@@ -75,7 +75,7 @@ handsfree.start()
 ```
 
 ## Config
-There are a number of ways to configure Handsfree.js, the easiest being during instantiation. Here are the available configs and their defaults as of [this release](https://github.com/BrowseHandsfree/handsfreeJS/releases):
+There are a number of ways to configure Handsfree.js, the easiest being during instantiation. Here are the available configs and their defaults as of [this release](https://github.com/labofoz/handsfree.js/releases):
 
 ```js
 const handsfree = new Handsfree({
