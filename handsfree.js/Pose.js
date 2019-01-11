@@ -15,12 +15,22 @@
  *               🔮 handsfree.js/Pose.js 🔮
  * 
  * @description A class describing different poses.
- * 
- * - Creates a pointer element for each enabled pose
- * - 
+ * Each pose has a:
+ * - .$el: The pointer element
  */
 class HandsfreePose {
-  constructor () {}
+  constructor () {
+    this.createPointer()
+  }
+
+  /**
+   * Creates the pointer element
+   */
+  createPointer () {
+    this.$el = document.createElement('div')
+    this.$el.classList.add('handsfree-cursor')
+    document.body.appendChild(this.$el)
+  }
 }
 
 module.exports = HandsfreePose
