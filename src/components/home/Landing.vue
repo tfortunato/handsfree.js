@@ -293,11 +293,11 @@ div
                   pre
                     code.javascript.
                       /**
-                        * Bind to the handsfree:trackFaces event, which is called once per frame
+                        * Bind to the handsfree:trackPoses event, which is called once per frame
                         * @param {Handsfree} ev.detail.scope The handsfree instance
                         * @param {Object}    ev.detail.faces An array of face objects
                         */
-                      window.addEventListener('handsfree:trackFaces', (ev) => {
+                      window.addEventListener('handsfree:trackPoses', (ev) => {
                         // Do code with the handsfree instance: ev.detail.scope
                         // or with the faces ev.detail.faces.forEach(face => {})
                       })

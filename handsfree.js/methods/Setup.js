@@ -107,13 +107,12 @@ module.exports = Handsfree => {
     window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 100}}))
 
     this.isTracking = true
-    this.trackFaces()
+    this.trackPoses()
   }
 
   /**
    * Deletes all poses and creates a HandsfreePose object for .settings.maxPoses
    * - Also sets handsfree.cursor.$el
-   * @todo Let's remove the handsfree.cursor.$el reference
    */
   Handsfree.prototype.reservePoses = function () {
     this.pose = []

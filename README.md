@@ -261,16 +261,16 @@ There are 64 landmark points, reflected in the following image:
 ![image from BRFv4](src/assets/img/brfv4_landmarks.jpg)
 
 ## Events
-### handsfree:trackFaces `since v4.0`
-An alternative to plugins is to listen in on the window's `handsfree:trackFaces` event:
+### handsfree:trackPoses `since v4.0.0`
+An alternative to plugins is to listen in on the window's `handsfree:trackPoses` event:
 
 ```js
 /**
- * Bind to the handsfree:trackFaces event
+ * Bind to the handsfree:trackPoses event
  * @param {Handsfree} ev.detail.scope The handsfree instance
  * @param {Object}    ev.detail.faces An array of face objects
  */
-window.addEventListener('handsfree:trackFaces', (ev) => {
+window.addEventListener('handsfree:trackPoses', (ev) => {
   // Do code with the handsfree instance: ev.detail.scope
   // or with the faces ev.detail.faces.forEach(face => {})
 })

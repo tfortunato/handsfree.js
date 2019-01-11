@@ -153,7 +153,7 @@ class Handsfree {
     this.tweenFaces = []
 
     // True when webcam stream is set and poses are being tracked
-    // - this.isTracking && requestAnimationFrame(Handsfree.trackFaces())
+    // - this.isTracking && requestAnimationFrame(Handsfree.trackPoses())
     this.isTracking = false
     // Whether Web Assembly is supported
     this.isWASMSupported = typeof WebAssembly === 'object'
@@ -198,7 +198,7 @@ class Handsfree {
         window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 100}}))
         this.isTracking = true
         this.brf.manager.setNumFacesToTrack(this.settings.maxPoses)
-        this.trackFaces()
+        this.trackPoses()
       }
     })
   }
@@ -222,6 +222,26 @@ class Handsfree {
   }
 
   /**
+   * Goes through and tracks poses for all active models
+   */
+  trackPoses () {
+    this.trackFaces()
+    this.calculateXY()
+    this.setTouchedElement()
+    this.onFrameHooks(this.faces)
+
+    /**
+     * Dispatch global event and reloop
+     * - Only reloops if .isTracking
+     */
+    window.dispatchEvent(new CustomEvent('handsfree:trackPoses', {detail: {
+      scope: this,
+      faces: this.faces
+    }}))
+    this.isTracking && requestAnimationFrame(() => this.trackPoses())
+  }
+  
+  /**
    * Tracks faces
    * - Will look for opts.settings.maxPoses
    * - Recurses until this.isTracking is false
@@ -236,30 +256,11 @@ class Handsfree {
 
     // Get faces
     this.brf.manager.update(ctx.getImageData(0, 0, resolution.width, resolution.height).data)
-    this.faces = this.brf.manager.getFaces()
+    const faces = this.faces = this.brf.manager.getFaces()
+    faces.forEach((face, n) => this.pose[n].face = face)
 
     // Do things with faces
     this.debug.isDebugging && this.drawFaces()
-    this.calculateXY()
-    this.setTouchedElement()
-    this.onFrameHooks(this.faces)
-
-    /**
-     * Dispatch global event
-     * @todo update this to handsfree:trackFaces @see https://github.com/BrowseHandsfree/handsfreeJS/issues/47
-     */
-    window.dispatchEvent(new CustomEvent('handsfree:trackFaces', {detail: {
-      scope: this,
-      faces: this.faces
-    }}))
-    // @deprecated Will be deprecated in v5
-    window.dispatchEvent(new CustomEvent('handsfree-trackFaces', {detail: {
-      scope: this,
-      faces: this.faces
-    }}))
-
-    // Only loop if we're tracking
-    this.isTracking && requestAnimationFrame(() => this.trackFaces())
   }
 
   /**
