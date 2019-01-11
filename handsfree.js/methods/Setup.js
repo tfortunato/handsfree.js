@@ -4,8 +4,14 @@ module.exports = Handsfree => {
   Handsfree.prototype.init = function () {
     // Inject elements
     this.injectDebugger()
-    this.injectCursor()
+    this.reservePoses()
     this.initAndMaybeReadWASMBinary()
+  }
+
+  /**
+   * Deletes all poses and creates a 
+   */
+  Handsfree.prototype.reservePoses = function () {
   }
   
   /**
@@ -102,7 +108,7 @@ module.exports = Handsfree => {
     this.brf.resolution = new this.brf.sdk.Rectangle(0, 0, this.debug.$canvas.width, this.debug.$canvas.height)
     this.brf.manager = new this.brf.sdk.BRFManager()
     this.brf.manager.init(this.brf.resolution, this.brf.resolution, 'js.handsfree')
-    this.brf.manager.setNumFacesToTrack(this.settings.maxFaces)
+    this.brf.manager.setNumFacesToTrack(this.settings.maxPoses)
     window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 100}}))
 
     this.isTracking = true

@@ -69,6 +69,11 @@ class Handsfree {
     this.faces = null
 
     /**
+     * A collection of pose objects {face} for this.settings.maxPoses
+     */
+    this.poses = []
+
+    /**
      * Your settings
      * - This really just acts as a namespace for plugins to pull settings from
      * - To set a setting during instantiation, use:
@@ -192,7 +197,7 @@ class Handsfree {
       } else {
         window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 100}}))
         this.isTracking = true
-        this.brf.manager.setNumFacesToTrack(this.settings.maxFaces)
+        this.brf.manager.setNumFacesToTrack(this.settings.maxPoses)
         this.trackFaces()
       }
     })
@@ -218,7 +223,7 @@ class Handsfree {
 
   /**
    * Tracks faces
-   * - Will look for opts.settings.maxFaces
+   * - Will look for opts.settings.maxPoses
    * - Recurses until this.isTracking is false
    */
   trackFaces () {

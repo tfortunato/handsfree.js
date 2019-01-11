@@ -36,9 +36,9 @@
               v-alert(type='warning' value=1 style='color: #444') This currently does not work with the existing plugins but is exposed for experimentation.
               v-layout(row)
                 v-flex
-                  v-slider(label='Number of Faces' max=20 min=1 step=1 v-model='maxFaces')
+                  v-slider(label='Max Poses (users)' max=20 min=1 step=1 v-model='maxPoses')
                 v-flex(shrink style='width: 80px')
-                  v-text-field(v-model='maxFaces')
+                  v-text-field(v-model='maxPoses')
 
         v-flex(xs12 md6 lg4)
           v-card.mb-2(light)
@@ -72,9 +72,9 @@ export default {
     /**
      * Set the number of faces
      */
-    maxFaces: debounce(function (maxFaces) {
-      window.handsfree.settings.maxFaces = maxFaces
-      window.handsfree.brf.manager.setmaxFacesToTrack && window.handsfree.brf.manager.setmaxFacesToTrack(maxFaces)
+    maxPoses: debounce(function (maxPoses) {
+      window.handsfree.settings.maxPoses = maxPoses
+      window.handsfree.brf.manager.setmaxPosesToTrack && window.handsfree.brf.manager.setmaxPosesToTrack(maxPoses)
     }, 500),
 
     /**
@@ -93,7 +93,7 @@ export default {
   data () {
     return {
       quickSetting: 'custom',
-      maxFaces: 1,
+      maxPoses: 1,
       smileClickSensitivity: 0,
       statsMode: 0,
       sensitivity: 0.7,
@@ -136,7 +136,7 @@ export default {
       if (window.handsfree) {
         const settings = window.handsfree.settings
   
-        this.maxFaces = settings.maxFaces
+        this.maxPoses = settings.maxPoses
         this.smileClickSensitivity = settings.sensitivity.click
         this.sensitivity = settings.sensitivity.xy
         this.stabilizerFactor = settings.stabilizer.factor

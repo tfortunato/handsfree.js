@@ -92,7 +92,7 @@ const handsfree = new Handsfree({
     // Maximum number of faces to track
     // - Performance drops with each additional face
     // - 🚧 This is experimental and not working with the core plugins yet
-    maxFaces: 1,
+    maxPoses: 1,
 
     sensitivity: {
       // A factor to adjust the cursors move speed by
@@ -355,6 +355,10 @@ window.dispatchEvent(new CustomEvent('handsfree:SimpleKeyboard:change'), {
   detail: 'abc'
 })
 ```
+
+## Deprecated/Renamed Methods
+### handsfree.settings.maxPoses => .maxPoses
+Since we're now dealing with whole pose objects instead of face objects, it makes sense to rename this setting to reflect that.
 
 ## Deprecated Events
 The following events are still being used but will be deprecated during the next major release:

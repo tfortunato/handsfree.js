@@ -124,7 +124,7 @@ div
                         // Available settings
                         settings: {
                           // Maximum number of faces to track
-                          maxFaces: 1,
+                          maxPoses: 1,
 
                           sensitivity: {
                             // A factor to adjust the cursors move speed by
