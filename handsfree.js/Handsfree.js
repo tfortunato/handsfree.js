@@ -71,7 +71,7 @@ class Handsfree {
     /**
      * A collection of pose objects {face} for this.settings.maxPoses
      */
-    this.poses = []
+    this.pose = []
 
     /**
      * Your settings
@@ -341,7 +341,6 @@ require('./methods/Util')(Handsfree)
 require('./methods/Debug')(Handsfree)
 require('./methods/Plugin')(Handsfree)
 require('./components/Cursor')(Handsfree)
-window.HandsfreePose = require('./Pose')
 
 // Finally, include stylesheets
 require('../public/handsfree.styl')

@@ -2,18 +2,6 @@ const {TweenMax} = require('gsap')
 
 module.exports = Handsfree => {
   /**
-   * Injects the cursor the user moves around
-   * 
-   * @todo #45 remove this method in favor of the Pose class
-   */
-  Handsfree.prototype.injectCursor = function () {
-    const $cursor = this.cursor.$el = document.createElement('div')
-
-    $cursor.classList.add('handsfree-cursor')
-    document.body.appendChild($cursor)
-  }
-
-  /**
    * Calculates the X/Y the user is facing
    */
   Handsfree.prototype.calculateXY = function () {

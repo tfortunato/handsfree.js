@@ -1,4 +1,5 @@
 const BRFvInitializer = require('../models/BRFv4_JS_TK110718_v4.1.0_trial.js')
+const HandsfreePose = window.HandsfreePose = require('../Pose')
 
 module.exports = Handsfree => {
   Handsfree.prototype.init = function () {
@@ -6,12 +7,6 @@ module.exports = Handsfree => {
     this.injectDebugger()
     this.reservePoses()
     this.initAndMaybeReadWASMBinary()
-  }
-
-  /**
-   * Deletes all poses and creates a 
-   */
-  Handsfree.prototype.reservePoses = function () {
   }
   
   /**
@@ -113,5 +108,18 @@ module.exports = Handsfree => {
 
     this.isTracking = true
     this.trackFaces()
+  }
+
+  /**
+   * Deletes all poses and creates a HandsfreePose object for .settings.maxPoses
+   * - Also sets handsfree.cursor.$el
+   * @todo Let's remove the handsfree.cursor.$el reference
+   */
+  Handsfree.prototype.reservePoses = function () {
+    this.pose = []
+    for (let i = 0; i < this.settings.maxPoses; i++) {
+      this.pose.push(new HandsfreePose())
+    }
+    this.cursor.$el = this.pose[0].$el
   }
 }

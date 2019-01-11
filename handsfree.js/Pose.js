@@ -20,6 +20,12 @@
  */
 class HandsfreePose {
   constructor () {
+    /**
+     * A BRFv4 tracked face
+     * @see https://github.com/Tastenkunst/brfv4_javascript_examples/
+     */
+    this.face = null
+    
     this.createPointer()
   }
 

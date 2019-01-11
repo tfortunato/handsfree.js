@@ -10,7 +10,6 @@ describe('Plugin: Scrolling', () => {
   it('scrolls the page vertically', () => {
     const handsfree = new Handsfree()
     let scrollTo = 1000
-    handsfree._injectCursor()
     handsfree._use(plugin)
   
     // Scroll up
