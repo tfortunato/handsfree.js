@@ -12,8 +12,9 @@ module.exports = {
   mouseDrag: [],
   mouseUp: [],
 
-  onFrame: function (faces, instance) {
-    faces.forEach((face, faceIndex) => {
+  onFrame: function (poses, instance) {
+    poses.forEach((pose, faceIndex) => {
+      const face = pose.face
       let a
       let b
       let smileFactor
@@ -40,16 +41,16 @@ module.exports = {
       if (smileFactor > 1) smileFactor = 1
 
       // Update states and fire events
-      instance.faces[faceIndex].cursor.state = this.updateMouseStates({
+      instance.pose[faceIndex].face.cursor.state = this.updateMouseStates({
         face,
         faceIndex,
         instance,
         smileFactor
       })
-      this.maybeFireEvents(instance.faces, faceIndex)
+      this.maybeFireEvents(instance.pose, faceIndex)
     })
 
-    return instance.faces
+    return instance.pose
   },
 
   /**
@@ -93,8 +94,8 @@ module.exports = {
   /**
    * Maybe fire events
    */
-  maybeFireEvents (faces, index) {
-    const state = faces[index].cursor.state
+  maybeFireEvents (poses, index) {
+    const state = poses[index].face.cursor.state
     let eventName = ''
     
     if (state.mouseDown) {
@@ -108,7 +109,7 @@ module.exports = {
     if (eventName) {
       window.dispatchEvent(new CustomEvent(`handsfree:${eventName}`, {
         detail: {
-          face: faces[index],
+          face: poses[index].face,
           id: index
         }
       }))

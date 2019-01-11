@@ -63,12 +63,6 @@ class Handsfree {
    */
   constructor (opts = {}) {
     /**
-     * An array containing a pose object for every tracked person
-     * @todo Rename this to this.pose.face @see https://github.com/BrowseHandsfree/handsfreeJS/issues/45
-     */
-    this.faces = null
-
-    /**
      * A collection of pose objects {face} for this.settings.maxPoses
      */
     this.pose = []
@@ -228,7 +222,7 @@ class Handsfree {
     this.trackFaces()
     this.getBRFv4Cursors()
     this.setTouchedElement()
-    this.onFrameHooks(this.faces)
+    this.onFrameHooks(this.pose)
 
     /**
      * Dispatch global event and reloop
