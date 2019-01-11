@@ -1,5 +1,7 @@
 <div align="center">
+  <p>With support from <a href="https://glitch.com">Glitch.com</a>, the <a href="https://www.cmu.edu/cfa/studio/index.html">STUDIO at CMU</a>, and you.</p>
   <img src="https://media.giphy.com/media/3Z15Ve7WEQGkLa1FwC/giphy.gif" alt="handsfree.js">
+  <h1>Handsfree.js</h1>
   <p>A platform for creating handsfree user interfaces, tools, games, and experiences for the web and IoT 🤯</p>
   <p>Made possible by <a href="https://github.com/Tastenkunst/brfv4_javascript_examples">BRFv4</a></p>
 <p>
