@@ -226,7 +226,7 @@ class Handsfree {
    */
   trackPoses () {
     this.trackFaces()
-    this.calculateXY()
+    this.getBRFv4Cursors()
     this.setTouchedElement()
     this.onFrameHooks(this.faces)
 
@@ -341,7 +341,7 @@ require('./methods/Setup')(Handsfree)
 require('./methods/Util')(Handsfree)
 require('./methods/Debug')(Handsfree)
 require('./methods/Plugin')(Handsfree)
-require('./components/Cursor')(Handsfree)
+require('./trackers/BRFv4')(Handsfree)
 
 // Finally, include stylesheets
 require('../public/handsfree.styl')

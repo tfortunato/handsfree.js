@@ -4,8 +4,9 @@ module.exports = Handsfree => {
   /**
    * Calculates the X/Y the user is facing
    */
-  Handsfree.prototype.calculateXY = function () {
-    this.faces.forEach((face, i) => {
+  Handsfree.prototype.getBRFv4Cursors = function () {
+    this.pose.forEach((pose, i) => {
+      const face = pose.face
 
       // Add enough helper object.
       while (i >= this.tweenFaces.length) {
