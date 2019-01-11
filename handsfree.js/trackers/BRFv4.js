@@ -129,7 +129,7 @@ module.exports = Handsfree => {
       this.cursor.$el.style.left = `${tweenFace.x}px`
       this.cursor.$el.style.top  = `${tweenFace.y}px`
 
-      face.cursor = {
+      this.pose[i].face.cursor = {
         x: tweenFace.x,
         y: tweenFace.y
       }

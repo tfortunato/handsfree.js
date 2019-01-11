@@ -264,9 +264,8 @@ class Handsfree {
    * @todo move this to Cursor.js
    */
   setTouchedElement () {
-    this.pose.forEach(pose => {
-      const face = pose.face
-      face.cursor.$target = document.elementFromPoint(face.cursor.x, face.cursor.y)
+    this.pose.forEach((pose) => {
+      pose.face.cursor.$target = document.elementFromPoint(pose.face.cursor.x, pose.face.cursor.y)
     })
   }
 

@@ -117,49 +117,6 @@ describe('Handsfree.prototype.stop', () => {
  * Handsfree.prototype.trackFaces
  */
 describe('Handsfree.prototype.trackFaces', () => {
-  it('dispatches correct events', () => {
-    const handsfree = new Handsfree()
-    const cb = jest.fn()
-    handsfree._injectDebugger()
-    Handsfree._mock.brfv4(handsfree)
-    window.addEventListener('handsfree-trackFaces', cb)
-
-    handsfree._trackFaces()
-    expect(cb).toHaveBeenCalled()
-    window.removeEventListener('handsfree-trackFaces', cb)
-  })
-
-  it('calls enabled plugin onFrameHooks', () => {
-    const handsfree = new Handsfree()
-    handsfree._injectDebugger()
-    Handsfree._mock.plugins(handsfree)
-    Handsfree._mock.brfv4(handsfree)
-    Handsfree._mock.restore(handsfree, 'onFrameHooks')
-
-    handsfree._trackFaces()
-    expect(Handsfree._mock.spy.onFrame).toBe(2)
-  })
-
-  it('keeps loop until isTracking is false', () => {
-    const handsfree = new Handsfree()
-    const raf = requestAnimationFrame
-    requestAnimationFrame = jest.fn()
-    handsfree._injectDebugger()
-
-    Handsfree._mock.plugins(handsfree)
-    Handsfree._mock.brfv4(handsfree)
-    Handsfree._mock.restore(handsfree, 'onFrameHooks')
-
-    handsfree.isTracking = false
-    handsfree._trackFaces()
-    expect(requestAnimationFrame).not.toHaveBeenCalled()
-
-    handsfree.isTracking = true
-    handsfree._trackFaces()
-    expect(requestAnimationFrame).toHaveBeenCalled()
-    requestAnimationFrame = raf
-  })
-
   it('draws faces only when debugger is on', () => {
     const handsfree = new Handsfree()
     Handsfree._mock.brfv4(handsfree)
@@ -176,6 +133,54 @@ describe('Handsfree.prototype.trackFaces', () => {
 })
 
 /**
+ * Handsfree.prototype.trackPoses
+ */
+describe('Handsfree.prototype.trackPoses', () => {
+  it('calls enabled plugin onFrameHooks', () => {
+    const handsfree = new Handsfree()
+    handsfree._injectDebugger()
+    Handsfree._mock.plugins(handsfree)
+    Handsfree._mock.brfv4(handsfree)
+    Handsfree._mock.restore(handsfree, 'onFrameHooks')
+
+    handsfree._trackPoses()
+    expect(Handsfree._mock.spy.onFrame).toBe(2)
+  })
+
+  it('keeps loop until isTracking is false', () => {
+    const handsfree = new Handsfree()
+    const raf = requestAnimationFrame
+    requestAnimationFrame = jest.fn()
+    handsfree._injectDebugger()
+
+    Handsfree._mock.plugins(handsfree)
+    Handsfree._mock.brfv4(handsfree)
+    Handsfree._mock.restore(handsfree, 'onFrameHooks')
+
+    handsfree.isTracking = false
+    handsfree._trackPoses()
+    expect(requestAnimationFrame).not.toHaveBeenCalled()
+
+    handsfree.isTracking = true
+    handsfree._trackPoses()
+    expect(requestAnimationFrame).toHaveBeenCalled()
+    requestAnimationFrame = raf
+  })
+
+  it('dispatches correct events', () => {
+    const handsfree = new Handsfree()
+    const cb = jest.fn()
+    handsfree._injectDebugger()
+    Handsfree._mock.brfv4(handsfree)
+    window.addEventListener('handsfree:trackPoses', cb)
+
+    handsfree._trackPoses()
+    expect(cb).toHaveBeenCalled()
+    window.removeEventListener('handsfree:trackPoses', cb)
+  })
+})
+
+/**
  * Handsfree.prototype.setTouchedElement
  */
 describe('Handsfree.prototype.setTouchedElement', () => {
@@ -184,10 +189,13 @@ describe('Handsfree.prototype.setTouchedElement', () => {
     Handsfree._mock.brfv4(handsfree)
     handsfree._injectDebugger()
 
-    handsfree.faces = Handsfree._mock.faces
-    handsfree.faces[0].cursor.$target = null
+    handsfree.pose = []
+    Handsfree._mock.pose.forEach((face, i) => {
+      handsfree.pose.push({face})
+      handsfree.pose[i].face.cursor.$target = null
+    })
     handsfree._setTouchedElement()
     
-    expect(handsfree.faces[0].cursor.$target).not.toBeNull()
+    expect(handsfree.pose[0].face.cursor.$target).not.toBeNull()
   })
 })
