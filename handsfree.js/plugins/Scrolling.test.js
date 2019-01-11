@@ -11,6 +11,7 @@ describe('Plugin: Scrolling', () => {
     const handsfree = new Handsfree()
     let scrollTo = 1000
     handsfree._use(plugin)
+    handsfree._reservePoses()
   
     // Scroll up
     document.body.style.height = '10000px'

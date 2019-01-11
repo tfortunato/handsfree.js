@@ -25,7 +25,12 @@ class HandsfreePose {
      * @see https://github.com/Tastenkunst/brfv4_javascript_examples/
      */
     this.face = null
-    
+
+    /**
+     * Points to the most relevant cursor element
+     */
+    this.$el = null
+
     this.createPointer()
   }
 
