@@ -25,6 +25,16 @@
  * -- Handsfree with capital H refers to the class
  * -- We use handsfree with a lower h to refer to an instance, like: const handsfree = new Handsfree()
  * 
+ * ---
+ * 
+ * # Globals
+ * The following globals are added when using handsfree.js:
+ * 
+ * - `Handsfree`
+ * - `HandsfreePose`
+ * 
+ * ---
+ * 
  * # HOW TO HELP
  * - For improvements to the cursor, @see /handsfree.js/components/Cursor.js
  * - For details about BRFv4 and the faces object @see https://github.com/Tastenkunst/brfv4_javascript_examples
@@ -326,7 +336,8 @@ require('./methods/Util')(Handsfree)
 require('./methods/Debug')(Handsfree)
 require('./methods/Plugin')(Handsfree)
 require('./components/Cursor')(Handsfree)
-module.exports = Handsfree
+window.HandsfreePose = require('./Pose')
 
 // Finally, include stylesheets
 require('../public/handsfree.styl')
+module.exports = Handsfree

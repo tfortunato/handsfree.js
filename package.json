@@ -50,7 +50,7 @@
       "./test/jest-setup.js"
     ],
     "moduleNameMapper": {
-      "\\.(css)$": "identity-obj-proxy"
+      "\\.(css|styl)$": "identity-obj-proxy"
     },
     "setupTestFrameworkScriptFile": "./test/global-setup.js",
     "coveragePathIgnorePatterns": [
