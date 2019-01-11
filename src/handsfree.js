@@ -166,7 +166,9 @@ document.addEventListener('DOMContentLoaded', () => {
      * Reset the faces to whatever the start scene is
      */
     onStop () {
-      handsfree.faces = facesOfOz
+      facesOfOz.forEach((face, i) => {
+        handsfree.pose[i].face = face
+      })
     },
 
     onStart () {
@@ -225,8 +227,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // Fly towards point
       if (handsfree.isTracking && BoidsDebugger.isReady) {
         this.speed = 0.05
-        this.vx = this.vx * BoidsDebugger.trackingSpeedMod - (this.pos.x - handsfree.faces[0].points[this.id].x - BoidsDebugger.offset.x) * 0.512
-        this.vy = this.vy * BoidsDebugger.trackingSpeedMod - (this.pos.y - handsfree.faces[0].points[this.id].y) * 0.512
+        this.vx = this.vx * BoidsDebugger.trackingSpeedMod - (this.pos.x - handsfree.pose[0].face.points[this.id].x - BoidsDebugger.offset.x) * 0.512
+        this.vy = this.vy * BoidsDebugger.trackingSpeedMod - (this.pos.y - handsfree.pose[0].face.points[this.id].y) * 0.512
         // BoidsDebugger.canvas[0].ctx.globalAlpha = 0.35
       // Fly towards start point
       } else if (!handsfree.isTracking && BoidsDebugger.mouseDown) {

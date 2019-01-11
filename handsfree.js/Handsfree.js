@@ -230,7 +230,7 @@ class Handsfree {
      */
     window.dispatchEvent(new CustomEvent('handsfree:trackPoses', {detail: {
       scope: this,
-      faces: this.faces
+      pose: this.pose
     }}))
     this.isTracking && requestAnimationFrame(() => this.trackPoses())
   }
@@ -250,7 +250,7 @@ class Handsfree {
 
     // Get faces
     this.brf.manager.update(ctx.getImageData(0, 0, resolution.width, resolution.height).data)
-    const faces = this.faces = this.brf.manager.getFaces()
+    const faces = this.brf.manager.getFaces()
     faces.forEach((face, n) => this.pose[n].face = face)
 
     // Do things with faces
@@ -264,8 +264,9 @@ class Handsfree {
    * @todo move this to Cursor.js
    */
   setTouchedElement () {
-    this.faces.forEach((face, i) => {
-      this.faces[i].cursor.$target = document.elementFromPoint(face.cursor.x, face.cursor.y)
+    this.pose.forEach(pose => {
+      const face = pose.face
+      face.cursor.$target = document.elementFromPoint(face.cursor.x, face.cursor.y)
     })
   }
 

@@ -11,14 +11,14 @@ div
         p.text-xs-center
           a(href='https://www.npmjs.com/package/handsfree')
             img.mr-2(src='https://img.shields.io/npm/v/handsfree.svg')
-          a(href='https://github.com/BrowseHandsfree/handsfreeJS/commits/master')
-            img.mr-2(src='https://img.shields.io/github/last-commit/BrowseHandsfree/handsfreeJS.svg')
-          a(href='https://travis-ci.org/BrowseHandsfree/handsfreeJS')
-            img.mr-2(src='https://travis-ci.org/BrowseHandsfree/handsfreeJS.svg?branch=master')
-          a(href='https://codecov.io/gh/BrowseHandsfree/handsfreeJS')
-            img.mr-2(src='https://img.shields.io/codecov/c/github/BrowseHandsfree/handsfreeJS/master.svg?style=flat')
+          a(href='https://github.com/labofoz/handsfree.js/commits/master')
+            img.mr-2(src='https://img.shields.io/github/last-commit/labofoz/handsfree.js.svg')
+          a(href='https://travis-ci.org/labofoz/handsfree.js')
+            img.mr-2(src='https://travis-ci.org/labofoz/handsfree.js.svg?branch=master')
+          a(href='https://codecov.io/gh/labofoz/handsfree.js')
+            img.mr-2(src='https://img.shields.io/codecov/c/github/labofoz/handsfree.js/master.svg?style=flat')
           span(style='margin-top: 5px; display: inline-block; vertical-align: middle')
-            a.github-button(href='https://github.com/browsehandsfree/handsfreejs' data-show-count='true' aria-label='Star browsehandsfree/handsfreejs on GitHub' data-icon='octicon-star') GitHub
+            a.github-button(href='https://github.com/labofoz/handsfree.js' data-show-count='true' aria-label='Star labofoz/handsfree.js on GitHub' data-icon='octicon-star') GitHub
         p.subheading.font-weight-regular
           | A drop-in library for adding handsfree interfaces to any website, service, and Internet of Thing. Runs on any device that supports <a href="https://caniuse.com/#feat=stream">getUserMedia()</a>
         p.text-xs-center
