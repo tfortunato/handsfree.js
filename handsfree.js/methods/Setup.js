@@ -1,4 +1,4 @@
-const BRFvInitializer = require('./models/BRFv4_JS_TK110718_v4.1.0_trial.js')
+const BRFvInitializer = require('../models/BRFv4_JS_TK110718_v4.1.0_trial.js')
 
 module.exports = Handsfree => {
   Handsfree.prototype.init = function () {

@@ -97,8 +97,8 @@ module.exports = Handsfree => {
    * Loads all the core plugins
    */
   Handsfree.prototype.loadPlugins = function () {
-    this.use(require('./plugins/Scrolling'))
-    this.use(require('./plugins/SmileClick'))
-    this.use(require('./plugins/SimpleKeyboard'))
+    this.use(require('../plugins/Scrolling'))
+    this.use(require('../plugins/SmileClick'))
+    this.use(require('../plugins/SimpleKeyboard'))
   }
 }
