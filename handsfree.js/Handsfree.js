@@ -160,7 +160,7 @@ class Handsfree {
      */
     this.init()
     document.body.classList.add('handsfree-stopped')
-    window.dispatchEvent(new CustomEvent('handsfree:instantiated', opts))
+    window.dispatchEvent(new CustomEvent('handsfree:instantiated', {detail: opts}))
   }
 
   /**
@@ -288,7 +288,8 @@ class Handsfree {
    * @param {Function} callback  The callback to call
    */
   on (eventName, callback) {
-    const handler = ev => callback.call(this, ...ev.detail)
+    const self = this
+    const handler = function (ev) {callback.call(self, ev)}
     window.addEventListener(`handsfree:${eventName}`, handler)
 
     if (!this.listening[eventName]) this.listening[eventName] = []

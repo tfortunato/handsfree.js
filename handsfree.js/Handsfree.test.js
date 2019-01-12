@@ -1,6 +1,9 @@
+beforeEach(() => {
+  handsfree = new Handsfree()
+})
+
 /**
- * Constructor
- * - Setup everything
+ * Handsfree Constructor
  */
 describe('Handsfree Constructor', () => {
   /**
@@ -36,9 +39,7 @@ describe('Handsfree.prototype.start', () => {
     const cb = ev => {progress = ev.detail.progress}
     window.addEventListener('handsfree:loading', cb)
     
-    const handsfree = new Handsfree()
     handsfree._injectDebugger()
-
     await handsfree._start()
     expect(document.body.classList).toContain('handsfree-started')
     expect(document.body.classList).not.toContain('handsfree-stopped')
@@ -56,7 +57,6 @@ describe('Handsfree.prototype.start', () => {
     const cb = ev => {progress = ev.detail.progress}
     window.addEventListener('handsfree:loading', cb)
 
-    const handsfree = new Handsfree()
     handsfree._injectDebugger()
     handsfree.brf.sdk = true
     handsfree.brf.manager = {setNumFacesToTrack: jest.fn()}
@@ -71,7 +71,6 @@ describe('Handsfree.prototype.start', () => {
    * @see /test/mock-handsfree.js > Handsfree._mock
    */
   it('calls enabled plugin onStart events only once', async () => {
-    const handsfree = new Handsfree()
     handsfree._injectDebugger()
     Handsfree._mock.restore(handsfree, 'onStartHooks')
     Handsfree._mock.plugins(handsfree)
@@ -87,7 +86,6 @@ describe('Handsfree.prototype.start', () => {
  */
 describe('Handsfree.prototype.stop', () => {
   it('sets up body classes', () => {
-    const handsfree = new Handsfree()
     document.body.classList.remove('handsfree-stopped')
     document.body.classList.add('handsfree-started')
     handsfree._stop()
@@ -97,7 +95,6 @@ describe('Handsfree.prototype.stop', () => {
   })
 
   it('runs enabled plugin onStopHooks', () => {
-    const handsfree = new Handsfree()
     handsfree._injectDebugger()
     Handsfree._mock.restore(handsfree, 'onStopHooks')
     Handsfree._mock.plugins(handsfree)
@@ -118,7 +115,6 @@ describe('Handsfree.prototype.stop', () => {
  */
 describe('Handsfree.prototype.trackFaces', () => {
   it('draws faces only when debugger is on', () => {
-    const handsfree = new Handsfree()
     Handsfree._mock.brfv4(handsfree)
     handsfree._injectDebugger()
 
@@ -137,7 +133,6 @@ describe('Handsfree.prototype.trackFaces', () => {
  */
 describe('Handsfree.prototype.trackPoses', () => {
   it('calls enabled plugin onFrameHooks', () => {
-    const handsfree = new Handsfree()
     handsfree._injectDebugger()
     Handsfree._mock.plugins(handsfree)
     Handsfree._mock.brfv4(handsfree)
@@ -148,7 +143,6 @@ describe('Handsfree.prototype.trackPoses', () => {
   })
 
   it('keeps loop until isTracking is false', () => {
-    const handsfree = new Handsfree()
     const raf = requestAnimationFrame
     requestAnimationFrame = jest.fn()
     handsfree._injectDebugger()
@@ -168,7 +162,6 @@ describe('Handsfree.prototype.trackPoses', () => {
   })
 
   it('dispatches correct events', () => {
-    const handsfree = new Handsfree()
     const cb = jest.fn()
     handsfree._injectDebugger()
     Handsfree._mock.brfv4(handsfree)
@@ -185,7 +178,6 @@ describe('Handsfree.prototype.trackPoses', () => {
  */
 describe('Handsfree.prototype.setTouchedElement', () => {
   it('Sets a target for every tracked face', () => {
-    const handsfree = new Handsfree()
     Handsfree._mock.brfv4(handsfree)
     handsfree._injectDebugger()
 
@@ -197,5 +189,24 @@ describe('Handsfree.prototype.setTouchedElement', () => {
     handsfree._setTouchedElement()
     
     expect(handsfree.pose[0].face.cursor.$target).not.toBeNull()
+  })
+})
+
+/**
+ * Handsfree.prototype.on
+ */
+describe('Handsfree.prototype.on', () => {
+  it('Adds event listener', () => {
+    const cb = jest.fn()
+    handsfree._on('test123', cb)
+    window.dispatchEvent(new CustomEvent('handsfree:test123'))
+    expect(cb).toHaveBeenCalled()
+  })
+
+  it('Adds the event to .listening', () => {
+    handsfree._on('test111', jest.fn())
+    expect(handsfree.listening['test111'].length).toBe(1)
+    handsfree._on('test111', jest.fn())
+    expect(handsfree.listening['test111'].length).toBe(2)
   })
 })
