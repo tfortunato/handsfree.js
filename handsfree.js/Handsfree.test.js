@@ -112,6 +112,7 @@ describe('Handsfree.prototype.stop', () => {
 
 /**
  * Handsfree.prototype.trackFaces
+ * @todo Move this into the BRFv4 interface class test suite once ready
  */
 describe('Handsfree.prototype.trackFaces', () => {
   it('draws faces only when debugger is on', () => {
@@ -208,5 +209,45 @@ describe('Handsfree.prototype.on', () => {
     expect(handsfree.listening['test111'].length).toBe(1)
     handsfree._on('test111', jest.fn())
     expect(handsfree.listening['test111'].length).toBe(2)
+  })
+})
+
+/**
+ * Handsfree.prototype.off
+ */
+describe('Handsfree.prototype.off', () => {
+  const cb1 = jest.fn()
+  const cb2 = jest.fn()
+
+  beforeEach(() => {
+    cb1.mockClear()
+    cb2.mockClear()
+    window.addEventListener('test-off-1', cb1)
+    window.addEventListener('test-off-2', cb2)
+    handsfree._on('test-off-1', cb1)
+    handsfree._on('test-off-2', cb2)
+  })
+
+  afterEach(() => {
+    window.removeEventListener('test-off-1', cb1)
+    window.removeEventListener('test-off-2', cb2)
+  })
+  
+  it('removes listeners by name', () => {
+    handsfree._off('test-off-1')
+    window.dispatchEvent(new CustomEvent('handsfree:test-off-1'))
+    window.dispatchEvent(new CustomEvent('handsfree:test-off-2'))
+    expect(cb1).not.toHaveBeenCalled()
+    expect(cb2).toHaveBeenCalled()
+    handsfree._off('test-off-2')
+  })
+
+  it('removes all listeners', () => {
+    Handsfree._mock.restore(handsfree, 'off')
+    handsfree.off()
+    window.dispatchEvent(new CustomEvent('handsfree:test-off-1'))
+    window.dispatchEvent(new CustomEvent('handsfree:test-off-2'))
+    expect(cb1).not.toHaveBeenCalled()
+    expect(cb2).not.toHaveBeenCalled()
   })
 })

@@ -239,6 +239,7 @@ class Handsfree {
    * Tracks faces
    * - Will look for opts.settings.maxPoses
    * - Recurses until this.isTracking is false
+   * @todo Move this into a BRFv4 interface class
    */
   trackFaces () {
     const ctx = this.debug.ctx
@@ -302,14 +303,16 @@ class Handsfree {
    * - Leave empty to turn off ALL events
    */
   off (eventName = null) {
+    // Remove by name
     if (eventName) {
       this.listening[eventName].forEach(callback => {
         window.removeEventListener(`handsfree:${eventName}`, callback)
       })
+      delete this.listening[eventName]
+    
+    // Remove all
     } else {
-      forEach(this.listening, (callback, eventName) => {
-        window.removeEventListener(`handsfree:${eventName}`, callback)
-      })
+      forEach(this.listening, (callback, eventName) => {this.off(eventName)})
     }
   }
 }
