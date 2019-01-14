@@ -266,11 +266,11 @@ div
                       /**
                         * Bind to the handsfree:trackPoses event, which is called once per frame
                         * @param {Handsfree} ev.detail.scope The handsfree instance
-                        * @param {Object}    ev.detail.poses An array of pose objects
+                        * @param {Array}     ev.detail.poses Collection of pose objects
                         */
                       window.addEventListener('handsfree:trackPoses', (ev) => {
                         // Do code with the handsfree instance: ev.detail.scope
-                        // or with the the pose: ev.detail.pose
+                        // or with the the pose: ev.detail.poses
                       })
 
                       /**

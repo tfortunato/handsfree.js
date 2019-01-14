@@ -230,7 +230,7 @@ class Handsfree {
      */
     window.dispatchEvent(new CustomEvent('handsfree:trackPoses', {detail: {
       scope: this,
-      pose: this.pose
+      poses: this.pose
     }}))
     this.isTracking && requestAnimationFrame(() => this.trackPoses())
   }
@@ -305,11 +305,13 @@ class Handsfree {
   off (eventName = null) {
     // Remove by name
     if (eventName) {
-      this.listening[eventName].forEach(callback => {
-        window.removeEventListener(`handsfree:${eventName}`, callback)
-      })
-      delete this.listening[eventName]
-    
+      // Only remove listeners that exist
+      if (this.listening[eventName]) {
+        this.listening[eventName].forEach(callback => {
+          window.removeEventListener(`handsfree:${eventName}`, callback)
+        })
+        delete this.listening[eventName]
+      }
     // Remove all
     } else {
       forEach(this.listening, (callback, eventName) => {this.off(eventName)})

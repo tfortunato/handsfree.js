@@ -274,7 +274,7 @@ An alternative to plugins is to listen in on the window's `handsfree:trackPoses`
 /**
  * Bind to the handsfree:trackPoses event
  * @param {Handsfree} ev.detail.scope The handsfree instance
- * @param {Object}    ev.detail.pose  A single pose object
+ * @param {Array}     ev.detail.poses Collection of pose objects
  */
 window.addEventListener('handsfree:trackPoses', (ev) => {
   // Do code with the handsfree instance: ev.detail.scope
