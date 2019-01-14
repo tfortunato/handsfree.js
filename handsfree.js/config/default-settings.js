@@ -2,7 +2,7 @@
  * The following are the default settings
  */
 module.exports = {
-  // Maximum number of faces to track
+  // Maximum number of poses to track
   maxPoses: 1,
 
   sensitivity: {
