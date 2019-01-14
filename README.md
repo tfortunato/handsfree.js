@@ -82,14 +82,14 @@ There are a number of ways to configure Handsfree.js, the easiest being during i
 ```js
 const handsfree = new Handsfree({
   // Whether to show (true) the "debugger" or not (false)
-  // - For now the debugger is a simple canvas that shows a wireframe over tracked faces
+  // - For now the debugger is a simple canvas that shows a wireframe over tracked poses
   // - You can toggle the debugger later with handsfree.toggleDebugger(true|false)
   debug: false,
 
   // Available settings
   // - You can change any of these later with: handsfree.settings['settingName'] = newVal;
   settings: {
-    // Maximum number of faces to track
+    // Maximum number of people to track
     // - Performance drops with each additional face
     // - 🚧 This is experimental and not working with the core plugins yet
     maxPoses: 1,
@@ -107,7 +107,7 @@ const handsfree = new Handsfree({
     },
 
     // 🚧 Experimental
-    // These settings help reduce cursor jitter
+    // These settings help reduce cursor jitter caused by errors and smoothens it
     stabilizer: {
       // How much stabilization to use: 0 = none, 3 = heavy
       factor: 1,
@@ -168,9 +168,9 @@ const myPlugin = handsfree.use({
   onUse: (handsfree) => {},
 
   // Called once per frame, after all calculations
-  // - {Array} faces  A collection of
-  // - {Return}       To overwrite/modify the properties of faces for use within other plugins, return faces array with modified values
-  onFrame: (faces, handsfree) => {},
+  // - {Array} poses  Reference to the handsfree.pose
+  // - {Return}       To overwrite/modify the properties of handsfree.pose for use within other plugins, return an array with modifications
+  onFrame: (poses, handsfree) => {},
 
   // Called any time Handsfree.start() is called
   onStart: (handsfree) => {},
@@ -202,57 +202,63 @@ handsfree.plugin['my-plugin'].disable() // handsfree.plugin['my-plugin']._isDisa
 handsfree.plugin['my-plugin'].enable() // handsfree.plugin['my-plugin']._isDisabled === false
 ```
 
-## The `faces` array
+## `poses` array
 
-The `onFrame` hook recieves a `faces` array, which contains an object for each tracked face. The key properties of the a `face` object include:
+The `onFrame` hook recieves a `poses` array, which contains an object with the following API (note that there is always at least one pose):
 
 ```js
-{
-  cursor: {
-    // Where to position the cursor on the screen, based on the users head pose
-    x: 0,
-    y: 0,
+poses[0] = {
+  /**
+   * A BRFv4 tracked face
+   * @see https://tastenkunst.github.io/brfv4_docs/#hl_BRFFace
+   */
+  face: {
+    cursor: {
+      // Where to position the cursor on the screen, based on the users head pose
+      x: 0,
+      y: 0,
 
-    // The HTML element currently under the above {x, y}
-    $target: 0,
+      // The HTML element currently under the above {x, y}
+      $target: 0,
 
-    // Cursor states for this face
-    // - These states are activated via the Click Gesture,
-    //   which is currently done by smiling wide
-    state: {
-      // True during the first frame of a click, false after (even if still held)
-      mouseDown: false,
-      // True after the first frame of a click and every frame until released
-      mouseDrag: false,
-      // True on the last frame of a click, immediately after the click is released
-      mouseUp: false
-    }
-  },
+      // Cursor states for this face
+      // - These states are activated via the Click Gesture,
+      //   which is currently done by smiling wide
+      state: {
+        // True during the first frame of a click, false after (even if still held)
+        mouseDown: false,
+        // True after the first frame of a click and every frame until released
+        mouseDrag: false,
+        // True on the last frame of a click, immediately after the click is released
+        mouseUp: false
+      }
+    },
 
-  // A list of all 64 landmarks
-  // - points[27] refers to the point between the eyes
-  points: [{x, y}, ...],
+    // A list of all 64 landmarks
+    // - points[27] refers to the point between the eyes
+    points: [{x, y}, ...],
 
-  // The head's pitch (facing up/down)
-  rotationX: 0,
-  // The head's yaw (facing left/right)
-  rotationY: 0,
-  // The head's roll (think of an airplane doing a barrel roll)
-  rotationZ: 0,
+    // The head's pitch (facing up/down)
+    rotationX: 0,
+    // The head's yaw (facing left/right)
+    rotationY: 0,
+    // The head's roll (think of an airplane doing a barrel roll)
+    rotationZ: 0,
 
-  // The overall size of the head relative to the video frame
-  // - smaller values == further away
-  // - larger values == close up
-  scale: 0,
+    // The overall size of the head relative to the video frame
+    // - smaller values == further away
+    // - larger values == close up
+    scale: 0,
 
-  // Where the head is relative to the left edge of the video feed
-  // - 0 == left
-  // - window.innerWidth == right
-  translationX: 0,
-  // Where the head is relative to the top edge of the video feed
-  // - 0 == top
-  // - window.innerHeight == bottom
-  translationY: 0
+    // Where the head is relative to the left edge of the video feed
+    // - 0 == left
+    // - window.innerWidth == right
+    translationX: 0,
+    // Where the head is relative to the top edge of the video feed
+    // - 0 == top
+    // - window.innerHeight == bottom
+    translationY: 0
+  }
 }
 ```
 
@@ -268,11 +274,11 @@ An alternative to plugins is to listen in on the window's `handsfree:trackPoses`
 /**
  * Bind to the handsfree:trackPoses event
  * @param {Handsfree} ev.detail.scope The handsfree instance
- * @param {Object}    ev.detail.faces An array of face objects
+ * @param {Object}    ev.detail.pose  A single pose object
  */
 window.addEventListener('handsfree:trackPoses', (ev) => {
   // Do code with the handsfree instance: ev.detail.scope
-  // or with the faces ev.detail.faces.forEach(face => {})
+  // or with the the pose: ev.detail.pose
 })
 ```
 
@@ -353,43 +359,6 @@ handsfree.dispatch('SimpleKeyboard:change', 'abc')
 // ...and this are equivalent
 window.dispatchEvent(new CustomEvent('handsfree:SimpleKeyboard:change'), {
   detail: 'abc'
-})
-```
-
-## Deprecated/Renamed Methods
-### handsfree.settings.maxPoses => .maxPoses
-Since we're now dealing with whole pose objects instead of face objects, it makes sense to rename this setting to reflect that.
-
-## Deprecated Events
-The following events are still being used but will be deprecated during the next major release:
-
-### handsfree-trackFaces
-An alternative to plugins is to listen in on the window's `handsfree-trackFaces` event:
-
-```js
-/**
- * Bind to the handsfree-trackFaces event
- * @param {Handsfree} ev.detail.scope The handsfree instance
- * @param {Object}    ev.detail.faces An array of face objects
- */
-window.addEventListener('handsfree-trackFaces', (ev) => {
-  // Do code with the handsfree instance: ev.detail.scope
-  // or with the faces ev.detail.faces.forEach(face => {})
-})
-```
-
-### handsfree-injectDebugger
-The `handsfree-injectDebugger` event is fired after the debugger is injected, but before handsfree is started. Use this event to draw into the canvas without the camera being turned on.
-
-```js
-/**
- * Bind to the handsfree-injectDebugger event
- * @param {Handsfree}       ev.detail.scope The handsfree instance
- * @param {Canvas2DContent} ev.detail.canvasContext The 2D debug canvas context
- */
-window.addEventListener('handsfree-injectDebugger', (ev) => {
-  // Do code with the handsfree instance: ev.detail.scope
-  // or draw into the canvas with ev.detail.canvasContext
 })
 ```
 
@@ -476,13 +445,19 @@ The following is a set of actions available:
 App.$store.dispatch('onReady', () => {})
 ```
 
+---
 
+## Deprecated/Renamed Methods
+### handsfree.settings.maxPoses => .maxPoses
+Since we're now dealing with whole pose objects instead of face objects, it makes sense to rename this setting to reflect that.
 
+## Deprecated Events
+The following events are still being used but will be deprecated after the (shown) release version:
 
+- `handsfree-trackfaces` (4.0.0)
+- `handsfree-injectDebugger` (4.0.0)
 
-
-
-
+---
 
 # More coming soon
 

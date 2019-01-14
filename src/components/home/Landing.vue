@@ -123,7 +123,7 @@ div
 
                         // Available settings
                         settings: {
-                          // Maximum number of faces to track
+                          // Maximum number of poses to track
                           maxPoses: 1,
 
                           sensitivity: {
@@ -151,46 +151,52 @@ div
                   h2.headline.mb-0 Adding Plugins
                 v-card-text
                   p Handsfree.js is built around plugins. Plugins have several callbacks that hook into different events, and are added with <code>handsfree.use(config)</code>.
-                  p Each callback receives two arguments, <code>(faces, instance)</code>. <code>instance</code> refers to the <code>new Handsfree</code> instance you created. <code>faces</code> contains the following:
+                  p Each callback receives two arguments, <code>(poses, instance)</code>. <code>instance</code> refers to the <code>new Handsfree</code> instance you created. <code>poses</code> is an array of objects containing the following:
                   pre
                     code.javascript.
                       {
-                        cursor: {
-                          // Where on the screen the user is pointed at
-                          x: 0,
-                          y: 0,
+                        /**
+                         * A BRFv4 tracked face
+                         * @see https://tastenkunst.github.io/brfv4_docs/#hl_BRFFace
+                         */
+                        face: {
+                          cursor: {
+                            // Where on the screen the user is pointed at
+                            x: 0,
+                            y: 0,
+                            
+                            // The target currently under the mouse
+                            $target: 0,
+                            
+                            // Mouse states for this face
+                            state: {
+                              // The first frame of a click
+                              mouseDown: false,
+                              // Every subsequent frame of a click
+                              mouseDrag: false,
+                              // When the click is finally released
+                              mouseUp: false
+                            }
+                          },
                           
-                          // The target currently under the mouse
-                          $target: 0,
-                          
-                          // Mouse states for this face
-                          state: {
-                            // The first frame of a click
-                            mouseDown: false,
-                            // Every subsequent frame of a click
-                            mouseDrag: false,
-                            // When the click is finally released
-                            mouseUp: false
-                          }
-                        },
+                          // A list of all 64 landmarks
+                          points: [{x, y}, ...],
                         
-                        // A list of all 64 landmarks
-                        points: [{x, y}, ...],
-                      
-                        // The head's pitch (facing up/down)
-                        rotationX: 0,
-                        // The head's yaw (facing left/right)
-                        rotationY: 0,
-                        // The head's roll (as if doing a cartwheel while facing straight ahead)
-                        rotationZ: 0,
-                      
-                        // The heads overall size within the camera
-                        scale: 0,
-                      
-                        // Where the head is relative to the left edge of the video feed
-                        translationX: 0,
-                        // Where the head is relative to the top edge of the video feed
-                        translationY: 0
+                          // The head's pitch (facing up/down)
+                          rotationX: 0,
+                          // The head's yaw (facing left/right)
+                          rotationY: 0,
+                          // The head's roll (as if doing a cartwheel while facing straight ahead)
+                          rotationZ: 0,
+                        
+                          // The heads overall size within the camera
+                          scale: 0,
+                        
+                          // Where the head is relative to the left edge of the video feed
+                          translationX: 0,
+                          // Where the head is relative to the top edge of the video feed
+                          translationY: 0
+                        }
                       }
                       
                   p Here are the landmark points, with #27 being the reference point for rotation/translation:
@@ -215,9 +221,9 @@ div
                         // Called once when the use method is called and after the plugin is added to the instance
                         onUse: () => {},
 
-                        // Called once per frame, after calculations, along with the detected face object
-                        // To overwrite/modify the properties of faces for use within other plugins, return the faces object
-                        onFrame: (faces, handsfree) => {},
+                        // Called once per frame, after calculations, along with the detected pose object
+                        // - {Return}       To overwrite/modify the properties of handsfree.pose for use within other plugins, return an array with modifications
+                        onFrame: (poses, handsfree) => {},
 
                         // Called any time Handsfree.start() is called
                         onStart: (handsfree) => {},
@@ -247,41 +253,6 @@ div
                       handsfree.plugin['my-plugin'].disable() // handsfree.plugin['my-plugin']._isDisabled === true
                       handsfree.plugin['my-plugin'].enable() // handsfree.plugin['my-plugin']._isDisabled === false
                       
-                  p Here's what our page scrolling plugin looks like:
-                  pre
-                    code.javascript.
-                      handsfree.use({
-                        // Required. The unique name for this plugin.
-                        // If it's not unique, then it overwrites the previous version of the plugin.
-                        name: 'scrolling',
-                      
-                        // The multiplier to scroll the page by
-                        // Adjust with this.scrollSpeed or handsfree.plugin.scrolling.scrollSpeed
-                        scrollSpeed: 0.1,
-                      
-                        /**
-                          * Scrolls the page when the cursor is above/below the screen
-                          * @param {Array}     faces    The array of face objects
-                          * @param {Handsfree} instance The handsfree instance
-                          */
-                        onFrame (faces, instance) {
-                          faces.forEach(face => {
-                            let x = face.cursor.x
-                            let y = face.cursor.y
-                      
-                            // Then add the points to the cursor!
-                            instance.cursor.$el.style.left = x + 'px'
-                            instance.cursor.$el.style.top = y + 'px'
-                      
-                            // Scroll the page
-                            if (y < 0)
-                              window.scrollTo(0, window.scrollY + y * this.scrollSpeed)
-                            else if (y > window.innerHeight)
-                              window.scrollTo(0, window.scrollY + (y - window.innerHeight) * this.scrollSpeed)
-                          })
-                        }
-                      })
-
             //- Step 4
             v-stepper-content(step='4')
               v-card
@@ -295,11 +266,11 @@ div
                       /**
                         * Bind to the handsfree:trackPoses event, which is called once per frame
                         * @param {Handsfree} ev.detail.scope The handsfree instance
-                        * @param {Object}    ev.detail.faces An array of face objects
+                        * @param {Object}    ev.detail.poses An array of pose objects
                         */
                       window.addEventListener('handsfree:trackPoses', (ev) => {
                         // Do code with the handsfree instance: ev.detail.scope
-                        // or with the faces ev.detail.faces.forEach(face => {})
+                        // or with the the pose: ev.detail.pose
                       })
 
                       /**
@@ -375,12 +346,12 @@ div
                   pre
                     code.javascript.
                       // Outside of plugins
-                      const $target = handsfree.faces[n].cursor.$target
+                      const $target = handsfree.poses[n].face.cursor.$target
                       
                       // Inside plugins
                       handsfree.use({
-                        onFrame (face) {
-                          const $target = face.cursor.$target
+                        onFrame (poses) {
+                          const $target = poses[n].cursor.$target
                         }
                       })
 
