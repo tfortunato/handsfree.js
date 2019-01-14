@@ -57,7 +57,9 @@ module.exports = Handsfree => {
     const ctx = this.debug.ctx
     ctx.clearRect(0, 0, this.debug.$canvas.width, this.debug.$canvas.height)
 
-    this.faces.forEach(face => {
+    this.pose.forEach(pose => {
+      const face = pose.face
+      
       // We check against !this.brf.sdk because we may occasionally want to draw points without the camera running
       if (!this.brf.sdk || (face.state === this.brf.sdk.BRFState.FACE_TRACKING_START || face.state === this.brf.sdk.BRFState.FACE_TRACKING)) {
         // Draw Triangles

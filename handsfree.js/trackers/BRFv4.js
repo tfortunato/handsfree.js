@@ -2,32 +2,11 @@ const {TweenMax} = require('gsap')
 
 module.exports = Handsfree => {
   /**
-   * Injects the cursor the user moves around
-   * 
-   * @todo #45 remove this method in favor of the Pose class
-   */
-  Handsfree.prototype.injectCursor = function () {
-    const $cursor = this.cursor.$el = document.createElement('div')
-
-    $cursor.classList.add('handsfree-cursor')
-    $cursor.style.position = 'fixed'
-    $cursor.style.background = '#f00'
-    $cursor.style.left = '-100px'
-    $cursor.style.top = '-100px'
-    $cursor.style.width = '20px'
-    $cursor.style.height = '20px'
-    $cursor.style.borderRadius = '20px'
-    $cursor.style.pointerEvents = 'none'
-    $cursor.style.zIndex = 99999999999
-
-    document.body.appendChild($cursor)
-  }
-
-  /**
    * Calculates the X/Y the user is facing
    */
-  Handsfree.prototype.calculateXY = function () {
-    this.faces.forEach((face, i) => {
+  Handsfree.prototype.getBRFv4Cursors = function () {
+    this.pose.forEach((pose, i) => {
+      const face = pose.face
 
       // Add enough helper object.
       while (i >= this.tweenFaces.length) {
@@ -150,7 +129,7 @@ module.exports = Handsfree => {
       this.cursor.$el.style.left = `${tweenFace.x}px`
       this.cursor.$el.style.top  = `${tweenFace.y}px`
 
-      face.cursor = {
+      this.pose[i].face.cursor = {
         x: tweenFace.x,
         y: tweenFace.y
       }

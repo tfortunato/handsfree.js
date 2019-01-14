@@ -42,8 +42,9 @@ export default {
         /**
          * Called during each frame
          */
-        onFrame (faces) {
-          faces.forEach(face => {
+        onFrame (poses) {
+          poses.forEach(pose => {
+            const face = pose.face
             if (store.state.spacewhale.entity.player) {
               this.tweenPOV(face)
               store.state.spacewhale.entity.player.rotation.set(this.tween.player.x, -this.tween.player.y + Math.PI, -this.tween.player.z)

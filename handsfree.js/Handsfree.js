@@ -63,10 +63,9 @@ class Handsfree {
    */
   constructor (opts = {}) {
     /**
-     * An array containing a pose object for every tracked person
-     * @todo Rename this to this.pose.face @see https://github.com/BrowseHandsfree/handsfreeJS/issues/45
+     * A collection of pose objects {face} for this.settings.maxPoses
      */
-    this.faces = null
+    this.pose = []
 
     /**
      * Your settings
@@ -148,7 +147,7 @@ class Handsfree {
     this.tweenFaces = []
 
     // True when webcam stream is set and poses are being tracked
-    // - this.isTracking && requestAnimationFrame(Handsfree.trackFaces())
+    // - this.isTracking && requestAnimationFrame(Handsfree.trackPoses())
     this.isTracking = false
     // Whether Web Assembly is supported
     this.isWASMSupported = typeof WebAssembly === 'object'
@@ -161,7 +160,7 @@ class Handsfree {
      */
     this.init()
     document.body.classList.add('handsfree-stopped')
-    window.dispatchEvent(new CustomEvent('handsfree:instantiated', opts))
+    window.dispatchEvent(new CustomEvent('handsfree:instantiated', {detail: opts}))
   }
 
   /**
@@ -192,8 +191,8 @@ class Handsfree {
       } else {
         window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 100}}))
         this.isTracking = true
-        this.brf.manager.setNumFacesToTrack(this.settings.maxFaces)
-        this.trackFaces()
+        this.brf.manager.setNumFacesToTrack(this.settings.maxPoses)
+        this.trackPoses()
       }
     })
   }
@@ -217,9 +216,30 @@ class Handsfree {
   }
 
   /**
+   * Goes through and tracks poses for all active models
+   */
+  trackPoses () {
+    this.trackFaces()
+    this.getBRFv4Cursors()
+    this.setTouchedElement()
+    this.onFrameHooks(this.pose)
+
+    /**
+     * Dispatch global event and reloop
+     * - Only reloops if .isTracking
+     */
+    window.dispatchEvent(new CustomEvent('handsfree:trackPoses', {detail: {
+      scope: this,
+      poses: this.pose
+    }}))
+    this.isTracking && requestAnimationFrame(() => this.trackPoses())
+  }
+  
+  /**
    * Tracks faces
-   * - Will look for opts.settings.maxFaces
+   * - Will look for opts.settings.maxPoses
    * - Recurses until this.isTracking is false
+   * @todo Move this into a BRFv4 interface class
    */
   trackFaces () {
     const ctx = this.debug.ctx
@@ -231,30 +251,11 @@ class Handsfree {
 
     // Get faces
     this.brf.manager.update(ctx.getImageData(0, 0, resolution.width, resolution.height).data)
-    this.faces = this.brf.manager.getFaces()
+    const faces = this.brf.manager.getFaces()
+    faces.forEach((face, n) => this.pose[n].face = face)
 
     // Do things with faces
     this.debug.isDebugging && this.drawFaces()
-    this.calculateXY()
-    this.setTouchedElement()
-    this.onFrameHooks(this.faces)
-
-    /**
-     * Dispatch global event
-     * @todo update this to handsfree:trackFaces @see https://github.com/BrowseHandsfree/handsfreeJS/issues/47
-     */
-    window.dispatchEvent(new CustomEvent('handsfree:trackFaces', {detail: {
-      scope: this,
-      faces: this.faces
-    }}))
-    // @deprecated Will be deprecated in v5
-    window.dispatchEvent(new CustomEvent('handsfree-trackFaces', {detail: {
-      scope: this,
-      faces: this.faces
-    }}))
-
-    // Only loop if we're tracking
-    this.isTracking && requestAnimationFrame(() => this.trackFaces())
   }
 
   /**
@@ -264,8 +265,8 @@ class Handsfree {
    * @todo move this to Cursor.js
    */
   setTouchedElement () {
-    this.faces.forEach((face, i) => {
-      this.faces[i].cursor.$target = document.elementFromPoint(face.cursor.x, face.cursor.y)
+    this.pose.forEach((pose) => {
+      pose.face.cursor.$target = document.elementFromPoint(pose.face.cursor.x, pose.face.cursor.y)
     })
   }
 
@@ -288,7 +289,8 @@ class Handsfree {
    * @param {Function} callback  The callback to call
    */
   on (eventName, callback) {
-    const handler = ev => callback.call(this, ...ev.detail)
+    const self = this
+    const handler = function (ev) {callback.call(self, ev)}
     window.addEventListener(`handsfree:${eventName}`, handler)
 
     if (!this.listening[eventName]) this.listening[eventName] = []
@@ -301,14 +303,18 @@ class Handsfree {
    * - Leave empty to turn off ALL events
    */
   off (eventName = null) {
+    // Remove by name
     if (eventName) {
-      this.listening[eventName].forEach(callback => {
-        window.removeEventListener(`handsfree:${eventName}`, callback)
-      })
+      // Only remove listeners that exist
+      if (this.listening[eventName]) {
+        this.listening[eventName].forEach(callback => {
+          window.removeEventListener(`handsfree:${eventName}`, callback)
+        })
+        delete this.listening[eventName]
+      }
+    // Remove all
     } else {
-      forEach(this.listening, (callback, eventName) => {
-        window.removeEventListener(`handsfree:${eventName}`, callback)
-      })
+      forEach(this.listening, (callback, eventName) => {this.off(eventName)})
     }
   }
 }
@@ -335,8 +341,7 @@ require('./methods/Setup')(Handsfree)
 require('./methods/Util')(Handsfree)
 require('./methods/Debug')(Handsfree)
 require('./methods/Plugin')(Handsfree)
-require('./components/Cursor')(Handsfree)
-window.HandsfreePose = require('./Pose')
+require('./trackers/BRFv4')(Handsfree)
 
 // Finally, include stylesheets
 require('../public/handsfree.styl')

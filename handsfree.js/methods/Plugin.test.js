@@ -61,7 +61,6 @@ describe('Handsfree.prototype.use', () => {
       onMouseDrag: jest.fn(),
       onMouseUp: jest.fn()
     }
-    handsfree.faces = Handsfree._mock.faces
     handsfree._use(enabled)
     handsfree._use(disabled)
     
@@ -106,9 +105,9 @@ describe('Handsfree.prototype.use', () => {
     }, 0)
   })
 
-  it('updates faces when returning faces from frameHooks', () => {
+  it('updates poses when returning poses from frameHooks', () => {
     const handsfree = new Handsfree()
-    handsfree.faces = [[], [], []]
+    handsfree.pose = [{}, {}, {}]
 
     handsfree._use({
       name: 'testPlugin',
@@ -116,7 +115,7 @@ describe('Handsfree.prototype.use', () => {
     })
     handsfree._onFrameHooks()
 
-    expect(handsfree.faces.length).toBe(1)
+    expect(handsfree.pose.length).toBe(1)
   })
 
   it('prioritizes plugins by .priority', () => {

@@ -67,10 +67,12 @@ export default {
         
         /**
          * This is called on each webcam frame
-         * @param {Array} faces An array of detected faces
+         * @param {Array} poses An array of detected poses
          */
-        onFrame (faces) {
-          faces.forEach(face => {
+        onFrame (poses) {
+          poses.forEach(pose => {
+            const face = pose.face
+
             // Hide cursor when over the iframe
             if (face.cursor.$target && face.cursor.$target.nodeName === 'CANVAS') {
               handsfree.cursor.$el.style.display = this.showCursor ? 'inherit' : 'none'

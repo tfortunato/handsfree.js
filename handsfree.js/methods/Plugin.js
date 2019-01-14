@@ -84,11 +84,11 @@ module.exports = Handsfree => {
   /**
    * Called once per frame, after calculations
    */
-  Handsfree.prototype.onFrameHooks = function (faces) {
+  Handsfree.prototype.onFrameHooks = function (poses) {
     forEach(this.plugin, (config) => {
       if (!config._isDisabled && config.onFrame) {
-        const newFaces = config.onFrame.call(config, faces, this)
-        if (newFaces) this.faces = newFaces
+        const newPoses = config.onFrame.call(config, poses, this)
+        if (newPoses) this.pose = newPoses
       }
     })
   }
