@@ -59,6 +59,18 @@ body.handsfree-started .handsfree-show-when-stopped
 body.handsfree-stopped .handsfree-show-when-stopped.flex
   display: flex
 
+// Cursor
+.handsfree-cursor
+  position: fixed
+  background: #f00
+  left: -100px
+  top: -100px
+  width: 20px
+  height: 20px
+  border-radius: 20px
+  pointer-events: none
+  z-index: 99999999999
+
 // BOIDS
 // @todo Move this into the boids component
 .handsfree-boids-debugger-wrap

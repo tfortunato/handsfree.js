@@ -44,14 +44,15 @@ export default {
 
         /**
          * This is called on each webcam frame
-         * @param {Array} faces An array of detected faces
+         * @param {Array} poses An array of detected poses
          */
-        onFrame (faces) {
+        onFrame (poses) {
           // @TODO Refactor this
           if (!window.App.$store.state.youtube.player || !document.contains(window.App.$store.state.youtube.player.a)) return
           window.App.$store.state.youtube.player.getSphericalProperties && window.App.$store.state.youtube.player.setSphericalProperties(this.tween)
 
-          faces.forEach(face => {
+          poses.forEach(pose => {
+            const face = pose.face
             this.tweenPOV(face)
             
             // When cursor is over youtube...

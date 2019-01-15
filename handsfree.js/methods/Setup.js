@@ -1,10 +1,11 @@
-const BRFvInitializer = require('./models/BRFv4_JS_TK110718_v4.1.0_trial.js')
+const BRFvInitializer = require('../models/BRFv4_JS_TK110718_v4.1.0_trial.js')
+const HandsfreePose = window.HandsfreePose = require('../Pose')
 
 module.exports = Handsfree => {
   Handsfree.prototype.init = function () {
     // Inject elements
     this.injectDebugger()
-    this.injectCursor()
+    this.reservePoses()
     this.initAndMaybeReadWASMBinary()
   }
   
@@ -102,10 +103,22 @@ module.exports = Handsfree => {
     this.brf.resolution = new this.brf.sdk.Rectangle(0, 0, this.debug.$canvas.width, this.debug.$canvas.height)
     this.brf.manager = new this.brf.sdk.BRFManager()
     this.brf.manager.init(this.brf.resolution, this.brf.resolution, 'js.handsfree')
-    this.brf.manager.setNumFacesToTrack(this.settings.maxFaces)
+    this.brf.manager.setNumFacesToTrack(this.settings.maxPoses)
     window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 100}}))
 
     this.isTracking = true
-    this.trackFaces()
+    this.trackPoses()
+  }
+
+  /**
+   * Deletes all poses and creates a HandsfreePose object for .settings.maxPoses
+   * - Also sets handsfree.cursor.$el
+   */
+  Handsfree.prototype.reservePoses = function () {
+    this.pose = []
+    for (let i = 0; i < this.settings.maxPoses; i++) {
+      this.pose.push(new HandsfreePose())
+    }
+    this.cursor.$el = this.pose[0].$el
   }
 }
