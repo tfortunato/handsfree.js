@@ -5,18 +5,6 @@ module.exports = {
   // Maximum number of poses to track
   maxPoses: 1,
 
-  // PoseNet
-  // @see https://github.com/tensorflow/tfjs-models/tree/master/posenet
-  posenet: {
-    multiplier: 0.75,
-    imageScaleFactor: 0.4,
-    minPoseConfidence: 0.1,
-    minPartConfidence: 0.5,
-    outputStride: 16,
-    nmsRadius: 20,
-    scoreThreshold: 0.5
-  },
-
   sensitivity: {
     // A factor to adjust the cursors move speed by
     xy: 0.7,
@@ -37,6 +25,37 @@ module.exports = {
       width: 640,
       height: 480,
       frameRate: 30
+    }
+  },
+
+  tracker: {
+    // PoseNet
+    // @see https://github.com/tensorflow/tfjs-models/tree/master/posenet
+    posenet: {
+      // @todo Make these comments more succinct
+      // The float multiplier for the depth (number of channels) for all convolution operations.
+      // - The value corresponds to a MobileNet architecture and checkpoint
+      // - The larger the value, the larger the size of the layers, and more accurate the model at the cost of speed
+      // - Set this to a smaller value to increase speed at the cost of accuracy.
+      // - Possible values [0.5, 0.75, 1.0, 1.01]
+      multiplier: 0.75,
+      // A number between 0.2 and 1.0 representing what to scale the image by before feeding it through the network
+      // - Set this number lower to scale down the image and increase the speed when feeding through the network at the cost of accuracy.
+      imageScaleFactor: 0.4,
+      // The minimum overall confidence score required for the a pose/person to be detected.
+      minPoseConfidence: 0.1,
+      // The minimum confidence score for an individual keypoint, like the nose or a shoulder, to be detected.
+      minPartConfidence: 0.5,
+      // the desired stride for the outputs when feeding the image through the model.
+      // - The higher the number, the faster the performance but slower the accuracy
+      // - Possible values [8, 16, 32]
+      outputStride: 16,
+      // Non-maximum suppression part distance
+      // - It needs to be strictly positive
+      // - Two parts suppress each other if they are less than nmsRadius pixels away
+      nmsRadius: 20,
+      // Only return instance detections that have root part score greater or equal to this value.
+      scoreThreshold: 0.5
     }
   }
 }
