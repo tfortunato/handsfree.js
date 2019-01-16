@@ -227,8 +227,15 @@ class Handsfree {
    * Goes through and tracks poses for all active models
    */
   trackPoses () {
+    // BRFv4 (face tracker)
     this.trackFaces()
     this.getBRFv4Cursors()
+
+    // PoseNet (full body pose estimator)
+    if (this.tracker.posenet.sdk) {
+      this.trackHeads()
+    }
+
     this.setTouchedElement()
     this.onFrameHooks(this.pose)
 

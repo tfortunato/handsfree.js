@@ -14,6 +14,9 @@ module.exports = Handsfree => {
     this.debug.$webcam = $webcam = document.createElement('video')
     this.debug.$canvas = $canvas = document.createElement('canvas')
 
+    $webcam.width = this.settings.webcam.video.width
+    $webcam.height = this.settings.webcam.video.height
+
     $wrap.classList.add('handsfree-debugger')
     $webcam.classList.add('handsfree-webcam')
     $canvas.classList.add('handsfree-canvas')
