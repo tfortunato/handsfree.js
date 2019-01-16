@@ -65,6 +65,8 @@
     ]
   },
   "dependencies": {
+    "@tensorflow-models/posenet": "^0.2.3",
+    "@tensorflow/tfjs": "^0.14.2",
     "idempotent-babel-polyfill": "^7.0.0",
     "javascript-time-ago": "^1.0.32",
     "simple-keyboard": "^2.8.0",

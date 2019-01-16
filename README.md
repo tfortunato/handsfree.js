@@ -3,7 +3,7 @@
   <img src="https://media.giphy.com/media/3Z15Ve7WEQGkLa1FwC/giphy.gif" alt="handsfree.js">
   <h1>Handsfree.js</h1>
   <p>A platform for creating handsfree user interfaces, tools, games, and experiences for the web and IoT 🤯</p>
-  <p>Made possible by <a href="https://github.com/Tastenkunst/brfv4_javascript_examples">BRFv4</a></p>
+  <p>Powered by <a href="https://github.com/Tastenkunst/brfv4_javascript_examples">BRFv4</a> and <a href="https://github.com/tensorflow/tfjs-models/tree/master/posenet">PoseNet</a></p>
 <p>
   <img class="mr-1" src="https://img.shields.io/github/release-pre/labofoz/handsfree.js.svg"> <img class="mr-1" src="https://img.shields.io/github/last-commit/labofoz/handsfree.js.svg"> <img class="mr-1" src="https://img.shields.io/github/commits-since/labofoz/handsfree.js/0.0.1.svg">
   <img src="https://img.shields.io/github/repo-size/labofoz/handsfree.js.svg">

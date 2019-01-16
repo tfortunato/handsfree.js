@@ -5,6 +5,18 @@ module.exports = {
   // Maximum number of poses to track
   maxPoses: 1,
 
+  // PoseNet
+  // @see https://github.com/tensorflow/tfjs-models/tree/master/posenet
+  posenet: {
+    multiplier: 0.75,
+    imageScaleFactor: 0.4,
+    minPoseConfidence: 0.1,
+    minPartConfidence: 0.5,
+    outputStride: 16,
+    nmsRadius: 20,
+    scoreThreshold: 0.5
+  },
+
   sensitivity: {
     // A factor to adjust the cursors move speed by
     xy: 0.7,

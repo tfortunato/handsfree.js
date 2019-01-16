@@ -7,7 +7,7 @@
  *                         \/\  ####  /\/
  *                             `##'
  * 
- *                      🔮 Handsfree.js 🔮
+ *                      🔮 /Handsfree.js 🔮
  * 
  * @description Use computer vision to handsfree-ify websites, apps, games,
  * tools, robotics and anything else with a webcam just...like...✨...that!
@@ -113,6 +113,14 @@ class Handsfree {
       $wrap: null
     }
 
+    /**
+     * Configs for trackers
+     */
+    this.tracker = {
+      brf: {},
+      posenet: {}
+    }
+    
     /**
      * Configs for BRFv4
      * @see https://tastenkunst.github.io/brfv4_docs/
@@ -342,6 +350,7 @@ require('./methods/Util')(Handsfree)
 require('./methods/Debug')(Handsfree)
 require('./methods/Plugin')(Handsfree)
 require('./trackers/BRFv4')(Handsfree)
+require('./trackers/PoseNet')(Handsfree)
 
 // Finally, include stylesheets
 require('../public/handsfree.styl')
