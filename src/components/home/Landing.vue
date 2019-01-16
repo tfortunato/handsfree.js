@@ -37,7 +37,7 @@ div
             h2.headline.mb-0 🎨 Try It
           v-card-text
             p Smile wide to start a click and make a normal face to release it. Lean in and back to adjust brush size. <a href="https://glitch.com/~handsfree-drawing">Try the Handsfree Drawing Starter Kit on Glitch</a>.
-            canvas#paperjs(style="width: 100%; height: 400px; box-shadow: 0 0 3px rgba(0,0,0,0.35)")
+            canvas#paperjs(style='width: 100%; height: 400px; box-shadow: 0 0 3px rgba(0,0,0,0.35)' resize)
             div
               v-btn.mx-0(large color='primary' @click='clearDrawing' style='width: 100%;')
                 v-icon.mr-2 refresh
