@@ -33,10 +33,10 @@ const worker = {
    * Creates an offcanvas for inference
    * - Tells client to set handsfree.trackers.posenet.isReady to true
    */
-  createOffCanvas (ev) {
+  createOffCanvas: async function (ev) {
     this.settings = ev.data.settings
     this.$canvas = new OffscreenCanvas(this.settings.webcam.video.width, this.settings.webcam.video.height)
-    if (!this.posenet) this.posenet = posenet.load(this.settings.tracker.posenet.multiplier)
+    if (!this.posenet) this.posenet = await posenet.load(this.settings.tracker.posenet.multiplier)
     postMessage({action: 'posenetReady'})
   },
 
@@ -47,31 +47,25 @@ const worker = {
    *
    * @param {Null|Array} poses Either null to estimate poses, or an array of poses to track
    */
-  trackHeads (ev) {
-    console.log('trackHead')
-    const settings = ev.data.settings
+  trackHeads: async function (ev) {
     let poses = []
-    
+
     // Get single pose
     if (this.settings.maxPoses === 1) {
-      let pose = this.posenet.estimateSinglePose(
-        this.debug.$webcam,
-        settings.imageScaleFactor,
+      let pose = await this.posenet.estimateSinglePose(
+        ev.data.pixels,
+        this.settings.imageScaleFactor,
         true,
-        settings.outputStride)
+        this.settings.outputStride)
       poses = [pose]
     // Get multiple poses
     } else {
-      poses = this.posenet.estimateMultiplePoses(
-        this.debug.$webcam, settings.imageScaleFactor, false, settings.outputStride,
-        settings.maxPoses, settings.scoreThreshold, settings.nmsRadius)
+      poses = await this.posenet.estimateMultiplePoses(
+        ev.data.pixels, this.settings.imageScaleFactor, false, this.settings.outputStride,
+        this.settings.maxPoses, this.settings.scoreThreshold, this.settings.nmsRadius)
     }
   
     // Set poses
-    this.pose.forEach((pose, i) => {
-      if (i < poses.length) {
-        this.pose[i].body = poses[i]
-      }
-    })
+    postMessage({action: 'posenetTracked', poses})
   }
 }

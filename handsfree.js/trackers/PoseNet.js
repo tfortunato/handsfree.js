@@ -40,7 +40,17 @@ module.exports = Handsfree => {
    */
   Handsfree.prototype.onPosenetWorker = function (ev) {
     switch (ev.data.action) {
-      case 'posenetReady': this.tracker.posenet.isReady = true
+      case 'posenetReady':
+        this.tracker.posenet.isReady = true;
+      break
+
+      case 'posenetTracked':
+        ev.data.poses.forEach((pose, i) => {
+          if (i < ev.data.poses.length) {
+            this.pose[i].body = ev.data.poses[i]
+          }
+        })
+      break
     }
   }
 
@@ -48,11 +58,10 @@ module.exports = Handsfree => {
    * Track heads and debug if needed
    */
   Handsfree.prototype.trackHeads = function () {
-    console.log('trackHeads')
-    // worker.postMessage({
-    //   action: 'trackHeads',
-    //   settings: this.settings.tracker.posenet
-    // })
+    worker.postMessage({
+      action: 'trackHeads',
+      pixels: this.debug.$canvas.getContext('2d').getImageData(0, 0, this.debug.$canvas.width, this.debug.$canvas.height)
+    })
     // Only draw when debug is on
     // this.debug.isDebugging && poses && this.debugPoses()
   }
