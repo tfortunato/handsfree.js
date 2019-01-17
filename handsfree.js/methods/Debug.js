@@ -55,10 +55,10 @@ module.exports = Handsfree => {
 
   /**
    * Draws the faces onto the debugger canvas
+   * @todo Move this into the BRFv4 class
    */
   Handsfree.prototype.drawFaces = function () {
     const ctx = this.debug.ctx
-    ctx.clearRect(0, 0, this.debug.$canvas.width, this.debug.$canvas.height)
 
     this.pose.forEach(pose => {
       const face = pose.face

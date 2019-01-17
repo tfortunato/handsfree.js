@@ -120,7 +120,7 @@ class Handsfree {
       brf: {},
       posenet: {}
     }
-    
+
     /**
      * Configs for BRFv4
      * @see https://tastenkunst.github.io/brfv4_docs/
@@ -232,7 +232,7 @@ class Handsfree {
     this.getBRFv4Cursors()
 
     // PoseNet (full body pose estimator)
-    if (this.tracker.posenet.sdk) {
+    if (this.tracker.posenet.api) {
       this.trackHeads()
     }
 
