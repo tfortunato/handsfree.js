@@ -24,55 +24,37 @@ module.exports = Handsfree => {
   /**
    * Initializes PoseNet and starts the tracking loop:
    * - Loads the model from Google's servers based on the chosen PoseNet modifier
+   * - Tells the web worker to prepare an offcanvas
    */
   Handsfree.prototype.initPoseNet = async function () {
-    if (!this.tracker.posenet.api) this.tracker.posenet.api = await PoseNet.load(this.settings.tracker.posenet.multiplier)
-    worker.onmessage = this.onPosenetWorker()
+    worker.postMessage({
+      action: 'createOffCanvas',
+      settings: this.settings
+    })    
+    worker.onmessage = ev => this.onPosenetWorker(ev)
   }
 
   /**
    * Called when posenet finishes inference
+   * @param {Object} ev The postMessage event from the worker
    */
-  Handsfree.prototype.onPosenetWorker = function () {
-
+  Handsfree.prototype.onPosenetWorker = function (ev) {
+    switch (ev.data.action) {
+      case 'posenetReady': this.tracker.posenet.isReady = true
+    }
   }
 
   /**
-   * Track Heads
-   * - Automatically adjusts algorithm to match "single" or "multiple mode"
-   * - If debug is on, displays the points and skeletons overlays on the webcam
-   *
-   * @param {Null|Array} poses Either null to estimate poses, or an array of poses to track
+   * Track heads and debug if needed
    */
   Handsfree.prototype.trackHeads = function () {
-    const posenet = this.tracker.posenet
-    const settings = this.settings.tracker.posenet
-    let poses = []
-    
-    // Get single pose
-    if (this.settings.maxPoses === 1) {
-      let pose = posenet.api.estimateSinglePose(
-        this.debug.$webcam,
-        settings.imageScaleFactor,
-        true,
-        settings.outputStride)
-      poses = [pose]
-    // Get multiple poses
-    } else {
-      poses = posenet.api.estimateMultiplePoses(
-        this.debug.$webcam, settings.imageScaleFactor, false, settings.outputStride,
-        settings.maxPoses, settings.scoreThreshold, settings.nmsRadius)
-    }
-
-    // Set poses
-    this.pose.forEach((pose, i) => {
-      if (i < poses.length) {
-        this.pose[i].body = poses[i]
-      }
-    })
-
+    console.log('trackHeads')
+    // worker.postMessage({
+    //   action: 'trackHeads',
+    //   settings: this.settings.tracker.posenet
+    // })
     // Only draw when debug is on
-    this.debug.isDebugging && poses && this.debugPoses()    
+    // this.debug.isDebugging && poses && this.debugPoses()
   }
 
   /**

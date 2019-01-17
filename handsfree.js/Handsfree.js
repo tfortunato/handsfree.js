@@ -232,7 +232,7 @@ class Handsfree {
     this.getBRFv4Cursors()
 
     // PoseNet (full body pose estimator)
-    if (this.tracker.posenet.api) {
+    if (this.tracker.posenet.isReady) {
       this.trackHeads()
     }
 

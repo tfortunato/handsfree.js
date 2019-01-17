@@ -23,8 +23,7 @@ module.exports = {
   webcam: {
     video: {
       width: 640,
-      height: 480,
-      frameRate: 30
+      height: 480
     }
   },
 
