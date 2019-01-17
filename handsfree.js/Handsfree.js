@@ -233,6 +233,7 @@ class Handsfree {
 
     // PoseNet (full body pose estimator)
     if (this.tracker.posenet.isReady) {
+      console.log('this.trackHeads()')
       this.trackHeads()
     }
 
@@ -348,8 +349,15 @@ const {trimStart, merge, forEach} = require('lodash')
 document.body.classList.add('handsfree-is-loading')
 
 // Set the lib path to whereever this file is, this is required for loading the BRFv4 SDK
-Handsfree.libPath = trimStart(document.currentScript.getAttribute('src').replace('handsfree.js', ''), '/')
-Handsfree.version = pkg.version
+const libSrc = document.currentScript.getAttribute('src')
+Handsfree.libPath = trimStart(libSrc.replace('handsfree.js', ''), '/')
+
+// Set the lib domain too
+if (libSrc[0] === '/' || libSrc.substring(0, 4) !== 'http') {
+  Handsfree.libDomain = window.location.origin + '/' + Handsfree.libPath
+} else {
+  Handsfree.libDomain = Handsfree.libPath
+}
 
 // Let the magic begin ✨
 require('./methods/Setup')(Handsfree)
@@ -360,5 +368,6 @@ require('./trackers/BRFv4')(Handsfree)
 require('./trackers/PoseNet')(Handsfree)
 
 // Finally, include stylesheets
+Handsfree.version = pkg.version
 require('../public/handsfree.styl')
 module.exports = Handsfree

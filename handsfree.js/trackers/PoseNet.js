@@ -18,9 +18,22 @@
  * @see https://github.com/tensorflow/tfjs-models/tree/master/posenet
  */
 const PoseNet = require('../../public/lib/posenet.min')
-const worker = new Worker('/workers/posenet.js')
 
 module.exports = Handsfree => {
+  /**
+   * Create the inline webworker
+   */
+  let fileHeader = `
+    // eslint-disable-next-line
+    process = self;
+    // eslint-disable-next-line
+    importScripts('${Handsfree.libDomain}/lib/tf.min.js');
+    // eslint-disable-next-line
+    importScripts('${Handsfree.libDomain}/lib/posenet.min.js');`
+
+  const blob = new Blob([fileHeader + require('raw-loader!../../public/workers/posenet.js')])
+  const worker = new Worker(URL.createObjectURL(blob))
+
   /**
    * Initializes PoseNet and starts the tracking loop:
    * - Loads the model from Google's servers based on the chosen PoseNet modifier
