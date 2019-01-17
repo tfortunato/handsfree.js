@@ -1,3 +1,22 @@
+/**                              
+ *                                    ....,       ,....
+ *          ✨	                    .' ,,, '.   .' ,,, '.
+ *           (\.   \      ,/)        .`   `.     .`   `.
+ *            \(   |\     )/       : ..... :   : ..... :
+ *            //\  | \   /\\          ```   ___   ```
+ *           (/ /\_#👓#_/\ \)             ( . . )
+ *             \/\  ####  /\/      
+ *                  `##'                `.~~~~~~~.`
+ *                                        `-...-`
+ *         
+ *             🔮 handsfree.js/trackers/BRFv4.js 🔮
+ * 
+ * @description Loads a face tracker (and more) into `handsfree.trackers.brf` 
+ * and populates:
+ * - `handsfree.pose[].face`
+ * 
+ * @see https://github.com/tensorflow/tfjs-models/tree/master/posenet
+ */
 const {TweenMax} = require('gsap')
 
 module.exports = Handsfree => {

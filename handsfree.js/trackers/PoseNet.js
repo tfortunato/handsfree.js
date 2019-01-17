@@ -9,11 +9,16 @@
  *                  `##'            |  |
  *                                  L  L
  *         
- *                🔮 trackers/PoseNet.js 🔮
+ *          🔮 handsfree.js/trackers/PoseNet.js 🔮
  * 
- * @description Provides an API for interfacing with
+ * @description Loads a full body pose estimator into `handsfree.trackers.posenet`
+ * and populates:
+ * - `handsfree.pose[].body`
+ * 
+ * @see https://github.com/tensorflow/tfjs-models/tree/master/posenet
  */
-const PoseNet = require('@tensorflow-models/posenet')
+const PoseNet = require('../../public/lib/posenet.min')
+const worker = new Worker('/workers/posenet.js')
 
 module.exports = Handsfree => {
   /**
@@ -22,6 +27,14 @@ module.exports = Handsfree => {
    */
   Handsfree.prototype.initPoseNet = async function () {
     if (!this.tracker.posenet.api) this.tracker.posenet.api = await PoseNet.load(this.settings.tracker.posenet.multiplier)
+    worker.onmessage = this.onPosenetWorker()
+  }
+
+  /**
+   * Called when posenet finishes inference
+   */
+  Handsfree.prototype.onPosenetWorker = function () {
+
   }
 
   /**
@@ -31,14 +44,14 @@ module.exports = Handsfree => {
    *
    * @param {Null|Array} poses Either null to estimate poses, or an array of poses to track
    */
-  Handsfree.prototype.trackHeads = async function () {
+  Handsfree.prototype.trackHeads = function () {
     const posenet = this.tracker.posenet
     const settings = this.settings.tracker.posenet
     let poses = []
     
     // Get single pose
     if (this.settings.maxPoses === 1) {
-      let pose = await posenet.api.estimateSinglePose(
+      let pose = posenet.api.estimateSinglePose(
         this.debug.$webcam,
         settings.imageScaleFactor,
         true,
@@ -46,7 +59,7 @@ module.exports = Handsfree => {
       poses = [pose]
     // Get multiple poses
     } else {
-      poses = await posenet.api.estimateMultiplePoses(
+      poses = posenet.api.estimateMultiplePoses(
         this.debug.$webcam, settings.imageScaleFactor, false, settings.outputStride,
         settings.maxPoses, settings.scoreThreshold, settings.nmsRadius)
     }
