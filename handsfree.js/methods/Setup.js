@@ -6,7 +6,10 @@ module.exports = Handsfree => {
     // Inject elements
     this.injectDebugger()
     this.reservePoses()
+
+    // Init trackers
     this.initAndMaybeReadWASMBinary()
+    !this.tracker.posenet._isDisabled && this.initPoseNet()
   }
   
   /**

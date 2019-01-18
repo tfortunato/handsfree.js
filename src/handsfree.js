@@ -1,18 +1,23 @@
 /**
- * Boids Debugger Plugin
- * - Adds a fullscreen canvas
- * - Places boids on the screen
- * - Boids do their own thing when camera is off
- * - Boids gather to face landmark points when turned on
- * - Disabled by default
- *
- * @see https://codepen.io/scorch/pen/aWzJgW
+ * @description This is where the main Handsfree.js instance is created
+ * @todo move the boids plugin into it's file
  */
 const facesOfOz = require('./store/faces/1-wink-face.json')
 
 document.addEventListener('DOMContentLoaded', () => {
   window.handsfree = new window.Handsfree()
   const handsfree = window.handsfree
+
+  /**
+   * Boids Debugger Plugin
+   * - Adds a fullscreen canvas
+   * - Places boids on the screen
+   * - Boids do their own thing when camera is off
+   * - Boids gather to face landmark points when turned on
+   * - Disabled by default
+   *
+   * @see https://codepen.io/scorch/pen/aWzJgW
+   */
   const BoidsDebugger = handsfree.use({
     name: 'boids-debugger',
 

@@ -132,7 +132,7 @@ class Handsfree {
         // Whether the web worker is free
         readyForInference: false,
         // Whether posenet is disabled or not
-        _isDisabled: true
+        _isDisabled: !this.settings.tracker.posenet.enabled
       }
     }
 

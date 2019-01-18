@@ -27,10 +27,14 @@ module.exports = {
     }
   },
 
+  // Tracker config
   tracker: {
     // PoseNet
     // @see https://github.com/tensorflow/tfjs-models/tree/master/posenet
     posenet: {
+      // Whether this tracker should be enabled on load or not
+      enabled: false,
+      
       // @todo Make these comments more succinct
       // The float multiplier for the depth (number of channels) for all convolution operations.
       // - The value corresponds to a MobileNet architecture and checkpoint
