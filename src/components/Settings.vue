@@ -59,6 +59,7 @@
             v-card-title
               h2 Models
             v-card-text
+              p 🚧 <strong>This is experimental.</strong> It runs within a Web Worker but does not use the GPU. Because of this it's still slow and is more of a proof of concept. Follow it's development on <a href="https://github.com/labofoz/handsfree.js/issues/53">GitHub Issue #53</a>.
               v-checkbox(label='Use PoseNet (full body pose estimation)?' v-model='usePoseNet')
 </template>
 
