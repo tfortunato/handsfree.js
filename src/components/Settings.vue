@@ -3,7 +3,7 @@
     v-container(grid-list-md)
       v-layout(wrap)
         v-flex(xs12 md6 lg8)
-          v-card(light)
+          v-card
             v-card-title
               h2 Settings
             v-card-text
@@ -41,7 +41,7 @@
                   v-text-field(v-model='maxPoses')
 
         v-flex(xs12 md6 lg4)
-          v-card.mb-2(light)
+          v-card.mb-2
             v-card-text
               p Click this Stats Panel to view different performance metrics:
               p.statsjs(ref='stats' @click='updateStatsDescription')
@@ -49,11 +49,17 @@
               p(v-if='statsMode === 1') <strong>MS</strong>: Milliseconds needed to render a frame. The lower the number the better.
               p(v-if='statsMode === 2') <strong>MB</strong>: MBytes of allocated memory
         
-          v-card(light)
+          v-card.mb-2
             v-card-title
               h2 Quick Settings
             v-card-text
               v-checkbox(label='Show webcam with debug mask?' v-model='isWebcamVisible')
+        
+          v-card
+            v-card-title
+              h2 Models
+            v-card-text
+              v-checkbox(label='Use PoseNet (full body pose estimation)?' v-model='usePoseNet')
 </template>
 
 <script>
@@ -65,9 +71,13 @@ export default {
 
   watch: {
     /**
-     * Toggles the webcam on/off
+     * Checkboxes
      */
-    isWebcamVisible () {this.toggleWebcam()},
+    isWebcamVisible () {
+      window.handsfree.debug.isEnabled = this.isWebcamVisible
+      window.handsfree.toggleDebugger(this.isWebcamVisible)
+    },
+    usePoseNet () {window.handsfree.togglePoseNet(!this.usePoseNet)},
 
     /**
      * Set the number of faces
@@ -92,14 +102,18 @@ export default {
   
   data () {
     return {
-      quickSetting: 'custom',
       maxPoses: 1,
+
+      // BRFv4
       smileClickSensitivity: 0,
       statsMode: 0,
       sensitivity: 0.7,
       stabilizerFactor: 1,
       stabilizerBuffer: 30,
-      isWebcamVisible: false
+      isWebcamVisible: false,
+
+      // PoseNet
+      usePoseNet: false
     }
   },
 
@@ -144,14 +158,6 @@ export default {
       } else {
         setTimeout(() => {this.syncSettings()}, 50)
       }
-    },
-
-    /**
-     * Toggles the webcam on/off
-     */
-    toggleWebcam () {
-      window.handsfree.debug.isEnabled = this.isWebcamVisible
-      window.handsfree.toggleDebugger(this.isWebcamVisible)
     }
   }
 }

@@ -30,14 +30,15 @@ onmessage = function (ev) {
 const worker = {
   // Used for artificially throttling on the client and here
   isReady: true,
+  // handsfree.settings
+  settings: null,
   
   /**
    * Creates an offcanvas for inference
    * - Tells client to set handsfree.trackers.posenet.isReady to true
    */
-  createOffCanvas: async function (ev) {
+  setup: async function (ev) {
     this.settings = ev.data.settings
-    this.$canvas = new OffscreenCanvas(this.settings.webcam.video.width, this.settings.webcam.video.height)
     // eslint-disable-next-line
     if (!this.posenet) this.posenet = await posenet.load(this.settings.tracker.posenet.multiplier)
     postMessage({action: 'posenetReady'})
@@ -60,7 +61,7 @@ const worker = {
         let pose = await this.posenet.estimateSinglePose(
           ev.data.pixels,
           this.settings.imageScaleFactor,
-          true,
+          false,
           this.settings.outputStride)
         poses = [pose]
       // Get multiple poses

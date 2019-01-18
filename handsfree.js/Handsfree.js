@@ -130,7 +130,9 @@ class Handsfree {
         // Whether the posenet model has been loaded in the web worker
         isReady: false,
         // Whether the web worker is free
-        readyForInference: false
+        readyForInference: false,
+        // Whether posenet is disabled or not
+        _isDisabled: true
       }
     }
 
@@ -245,7 +247,7 @@ class Handsfree {
     this.getBRFv4Cursors()
 
     // PoseNet (full body pose estimator)
-    if (this.tracker.posenet.isReady && this.tracker.posenet.readyForInference) {
+    if (!this.tracker.posenet._isDisabled && this.tracker.posenet.isReady && this.tracker.posenet.readyForInference) {
       this.trackHeads()
     }
 

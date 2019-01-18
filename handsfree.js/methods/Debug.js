@@ -5,7 +5,7 @@ module.exports = Handsfree => {
   Handsfree.prototype.debugPoses = function () {
     if (this.debug.isDebugging) {
       this.pose[0].face && this.drawFaces()
-      this.pose[0].body && this.debugPoseNetPoses()
+      this.pose[0].body && !this.tracker.posenet._isDisabled && this.debugPoseNetPoses()
     }
   }
   

@@ -25,30 +25,31 @@ const PoseNet = require('../../public/lib/posenet.min')
 
 module.exports = Handsfree => {
   /**
-   * Create the inline webworker
-   */
-  let fileHeader = `
-    // eslint-disable-next-line
-    process = self;
-    // eslint-disable-next-line
-    importScripts('${Handsfree.libDomain}/lib/tf.min.js');
-    // eslint-disable-next-line
-    importScripts('${Handsfree.libDomain}/lib/posenet.min.js');`
-
-  const blob = new Blob([fileHeader + require('raw-loader!../../public/workers/posenet.js')])
-  const worker = new Worker(URL.createObjectURL(blob))
-
-  /**
    * Initializes PoseNet and starts the tracking loop:
    * - Loads the model from Google's servers based on the chosen PoseNet modifier
    * - Tells the web worker to prepare an offcanvas
    */
-  Handsfree.prototype.initPoseNet = async function () {
+  let blob
+  let worker
+  Handsfree.prototype.initPoseNet = function () {
+    // Adds inline scripts inside `/public/lib`
+    let fileHeader = `
+      // eslint-disable-next-line
+      process = self;
+      // eslint-disable-next-line
+      importScripts('${Handsfree.libDomain}/lib/tf.min.js');
+      // eslint-disable-next-line
+      importScripts('${Handsfree.libDomain}/lib/posenet.min.js');`
+
+    // Create worker
+    blob = new Blob([fileHeader + require('raw-loader!../../public/workers/posenet.js')])
+    worker = new Worker(URL.createObjectURL(blob))
     worker.postMessage({
-      action: 'createOffCanvas',
+      action: 'setup',
       settings: this.settings
     })    
     worker.onmessage = ev => this.onPosenetWorker(ev)
+    console.log('READYING')
   }
 
   /**
@@ -59,6 +60,7 @@ module.exports = Handsfree => {
     // @todo let's clean this up by using named functions (ie, this[`posenet${action}`])
     switch (ev.data.action) {
       case 'posenetReady':
+        console.log('READY')
         this.tracker.posenet.isReady = true
         this.tracker.posenet.readyForInference = true
       break
@@ -160,5 +162,22 @@ module.exports = Handsfree => {
     context.lineWidth = 10
     context.strokeStyle = '#ff00ff'
     context.stroke()
+  }
+
+  /**
+   * Toggles PoseNet on/off
+   * - Also initializes posenet for the first time if it hasn't yet
+   * 
+   * @param {Boolean|Null} state Toggle the PoseNet tracker on (true), off (false), or flip it (pass nothing)
+   */
+  Handsfree.prototype.togglePoseNet = function (state) {
+    if (typeof state === 'boolean') {
+      this.tracker.posenet._isDisabled = state
+    } else {
+      this.tracker.posenet._isDisabled = !this.tracker.posenet._isDisabled
+    }
+
+    // Initialize posenet if it hasn'et been yet
+    !this.tracker.posenet._isDisabled && !this.tracker.posenet.isReady && this.initPoseNet()
   }
 }
