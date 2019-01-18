@@ -1,5 +1,15 @@
 module.exports = Handsfree => {
   /**
+   * Draws poses
+   */
+  Handsfree.prototype.debugPoses = function () {
+    if (this.debug.isDebugging) {
+      this.pose[0].face && this.drawFaces()
+      this.pose[0].body && this.debugPoseNetPoses()
+    }
+  }
+  
+  /**
    * Inject the debugger, which includes a video, canvas, and wrapping div
    * @emits handsfree-injectDebugger
    */

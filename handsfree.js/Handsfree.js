@@ -51,6 +51,8 @@
  * @see https://twitter.com/labofoz
  * 
  */
+const {trimStart, merge, forEach} = require('lodash')
+
 class Handsfree {
   /**
    * Doing nothing by default (eg: new Handsfree()) would:
@@ -66,6 +68,12 @@ class Handsfree {
      * A collection of pose objects {face} for this.settings.maxPoses
      */
     this.pose = []
+
+    /**
+     * This object contains their latest tracked values while we wait for next frame
+     * - Poses are estimated in separate workers at different speeds
+     */
+    this.poseCache = {face: [], body: []}
 
     /**
      * Your settings
@@ -118,7 +126,12 @@ class Handsfree {
      */
     this.tracker = {
       brf: {},
-      posenet: {}
+      posenet: {
+        // Whether the posenet model has been loaded in the web worker
+        isReady: false,
+        // Whether the web worker is free
+        readyForInference: false
+      }
     }
 
     /**
@@ -232,13 +245,15 @@ class Handsfree {
     this.getBRFv4Cursors()
 
     // PoseNet (full body pose estimator)
-    if (this.tracker.posenet.isReady) {
-      console.log('this.trackHeads()')
+    if (this.tracker.posenet.isReady && this.tracker.posenet.readyForInference) {
       this.trackHeads()
     }
 
+    // Do things with poses
+    this.setPosesFromCache()
     this.setTouchedElement()
     this.onFrameHooks(this.pose)
+    this.debugPoses()
 
     /**
      * Dispatch global event and reloop
@@ -249,6 +264,17 @@ class Handsfree {
       poses: this.pose
     }}))
     this.isTracking && requestAnimationFrame(() => this.trackPoses())
+  }
+
+  /**
+   * Updates this.pose with cached data
+   */
+  setPosesFromCache () {
+    forEach(this.poseCache, (cache, pose) => {
+      for (let i = 0; i < cache.length; i++) {
+        this.pose[i][pose] = cache[i]
+      }
+    })
   }
   
   /**
@@ -269,9 +295,6 @@ class Handsfree {
     this.brf.manager.update(ctx.getImageData(0, 0, resolution.width, resolution.height).data)
     const faces = this.brf.manager.getFaces()
     faces.forEach((face, n) => this.pose[n].face = face)
-
-    // Do things with faces
-    this.debug.isDebugging && this.drawFaces()
   }
 
   /**
@@ -341,9 +364,6 @@ class Handsfree {
  */
 const defaultSettings = require('./config/default-settings')
 const pkg = require('../package.json')
-
-// Dependencies
-const {trimStart, merge, forEach} = require('lodash')
 
 // Add class to body to style loading
 document.body.classList.add('handsfree-is-loading')

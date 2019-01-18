@@ -19,7 +19,6 @@
  * Delegate actions to one of the worker methods
  */
 onmessage = function (ev) {
-  console.log('onmessage')
   worker[ev.data.action](ev)
 }
 
@@ -29,7 +28,7 @@ onmessage = function (ev) {
  * @prop {PoseNet} posenet  The loaded posenet model
  */
 const worker = {
-  // Whether we're ready to run inference
+  // Used for artificially throttling on the client and here
   isReady: true,
   
   /**
@@ -52,10 +51,8 @@ const worker = {
    * @param {Null|Array} poses Either null to estimate poses, or an array of poses to track
    */
   trackHeads: async function (ev) {
-    console.log('trackHeads', this, this.isReady)
     if (this.isReady) {
       let poses = []
-      console.log('TRACK')
   
       // Get single pose
       this.isReady = false
