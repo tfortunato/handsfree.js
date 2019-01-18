@@ -5,6 +5,23 @@
 const facesOfOz = require('./store/faces/1-wink-face.json')
 
 document.addEventListener('DOMContentLoaded', () => {
+  console.log(`
+
+          ✨
+           (\\.   \\      ,/)
+            \\(   |\\     )/
+            //\\  | \\   /\\\\
+          (/ /\\_#👓#_/\\ \\)
+            \\/\\  ####  /\\/
+                \\\`##' /
+  
+      🔮 Handsfree.js ${window.Handsfree.version} 🔮
+      
+      https://twitter.com/labofoz
+      https://glitch.com/@handsfreejs
+      https://glitch.com/~handsfree-starter
+
+  `)
   window.handsfree = new window.Handsfree()
   const handsfree = window.handsfree
 

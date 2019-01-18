@@ -49,7 +49,6 @@ module.exports = Handsfree => {
       settings: this.settings
     })    
     worker.onmessage = ev => this.onPosenetWorker(ev)
-    console.log('READYING')
   }
 
   /**
@@ -60,7 +59,6 @@ module.exports = Handsfree => {
     // @todo let's clean this up by using named functions (ie, this[`posenet${action}`])
     switch (ev.data.action) {
       case 'posenetReady':
-        console.log('READY')
         this.tracker.posenet.isReady = true
         this.tracker.posenet.readyForInference = true
       break
