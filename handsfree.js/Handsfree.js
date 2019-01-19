@@ -127,12 +127,12 @@ class Handsfree {
     this.tracker = {
       brf: {},
       posenet: {
+        // Whether posenet is disabled or not
+        _isDisabled: !this.settings.tracker.posenet.enabled,
         // Whether the posenet model has been loaded in the web worker
         isReady: false,
-        // Whether the web worker is free
-        readyForInference: false,
-        // Whether posenet is disabled or not
-        _isDisabled: !this.settings.tracker.posenet.enabled
+        // Web workers in the form {ready: false}
+        workers: []
       }
     }
 
@@ -247,7 +247,7 @@ class Handsfree {
     this.getBRFv4Cursors()
 
     // PoseNet (full body pose estimator)
-    if (!this.tracker.posenet._isDisabled && this.tracker.posenet.isReady && this.tracker.posenet.readyForInference) {
+    if (!this.tracker.posenet._isDisabled && this.tracker.posenet.isReady) {
       this.trackHeads()
     }
 

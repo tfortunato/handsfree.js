@@ -21,6 +21,7 @@
  * @see /public/workers/posenet.js
  * @see https://github.com/tensorflow/tfjs-models/tree/master/posenet
  */
+const {throttle} = require('lodash')
 const PoseNet = require('../../public/lib/posenet.min')
 
 module.exports = Handsfree => {
@@ -29,8 +30,6 @@ module.exports = Handsfree => {
    * - Loads the model from Google's servers based on the chosen PoseNet modifier
    * - Tells the web worker to prepare an offcanvas
    */
-  let blob
-  let worker
   Handsfree.prototype.initPoseNet = function () {
     // Adds inline scripts inside `/public/lib`
     let fileHeader = `
@@ -40,15 +39,23 @@ module.exports = Handsfree => {
       importScripts('${Handsfree.libDomain}/lib/tf.min.js');
       // eslint-disable-next-line
       importScripts('${Handsfree.libDomain}/lib/posenet.min.js');`
+    let blob = new Blob([fileHeader + require('raw-loader!../../public/workers/posenet.js')])
 
-    // Create worker
-    blob = new Blob([fileHeader + require('raw-loader!../../public/workers/posenet.js')])
-    worker = new Worker(URL.createObjectURL(blob))
-    worker.postMessage({
-      action: 'setup',
-      settings: this.settings
-    })    
-    worker.onmessage = ev => this.onPosenetWorker(ev)
+    // Create workers
+    for (let i = 0; i < this.settings.tracker.posenet.workers; i++) {
+      this.tracker.posenet.workers.push({
+        worker: new Worker(URL.createObjectURL(blob)),
+        isReady: false
+      })
+
+      const webworker = this.tracker.posenet.workers[i]
+      webworker.worker.postMessage({
+        action: 'setup',
+        id: i,
+        settings: this.settings
+      })    
+      webworker.worker.onmessage = ev => this.onPosenetWorker(ev)
+    }
   }
 
   /**
@@ -60,7 +67,7 @@ module.exports = Handsfree => {
     switch (ev.data.action) {
       case 'posenetReady':
         this.tracker.posenet.isReady = true
-        this.tracker.posenet.readyForInference = true
+        this.tracker.posenet.workers[ev.data.id].isReady = true
       break
 
       case 'posenetTracked':
@@ -71,24 +78,50 @@ module.exports = Handsfree => {
 
   /**
    * Handles receiving the posenet results from the web worker
-   * - Enables `this.tracker.posenet.readyForInference`
+   * - Enables `this.tracker.posenet.worker[ev.data.id]`
    */
   Handsfree.prototype.onPoseNetTracked = function (ev) {
-    this.tracker.posenet.readyForInference = true
+    this.tracker.posenet.workers[ev.data.id].isReady = true
     this.poseCache.body = ev.data.poses
   }
-  
+
+  /**
+   * Toggles PoseNet on/off
+   * - Also initializes posenet for the first time if it hasn't yet
+   * 
+   * @param {Boolean|Null} state Toggle the PoseNet tracker on (true), off (false), or flip it (pass nothing)
+   */
+  Handsfree.prototype.togglePoseNet = function (state) {
+    if (typeof state === 'boolean') {
+      this.tracker.posenet._isDisabled = state
+    } else {
+      this.tracker.posenet._isDisabled = !this.tracker.posenet._isDisabled
+    }
+
+    // Initialize posenet if it hasn'et been yet
+    !this.tracker.posenet._isDisabled && !this.tracker.posenet.isReady && this.initPoseNet()
+  }
+
   /**
    * Track heads and debug if needed
-   * - Disables `this.tracker.posenet.readyForInference`
+   * - Chooses from the next available worker
+   * - Disables `this.tracker.posenet.worker[workerId]`
+   * 
+   * @param {Number} workerId The worker ID to infer inside of
    */
-  Handsfree.prototype.trackHeads = function () {
-    this.tracker.posenet.readyForInference = false
-    worker.postMessage({
-      action: 'trackHeads',
-      pixels: this.debug.$canvas.getContext('2d').getImageData(0, 0, this.debug.$canvas.width, this.debug.$canvas.height)
+  Handsfree.prototype.trackHeads = throttle(function () {
+    // Post to the first available worker
+    this.tracker.posenet.workers.some(webworker => {
+      if (webworker.isReady) {
+        webworker.isReady = false
+        webworker.worker.postMessage({
+          action: 'trackHeads',
+          pixels: this.debug.$canvas.getContext('2d').getImageData(0, 0, this.debug.$canvas.width, this.debug.$canvas.height)
+        })
+        return true
+      }
     })
-  }
+  }, 1000 / 2)
 
   /**
    * Loops through each pose and draws their keypoints/skeletons
@@ -160,22 +193,5 @@ module.exports = Handsfree => {
     context.lineWidth = 10
     context.strokeStyle = '#ff00ff'
     context.stroke()
-  }
-
-  /**
-   * Toggles PoseNet on/off
-   * - Also initializes posenet for the first time if it hasn't yet
-   * 
-   * @param {Boolean|Null} state Toggle the PoseNet tracker on (true), off (false), or flip it (pass nothing)
-   */
-  Handsfree.prototype.togglePoseNet = function (state) {
-    if (typeof state === 'boolean') {
-      this.tracker.posenet._isDisabled = state
-    } else {
-      this.tracker.posenet._isDisabled = !this.tracker.posenet._isDisabled
-    }
-
-    // Initialize posenet if it hasn'et been yet
-    !this.tracker.posenet._isDisabled && !this.tracker.posenet.isReady && this.initPoseNet()
   }
 }

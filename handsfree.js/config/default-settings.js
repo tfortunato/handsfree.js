@@ -34,6 +34,9 @@ module.exports = {
     posenet: {
       // Whether this tracker should be enabled on load or not
       enabled: false,
+
+      // Number of workers to dedicate to this tracker
+      workers: 8,
       
       // @todo Make these comments more succinct
       // The float multiplier for the depth (number of channels) for all convolution operations.

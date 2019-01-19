@@ -28,6 +28,8 @@ onmessage = function (ev) {
  * @prop {PoseNet} posenet  The loaded posenet model
  */
 const worker = {
+  // handsfree.settings.tracker.posenet.worker[id]
+  id: 0,
   // Used for artificially throttling on the client and here
   isReady: true,
   // handsfree.settings
@@ -39,9 +41,11 @@ const worker = {
    */
   setup: async function (ev) {
     this.settings = ev.data.settings
+    this.id = ev.data.id
+
     // eslint-disable-next-line
     if (!this.posenet) this.posenet = await posenet.load(this.settings.tracker.posenet.multiplier)
-    postMessage({action: 'posenetReady'})
+    postMessage({action: 'posenetReady', id: this.id})
   },
 
   /**
@@ -73,7 +77,7 @@ const worker = {
     
       // Set poses
       this.isReady = true
-      postMessage({action: 'posenetTracked', poses})
+      postMessage({action: 'posenetTracked', poses, id: this.id})
     }
   }
 }
