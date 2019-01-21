@@ -125,7 +125,12 @@ class Handsfree {
      * Configs for trackers
      */
     this.tracker = {
-      brf: {},
+      brf: {
+        model: null,
+        _isDisabled: !this.settings.tracker.brf.enabled,
+        isReady: false,
+        workers: []
+      },
       posenet: {
         // The PoseNet model, available only within the main thread (not with workers) 
         model: null,
@@ -210,13 +215,17 @@ class Handsfree {
       this.debug.$webcam.play()
       this.onStartHooks()
 
-      if (!this.brf.sdk) {
-        window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 10}}))
-        this.startBRFv4()
-      } else {
-        window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 100}}))
-        this.isTracking = true
-        this.brf.manager.setNumFacesToTrack(this.settings.maxPoses)
+      if (this.settings.tracker.brf.enabled) {
+        if (!this.brf.sdk) {
+          window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 10}}))
+          this.startBRFv4()
+        } else {
+          window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 100}}))
+          this.isTracking = true
+          this.brf.manager.setNumFacesToTrack(this.settings.maxPoses)
+          this.trackPoses()
+        }
+      } else if (this.settings.tracker.posenet.enabled) {
         this.trackPoses()
       }
     })
@@ -244,20 +253,23 @@ class Handsfree {
    * Goes through and tracks poses for all active models
    */
   trackPoses () {
+    this.debug.isDebugging && this.debugPoses()
+
     // BRFv4 (face tracker)
-    this.trackFaces()
-    this.getBRFv4Cursors()
+    if (!this.tracker.brf._isDisabled && this.tracker.brf.isReady) {
+      this.trackFaces()
+      this.getBRFv4Cursors()
+    }
 
     // PoseNet (full body pose estimator)
     if (!this.tracker.posenet._isDisabled && this.tracker.posenet.isReady) {
-      this.trackHeads()
+      this.trackBody()
     }
 
     // Do things with poses
     this.setPosesFromCache()
-    this.setTouchedElement()
+    // this.setTouchedElement()
     this.onFrameHooks(this.pose)
-    this.debugPoses()
 
     /**
      * Dispatch global event and reloop
@@ -281,26 +293,6 @@ class Handsfree {
     })
   }
   
-  /**
-   * Tracks faces
-   * - Will look for opts.settings.maxPoses
-   * - Recurses until this.isTracking is false
-   * @todo Move this into a BRFv4 interface class
-   */
-  trackFaces () {
-    const ctx = this.debug.ctx
-    const resolution = this.brf.resolution
-
-    // mirrors the context
-    ctx.drawImage(this.debug.$webcam, 0, 0, resolution.width, resolution.height)
-    ctx.setTransform(1, 0, 0, 1, 0, 0)
-
-    // Get faces
-    this.brf.manager.update(ctx.getImageData(0, 0, resolution.width, resolution.height).data)
-    const faces = this.brf.manager.getFaces()
-    faces.forEach((face, n) => this.pose[n].face = face)
-  }
-
   /**
    * Returns the element under the face and stores it as face.$target
    * - If there's no target, then null is returned
@@ -388,7 +380,7 @@ require('./methods/Setup')(Handsfree)
 require('./methods/Util')(Handsfree)
 require('./methods/Debug')(Handsfree)
 require('./methods/Plugin')(Handsfree)
-require('./trackers/BRFv4')(Handsfree)
+require('./trackers/BRF')(Handsfree)
 require('./trackers/PoseNet')(Handsfree)
 
 // Finally, include stylesheets

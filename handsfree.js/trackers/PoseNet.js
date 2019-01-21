@@ -88,10 +88,12 @@ module.exports = Handsfree => {
       case 'posenetReady':
         this.tracker.posenet.isReady = true
         this.tracker.posenet.workers[ev.data.id].isReady = true
+        this.onReadyHook()
+        this.isTracking = true
       break
 
       case 'posenetTracked':
-        this.onPoseNetTracked(ev)
+        this.onPoseNetTrackedWithWorker(ev)
       break
     }
   }
@@ -100,7 +102,7 @@ module.exports = Handsfree => {
    * Handles receiving the posenet results from the web worker
    * - Enables `this.tracker.posenet.worker[ev.data.id]`
    */
-  Handsfree.prototype.onPoseNetTracked = function (ev) {
+  Handsfree.prototype.onPoseNetTrackedWithWorker = function (ev) {
     this.tracker.posenet.workers[ev.data.id].isReady = true
     this.poseCache.body = ev.data.poses
   }
@@ -129,34 +131,36 @@ module.exports = Handsfree => {
    * 
    * @param {Number} workerId The worker ID to infer inside of
    */
-  Handsfree.prototype.trackHeads = function () {
+  Handsfree.prototype.trackBody = function () {
     if (this.settings.tracker.posenet.useWithWorker) 
-      this.trackHeadsWithWorker()
+      this.trackBodyWithWorker()
     else
-      this.trackHeadsInMain()
+      this.trackBodyInMain()
   }
   
   /**
    * Infer with PoseNet within a worker
    */
-  Handsfree.prototype.trackHeadsWithWorker = throttle(function () {
+  Handsfree.prototype.trackBodyWithWorker = throttle(function () {
     // Post to the first available worker
     this.tracker.posenet.workers.some(webworker => {
       if (webworker.isReady) {
         webworker.isReady = false
         webworker.worker.postMessage({
-          action: 'trackHeads',
+          action: 'trackBody',
           pixels: this.debug.$canvas.getContext('2d').getImageData(0, 0, this.debug.$canvas.width, this.debug.$canvas.height)
         })
         return true
       }
     })
+
+  // @TODO handle this programmatically
   }, 1000 / 2)
 
   /**
    * Infer with PoseNet within the main thread
    */
-  Handsfree.prototype.trackHeadsInMain = async function () {
+  Handsfree.prototype.trackBodyInMain = async function () {
     let poses = []
     
     // Get single pose
@@ -170,9 +174,7 @@ module.exports = Handsfree => {
         this.settings.maxPoses, this.settings.tracker.posenet.scoreThreshold, this.settings.tracker.posenet.nmsRadius)
     }
 
-    this.pose.forEach((pose, i) => {
-      pose.body = poses[i]
-    })
+    this.pose.forEach((pose, i) => {pose.body = poses[i]})
   }
 
   /**

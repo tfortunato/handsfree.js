@@ -3,10 +3,12 @@ module.exports = Handsfree => {
    * Draws poses
    */
   Handsfree.prototype.debugPoses = function () {
-    if (this.debug.isDebugging) {
-      this.pose[0].face && this.drawFaces()
-      this.pose[0].body && !this.tracker.posenet._isDisabled && this.debugPoseNetPoses()
-    }
+    this.debug.$canvas.width = this.debug.$webcam.videoWidth
+    this.debug.$canvas.height = this.debug.$webcam.videoHeight
+    this.debug.$canvas.getContext('2d').clearRect(0, 0, this.debug.$canvas.width, this.debug.$canvas.height)
+
+    this.pose[0].face && this.drawFaces()
+    this.pose[0].body && !this.tracker.posenet._isDisabled && this.debugPoseNetPoses()
   }
   
   /**

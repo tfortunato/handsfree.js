@@ -3,6 +3,7 @@
  */
 module.exports = {
   name: 'Scrolling',
+  _isDisabled: true,
 
   // The multiplier to scroll the page by
   // @TODO Implement this on handsfree.js.org

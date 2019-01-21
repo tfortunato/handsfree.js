@@ -33,6 +33,9 @@ module.exports = {
       // Whether this tracker is enablded on load or not
       enabled: true,
 
+      // Whether to run inside a web worker or main thread
+      useWithWorker: false,
+      
       // Number of workers to dedicate to this tracker when in web worker mode
       workers: 4,
     },

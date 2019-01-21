@@ -26,6 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
     debug: true,
     settings: {
       tracker: {
+        brf: {
+          enabled: false,
+          useWithWorker: false
+        },
         posenet: {
           enabled: true,
           useWithWorker: false
@@ -48,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const BoidsDebugger = handsfree.use({
     name: 'boids-debugger',
 
-    _isDisabled: false,
+    _isDisabled: true,
 
     // The canvas context
     canvas: [

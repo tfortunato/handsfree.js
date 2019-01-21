@@ -4,6 +4,7 @@
  */
 module.exports = {
   name: 'SmileClick',
+  _isDisabled: true,
 
   priority: 9,
   

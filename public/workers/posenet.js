@@ -18,10 +18,8 @@
 /**
  * Delegate actions to one of the worker methods
  */
-if (process && !process.module) {
-  onmessage = function (ev) {
-    worker[ev.data.action](ev)
-  }
+onmessage = function (ev) {
+  worker[ev.data.action](ev)
 }
 
 /**
@@ -51,13 +49,9 @@ const worker = {
   },
 
   /**
-   * Track Heads
-   * - Automatically adjusts algorithm to match "single" or "multiple mode"
-   * - If debug is on, displays the points and skeletons overlays on the webcam
-   *
-   * @param {Null|Array} poses Either null to estimate poses, or an array of poses to track
+   * Track Bodies
    */
-  trackHeads: async function (ev) {
+  trackBody: async function (ev) {
     if (this.isReady) {
       let poses = []
   
@@ -83,8 +77,3 @@ const worker = {
     }
   }
 }
-
-/**
- * Export for use within Handsfree.js
- */
-if (process && process.module) module.exports = worker

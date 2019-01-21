@@ -82,31 +82,31 @@ describe('Handsfree.prototype.startBRFv4', () => {
 })
 
 /**
- * Handsfree.prototype.waitForSDK
+ * Handsfree.prototype.waitForBRFSDK
  */
-describe('Handsfree.prototype.waitForSDK', () => {
+describe('Handsfree.prototype.waitForBRFSDK', () => {
   it('dispatches handsfree:loading', () => {
     const handsfree = new Handsfree()
     const cb = jest.fn()
     window.addEventListener('handsfree:loading', cb)
     
-    handsfree._waitForSDK()
+    handsfree._waitForBRFSDK()
     expect(cb).toHaveBeenCalled()
     window.removeEventListener('handsfree:loading', cb)
   })
 
-  it('runs initSDK', () => {
+  it('runs initBRFSDK', () => {
     const handsfree = new Handsfree()
     const cb = jest.fn()
     const st = setTimeout
     setTimeout = jest.fn()
     window.addEventListener('handsfree:loading', cb)
 
-    handsfree._waitForSDK()
+    handsfree._waitForBRFSDK()
     expect(setTimeout).toHaveBeenCalled()
     handsfree.brf.sdk.sdkReady = true
-    handsfree._waitForSDK()
-    expect(handsfree.initSDK).toHaveBeenCalled()
+    handsfree._waitForBRFSDK()
+    expect(handsfree.initBRFSDK).toHaveBeenCalled()
     
     window.removeEventListener('handsfree:loading', cb)
     setTimeout = st
@@ -114,9 +114,9 @@ describe('Handsfree.prototype.waitForSDK', () => {
 })
 
 /**
- * Handsfree.prototype.initSDK
+ * Handsfree.prototype.initBRFSDK
  */
-describe('Handsfree.prototype.initSDK', () => {
+describe('Handsfree.prototype.initBRFSDK', () => {
   it('dispatches handsfree:loading and sets isTracking to true', () => {
     const handsfree = new Handsfree()
     const cb = jest.fn()
@@ -134,7 +134,7 @@ describe('Handsfree.prototype.initSDK', () => {
     }
     
     handsfree.isTracking = false
-    handsfree._initSDK()
+    handsfree._initBRFSDK()
     expect(cb).toHaveBeenCalled()
     expect(handsfree.isTracking).toBe(true)
 
