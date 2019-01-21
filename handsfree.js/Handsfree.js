@@ -127,6 +127,8 @@ class Handsfree {
     this.tracker = {
       brf: {},
       posenet: {
+        // The PoseNet model, available only within the main thread (not with workers) 
+        model: null,
         // Whether posenet is disabled or not
         _isDisabled: !this.settings.tracker.posenet.enabled,
         // Whether the posenet model has been loaded in the web worker

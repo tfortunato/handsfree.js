@@ -18,8 +18,10 @@
 /**
  * Delegate actions to one of the worker methods
  */
-onmessage = function (ev) {
-  worker[ev.data.action](ev)
+if (!process) {
+  onmessage = function (ev) {
+    worker[ev.data.action](ev)
+  }
 }
 
 /**
@@ -81,3 +83,8 @@ const worker = {
     }
   }
 }
+
+/**
+ * Export for use within Handsfree.js
+ */
+if (process) module.exports = worker

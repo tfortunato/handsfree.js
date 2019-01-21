@@ -29,14 +29,24 @@ module.exports = {
 
   // Tracker config
   tracker: {
-    // PoseNet
+    brf: {
+      // Whether this tracker is enablded on load or not
+      enabled: true,
+
+      // Number of workers to dedicate to this tracker when in web worker mode
+      workers: 4,
+    },
+    
     // @see https://github.com/tensorflow/tfjs-models/tree/master/posenet
     posenet: {
       // Whether this tracker should be enabled on load or not
       enabled: false,
 
-      // Number of workers to dedicate to this tracker
-      workers: 8,
+      // Whether to run inside a web worker or main thread
+      useWithWorker: true,
+
+      // Number of workers to dedicate to this tracker when in web worker mode
+      workers: 4,
       
       // @todo Make these comments more succinct
       // The float multiplier for the depth (number of channels) for all convolution operations.

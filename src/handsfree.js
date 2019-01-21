@@ -22,7 +22,17 @@ document.addEventListener('DOMContentLoaded', () => {
       https://glitch.com/~handsfree-starter
 
   `)
-  window.handsfree = new window.Handsfree()
+  window.handsfree = new window.Handsfree({
+    debug: true,
+    settings: {
+      tracker: {
+        posenet: {
+          enabled: true,
+          useWithWorker: false
+        }
+      }
+    }
+  })
   const handsfree = window.handsfree
 
   /**
