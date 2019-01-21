@@ -57,7 +57,7 @@ module.exports = {
       multiplier: 0.5,
       // A number between 0.2 and 1.0 representing what to scale the image by before feeding it through the network
       // - Set this number lower to scale down the image and increase the speed when feeding through the network at the cost of accuracy.
-      imageScaleFactor: 0.2,
+      imageScaleFactor: 0.4,
       // The minimum overall confidence score required for the a pose/person to be detected.
       minPoseConfidence: 0.1,
       // The minimum confidence score for an individual keypoint, like the nose or a shoulder, to be detected.

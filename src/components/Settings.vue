@@ -133,6 +133,10 @@ export default {
     perf()
 
     this.syncSettings()
+
+    this.$store.dispatch('onReady', () => {
+      this.usePoseNet = !window.handsfree.tracker.posenet._isDisabled
+    })
   },
 
   methods: {

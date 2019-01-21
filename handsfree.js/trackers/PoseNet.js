@@ -49,7 +49,8 @@ module.exports = Handsfree => {
       // eslint-disable-next-line
       importScripts('${Handsfree.libDomain}/lib/tf.min.js');
       // eslint-disable-next-line
-      importScripts('${Handsfree.libDomain}/lib/posenet.min.js');`
+      importScripts('${Handsfree.libDomain}/lib/posenet.min.js');
+      `
     let blob = new Blob([fileHeader + require('raw-loader!../../public/workers/posenet.js')])
 
     // Create workers
@@ -155,8 +156,23 @@ module.exports = Handsfree => {
   /**
    * Infer with PoseNet within the main thread
    */
-  Handsfree.prototype.trackHeadsInMain = function () {
-    console.log('tracking heads in main')
+  Handsfree.prototype.trackHeadsInMain = async function () {
+    let poses = []
+    
+    // Get single pose
+    if (this.settings.maxPoses === 1) {
+      let pose = await this.tracker.posenet.model.estimateSinglePose(this.debug.$webcam, this.settings.tracker.posenet.imageScaleFactor, false, this.settings.tracker.posenet.outputStride)
+      poses = [pose]
+      // Get multiple poses
+    } else {
+      poses = await this.tracker.posenet.model.estimateMultiplePoses(
+        this.debug.$webcam, this.settings.tracker.posenet.imageScaleFactor, false, this.settings.tracker.posenet.outputStride,
+        this.settings.maxPoses, this.settings.tracker.posenet.scoreThreshold, this.settings.tracker.posenet.nmsRadius)
+    }
+
+    this.pose.forEach((pose, i) => {
+      pose.body = poses[i]
+    })
   }
 
   /**
@@ -186,10 +202,12 @@ module.exports = Handsfree => {
    * @param {OBJ} context The canvas context to draw into
    */
   Handsfree.prototype.drawPoseNetKeypoints = function (keypoints, minConfidence, context) {
+    const scale = this.settings.tracker.posenet.useWithWorker ? 1 : 0.5
+
     keypoints.forEach(({position, score}) => {
       if (score > minConfidence) {
         context.beginPath()
-        context.arc(position.x, position.y, 15, 0, 2 * Math.PI)
+        context.arc(position.x * scale, position.y * scale, 15, 0, 2 * Math.PI)
         context.fillStyle = '#00ff00'
         context.fill()
       }
@@ -221,7 +239,7 @@ module.exports = Handsfree => {
    * @param {OBJ} context The canvas context to draw in
    */
   Handsfree.prototype.drawSegment = function ([ay, ax], [by, bx], context) {
-    const scale = 1
+    const scale = this.settings.tracker.posenet.useWithWorker ? 1 : 0.5
 
     context.beginPath()
     context.moveTo(ax * scale, ay * scale)

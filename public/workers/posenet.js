@@ -18,7 +18,7 @@
 /**
  * Delegate actions to one of the worker methods
  */
-if (!process) {
+if (process && !process.module) {
   onmessage = function (ev) {
     worker[ev.data.action](ev)
   }
@@ -87,4 +87,4 @@ const worker = {
 /**
  * Export for use within Handsfree.js
  */
-if (process) module.exports = worker
+if (process && process.module) module.exports = worker

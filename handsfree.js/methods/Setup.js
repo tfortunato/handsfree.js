@@ -9,7 +9,7 @@ module.exports = Handsfree => {
 
     // Init trackers
     this.initAndMaybeReadWASMBinary()
-    !this.tracker.posenet._isDisabled && this.initPoseNet()
+    this.settings.tracker.posenet.enabled && this.initPoseNet()
   }
   
   /**
