@@ -135,7 +135,7 @@ module.exports = Handsfree => {
   /**
    * Calculates the X/Y the user is facing
    */
-  Handsfree.prototype.getBRFv4Cursors = function () {
+  Handsfree.prototype.getBRFCursors = function () {
     this.pose.forEach((pose, i) => {
       const face = pose.face
 
@@ -253,6 +253,7 @@ module.exports = Handsfree => {
         tweenFace.y = avgY / numPositions;
       }
 
+      // Update cursor
       this.cursor.x = tweenFace.x;
       this.cursor.y = tweenFace.y;
 

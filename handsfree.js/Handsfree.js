@@ -173,6 +173,7 @@ class Handsfree {
     }
     // Helper object to remove jittering
     this.tweenFaces = []
+    this.tweenBody = []
 
     // True when webcam stream is set and poses are being tracked
     // - this.isTracking && requestAnimationFrame(Handsfree.trackPoses())
@@ -258,7 +259,6 @@ class Handsfree {
     // BRFv4 (face tracker)
     if (!this.tracker.brf._isDisabled && this.tracker.brf.isReady) {
       this.trackFaces()
-      this.getBRFv4Cursors()
     }
 
     // PoseNet (full body pose estimator)
@@ -267,6 +267,7 @@ class Handsfree {
     }
 
     // Do things with poses
+    this.getCursors()
     this.setPosesFromCache()
     this.debug.isDebugging && this.debugPoses()
     this.setTouchedElement()
@@ -283,6 +284,17 @@ class Handsfree {
     this.isTracking && requestAnimationFrame(() => this.trackPoses())
   }
 
+  /**
+   * Sets the cursor, based on the dominant tracker
+   */
+  getCursors () {
+    if (!this.tracker.brf._isDisabled) {
+      this.getBRFCursors()
+    } else if (!this.tracker.posenet._isDisabled) {
+      this.getPoseNetCursors()
+    }
+  }
+  
   /**
    * Updates this.pose with cached data
    */

@@ -145,4 +145,170 @@ module.exports = Handsfree => {
     context.strokeStyle = '#ff00ff'
     context.stroke()
   }
+
+  /**
+   * Entry point for our hacky calculations
+   * - Calculates "pointedAt" for each pose
+   */
+  Handsfree.prototype.getPoseNetCursors = function () {
+    this.pose.forEach((pose, i) => {
+      if (!pose.body) return
+
+      const nose = pose.body.keypoints[0]
+      const envWidth = window.outerWidth
+      const envHeight = window.outerHeight
+      let poseAverages = 0
+
+      // Helps map a point on the.canvas to a point on the window
+      const ratio = {
+        width: envWidth / this.debug.$canvas.width,
+        height: envHeight / this.debug.$canvas.height
+      }
+
+      // First, let's get where on the screen we are if looking dead ahead
+      // The canvas is mirrored, so left needs to be flipped
+      let x = -nose.position.x * ratio.width + envWidth
+      let y = nose.position.y * ratio.height
+
+      // @FIXME Now let's adjust for rotation
+      let yaw = this.calculatePoseNetHeadYaw(pose)
+      let pitch = this.calculatePoseNetHeadPitch(pose)
+      x += yaw * window.outerWidth / 2
+      y += pitch * window.outerHeight / 2 - window.outerHeight
+
+      // Let's add it to the stack
+      this.tweenBody[i] = this.tweenBody[i] || []
+      this.tweenBody[i].push({x, y})
+      if (this.tweenBody[i].length > 10) this.tweenBody[i].shift()
+
+      // Finally let's get the average
+      poseAverages = this.poseNetTweening(this.tweenBody[i])
+      x = poseAverages.x
+      y = poseAverages.y
+
+      // y = 300
+
+      // Update cursor
+      this.cursor.x = x;
+      this.cursor.y = y;
+
+      // Update pointer and vars
+      this.cursor.$el.style.left = `${x}px`
+      this.cursor.$el.style.top  = `${y}px`
+      
+      // Assign values
+      this.pose[i].body.cursor = {x, y}
+      pose.body.angles = {pitch, yaw}
+      this.pose[i] = pose
+    })
+  }
+
+  /**
+   * @FIXME Get the head's Yaw (looking left/right)
+   * 👻 Let's unit test this AFTER we agree on a solid algorithm
+   * 🧙 CAUTION HERO, FOR HERE BE 🐉 DRAGONS 🐉
+   *
+   * - 0* is you looking straight ahead
+   * - 90* would be your head turned to the right
+   * - -90* would be you looking to the left
+   *
+   * My basic algorithm is:
+   *  1. What is the x distance from the nose to each eye?
+   *
+   *  2. The difference between these distances determines the angle
+   *    - For this algorithm, angles are between -90 and 90 (looking left and right)
+   *
+   * Problems with this aglorithm:
+   * - All of it
+   */
+  Handsfree.prototype.calculatePoseNetHeadYaw = function (pose) {
+    const points = pose.body.keypoints
+    let yaw = 0
+    let distanceRatio
+    let sideLookingAt
+    let totalDistance
+
+    // 1. What is the x distance from the nose to each eye?
+    let eyeNoseDistance = {
+      left: Math.abs(points[1].position.x - points[0].position.x),
+      right: Math.abs(points[2].position.x - points[0].position.x)
+    }
+    totalDistance = eyeNoseDistance.left + eyeNoseDistance.right
+
+    // 2. The difference between these distances determines the angle
+    if (eyeNoseDistance.left > eyeNoseDistance.right) {
+      distanceRatio = 1 - eyeNoseDistance.right / eyeNoseDistance.left
+      sideLookingAt = 1
+    } else {
+      distanceRatio = 1 - eyeNoseDistance.left / eyeNoseDistance.right
+      sideLookingAt = -1
+    }
+
+    // Try to tame this beast into a radian
+    yaw = ((distanceRatio * 90 * sideLookingAt) * Math.PI / 180)
+
+    return yaw
+  }
+
+  /**
+   * @FIXME Get the head's Pitch (looking up/down)
+   * 👻 Let's unit test this AFTER we agree on a solid algorithm
+   * 🧙 CAUTION HERO, FOR HERE BE 🐉 DRAGONS 🐉
+   *
+   * - 0* is you looking straight ahead
+   * - 90* would be your head turned upwards
+   * - -90* would be you head turned downwards
+   *
+   * My basic algorithm is:
+   *  1. Calculate the average Y's for both ears (or whichever is visible)
+   *  2. Calculate the distance the eyes are apart
+   *  3. Calculate the distance between the nose and the averaged ear Y
+   */
+  Handsfree.prototype.calculatePoseNetHeadPitch = function (pose) {
+    let yEarAverage = 0
+    let numEarsFound = 0
+    let eyeDistance = 0
+    let distanceRatio = 0
+    let points = pose.body.keypoints
+
+    // 1. Calculate the average Y's for both ears (or whichever is visible)
+    if (points[3].score >= this.settings.tracker.posenet.minPartConfidence) {
+      numEarsFound++
+      yEarAverage += points[3].position.y
+    }
+    if (points[4].score >= this.settings.tracker.posenet.minPartConfidence) {
+      numEarsFound++
+      yEarAverage += points[4].position.y
+    }
+    yEarAverage = yEarAverage / numEarsFound
+
+    // 2. Calculate the distance the eyes are apart
+    // - I am literally making this up as I go
+    eyeDistance = points[1].position.x - points[2].position.x
+    distanceRatio = (points[0].position.y - yEarAverage) / eyeDistance
+
+    return (90 * distanceRatio) * Math.PI / 180
+  }
+
+  /**
+   * @FIXME Averages the pose stacks to reduce "wobble"
+   *
+   * @param {Object} tweenBody The tweenBody to average out
+   *
+   * @return {Object} The averaged {x, y}
+   */
+  Handsfree.prototype.poseNetTweening = function (tweenBody) {
+    let x = 0
+    let y = 0
+
+    tweenBody.forEach(pose => {
+      x += pose.x
+      y += pose.y
+    })
+
+    x = x / tweenBody.length
+    y = y / tweenBody.length
+
+    return {x, y}
+  }
 }
