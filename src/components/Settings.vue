@@ -59,8 +59,8 @@
             v-card-title
               h2 Models
             v-card-text
-              p 🚧 <strong>This is experimental.</strong> It runs within a Web Worker but does not use the GPU. Because of this it's still slow and is more of a proof of concept. Follow it's development on <a href="https://github.com/labofoz/handsfree.js/issues/53">GitHub Issue #53</a>.
-              v-checkbox(label='Use PoseNet (full body pose estimation)?' v-model='usePoseNet')
+              v-checkbox(label='Use head tracking (via BRFv4)?' v-model='useBRF')
+              v-checkbox(label='Use full body pose estimation (via PoseNet)?' v-model='usePoseNet')
 </template>
 
 <script>
@@ -78,7 +78,8 @@ export default {
       window.handsfree.debug.isEnabled = this.isWebcamVisible
       window.handsfree.toggleDebugger(this.isWebcamVisible)
     },
-    usePoseNet () {window.handsfree.togglePoseNet(!this.usePoseNet)},
+    usePoseNet () {window.handsfree.toggleBodyTracker(!this.usePoseNet)},
+    useBRF () {window.handsfree.toggleFaceTracker(!this.useBRF)},
 
     /**
      * Set the number of faces
@@ -113,8 +114,9 @@ export default {
       stabilizerBuffer: 30,
       isWebcamVisible: false,
 
-      // PoseNet
-      usePoseNet: false
+      // Models
+      usePoseNet: false,
+      useBRF: false
     }
   },
 
@@ -135,7 +137,8 @@ export default {
     this.syncSettings()
 
     this.$store.dispatch('onReady', () => {
-      this.usePoseNet = !window.handsfree.tracker.posenet._isDisabled
+      this.usePoseNet = window.handsfree.settings.tracker.posenet.enabled
+      this.useBRF = window.handsfree.settings.tracker.brf.enabled
     })
   },
 

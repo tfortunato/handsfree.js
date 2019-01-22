@@ -41,7 +41,7 @@ module.exports = Handsfree => {
    * 
    * @param {Boolean|Null} state Toggle the PoseNet tracker on (true), off (false), or flip it (pass nothing)
    */
-  Handsfree.prototype.togglePoseNet = function (state) {
+  Handsfree.prototype.toggleBodyTracker = function (state) {
     if (typeof state === 'boolean') {
       this.tracker.posenet._isDisabled = state
     } else {

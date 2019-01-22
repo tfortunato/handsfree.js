@@ -24,6 +24,9 @@ module.exports = Handsfree => {
    * Reads the Web ASM Binary into a buffer if it's supported
    */
   Handsfree.prototype.initBRF = function () {
+    if (this.tracker.brf._isLoading) return
+    this.tracker.brf._isLoading = true
+    
     if (this.isWASMSupported) {
       let xhr = new XMLHttpRequest()
       let url = this.brf.baseURL + this.brf.sdkName + '.wasm'
@@ -124,6 +127,7 @@ module.exports = Handsfree => {
     window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 100}}))
 
     this.tracker.brf.isReady = true
+    this.tracker.brf._isLoading = false
     this.isTracking = true
     this.trackPoses()
   }
@@ -263,6 +267,19 @@ module.exports = Handsfree => {
     })
   }
 
+  /**
+   * Toggles BRF on and off
+   */
+  Handsfree.prototype.toggleFaceTracker = function (state) {
+    if (typeof state === 'boolean') {
+      this.tracker.brf._isDisabled = state
+    } else {
+      this.tracker.brf._isDisabled = !this.tracker.brf._isDisabled
+    }
+
+    // Initialize brf if it hasn'et been yet
+    !this.tracker.brf._isDisabled && !this.tracker.brf.isReady && this.initBRF()
+  }
   
   /**
    * Gets a points color based on it's "type"

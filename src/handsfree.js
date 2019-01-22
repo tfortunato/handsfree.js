@@ -50,8 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const BoidsDebugger = handsfree.use({
     name: 'boids-debugger',
 
-    _isDisabled: true,
-
     // The canvas context
     canvas: [
       // Boids
@@ -247,6 +245,9 @@ document.addEventListener('DOMContentLoaded', () => {
     this.history = []
 
     this.update = function () {
+      // if (!handsfree.pose[0].face || !handsfree.pose[0].face.points[this.id]) return
+      if ((handsfree.isTracking && !handsfree.pose[0].face) || (handsfree.isTracking && !handsfree.pose[0].face.points[this.id])) return
+      
       //////////////////////////////////////
       this.step ++
       this.step %= 400

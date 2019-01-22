@@ -14,6 +14,8 @@ module.exports = {
    * @param {Handsfree} instance The handsfree instance
    */
   onFrame (poses, instance) {
+    if (!poses[0].face) return
+
     poses.forEach(pose => {
       let x = pose.face.cursor.x
       let y = pose.face.cursor.y
