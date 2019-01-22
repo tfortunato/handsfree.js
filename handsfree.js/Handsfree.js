@@ -253,7 +253,7 @@ class Handsfree {
    * Goes through and tracks poses for all active models
    */
   trackPoses () {
-    this.debug.isDebugging && this.debugPoses()
+    this.debug.ctx.clearRect(0, 0, this.debug.$canvas.width, this.debug.$canvas.height)
 
     // BRFv4 (face tracker)
     if (!this.tracker.brf._isDisabled && this.tracker.brf.isReady) {
@@ -268,7 +268,8 @@ class Handsfree {
 
     // Do things with poses
     this.setPosesFromCache()
-    // this.setTouchedElement()
+    this.debug.isDebugging && this.debugPoses()
+    this.setTouchedElement()
     this.onFrameHooks(this.pose)
 
     /**
@@ -301,7 +302,9 @@ class Handsfree {
    */
   setTouchedElement () {
     this.pose.forEach((pose) => {
-      pose.face.cursor.$target = document.elementFromPoint(pose.face.cursor.x, pose.face.cursor.y)
+      if (pose.face) {
+        pose.face.cursor.$target = document.elementFromPoint(pose.face.cursor.x, pose.face.cursor.y)
+      }
     })
   }
 

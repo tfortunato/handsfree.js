@@ -262,4 +262,63 @@ module.exports = Handsfree => {
       }
     })
   }
+
+  
+  /**
+   * Gets a points color based on it's "type"
+   * - Lips: 47 - 69
+   * - Eyes: 35 - 48
+   * - "third eye": 27
+   * - Edge: everything else
+   * 
+   * @return color
+   */
+  Handsfree.prototype.getPointColor = function (vertex) {
+    let color = '#ff0'
+    
+    if (vertex > 47 && vertex < 69) color = '#f0f'
+    else if (vertex > 35 && vertex < 48) color = '#0f0'
+    else if (vertex === 27) color = '#f00'
+    else color = '#ff0'
+
+    return color
+  }
+
+  /**
+   * Draws the faces onto the debugger canvas
+   * @todo Move this into the BRFv4 class
+   */
+  Handsfree.prototype.drawFaces = function () {
+    const ctx = this.debug.ctx
+
+    this.pose.forEach(pose => {
+      const face = pose.face
+      
+      // We check against !this.brf.sdk because we may occasionally want to draw points without the camera running
+      if (!this.brf.sdk || (face.state === this.brf.sdk.BRFState.FACE_TRACKING_START || face.state === this.brf.sdk.BRFState.FACE_TRACKING)) {
+        // Draw Triangles
+        ctx.strokeStyle = '#ff0'
+        ctx.lineWidth = 2
+        for (let i = 0; i < face.triangles.length; i += 3) {
+          ctx.beginPath()
+          let vertex = face.triangles[i]
+          ctx.moveTo(face.vertices[vertex * 2], face.vertices[vertex * 2 + 1])
+          vertex = face.triangles[i + 1]
+          ctx.lineTo(face.vertices[vertex * 2], face.vertices[vertex * 2 + 1])
+          vertex = face.triangles[i + 2]
+          ctx.lineTo(face.vertices[vertex * 2], face.vertices[vertex * 2 + 1])
+          ctx.stroke()
+        }
+
+        // Draw Vertices
+        ctx.lineWidth = 3
+        for (let i = 0; i < face.vertices.length; i += 2) {
+          ctx.strokeStyle = this.getPointColor(i / 2)
+          ctx.beginPath()
+          ctx.arc(face.vertices[i], face.vertices[i + 1], 3, 0, 2 * Math.PI)
+          ctx.stroke()
+        }
+      }
+    })
+  }
 }
