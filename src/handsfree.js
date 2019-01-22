@@ -27,12 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
     settings: {
       tracker: {
         brf: {
-          enabled: false,
-          useWithWorker: false
+          enabled: false
         },
         posenet: {
-          enabled: true,
-          useWithWorker: false
+          enabled: true
         }
       }
     }

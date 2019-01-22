@@ -31,13 +31,7 @@ module.exports = {
   tracker: {
     brf: {
       // Whether this tracker is enablded on load or not
-      enabled: true,
-
-      // Whether to run inside a web worker or main thread
-      useWithWorker: false,
-      
-      // Number of workers to dedicate to this tracker when in web worker mode
-      workers: 4,
+      enabled: true
     },
     
     // @see https://github.com/tensorflow/tfjs-models/tree/master/posenet
@@ -45,12 +39,6 @@ module.exports = {
       // Whether this tracker should be enabled on load or not
       enabled: false,
 
-      // Whether to run inside a web worker or main thread
-      useWithWorker: true,
-
-      // Number of workers to dedicate to this tracker when in web worker mode
-      workers: 4,
-      
       // @todo Make these comments more succinct
       // The float multiplier for the depth (number of channels) for all convolution operations.
       // - The value corresponds to a MobileNet architecture and checkpoint

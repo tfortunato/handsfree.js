@@ -15,98 +15,26 @@
  * and populates:
  * - `handsfree.pose[].body`
  * 
- * This file also:
- * - Runs inference inside a worker
- * 
  * @see /public/workers/posenet.js
  * @see https://github.com/tensorflow/tfjs-models/tree/master/posenet
  */
-const {throttle} = require('lodash')
-const PoseNet = require('../../public/lib/posenet.min')
+const PoseNet = require('@tensorflow-models/posenet')
 
 module.exports = Handsfree => {
   /**
    * Initializes PoseNet
    * - Within a web worker if `this.settings.tracker.posenet.useWithWorker`
    */
-  Handsfree.prototype.initPoseNet = function () {
-    if (this.settings.tracker.posenet.useWithWorker)
-      this.initPoseNetWorker()
-    else
-      this.initPosenetMainThread()
+  Handsfree.prototype.initPoseNet = async function () {
+    if (!this.tracker.posenet.isLoading) {
+      this.tracker.posenet.isLoading = true
+      this.tracker.posenet.isReady = false
+      this.tracker.posenet.model = await PoseNet.load(this.settings.tracker.posenet.multiplier)
+      this.tracker.posenet.isLoading = false
+      this.tracker.posenet.isReady = true
+    }
   }
   
-  /**
-   * Initializes PoseNet within a worker and starts the tracking loop:
-   * - Loads the model from Google's servers based on the chosen PoseNet modifier
-   * - Tells the web worker to prepare an offcanvas
-   */
-  Handsfree.prototype.initPoseNetWorker = function () {
-    // Adds inline scripts inside `/public/lib`
-    let fileHeader = `
-      // eslint-disable-next-line
-      process = self;
-      // eslint-disable-next-line
-      importScripts('${Handsfree.libDomain}/lib/tf.min.js');
-      // eslint-disable-next-line
-      importScripts('${Handsfree.libDomain}/lib/posenet.min.js');
-      `
-    let blob = new Blob([fileHeader + require('raw-loader!../../public/workers/posenet.js')])
-
-    // Create workers
-    for (let i = 0; i < this.settings.tracker.posenet.workers; i++) {
-      this.tracker.posenet.workers.push({
-        worker: new Worker(URL.createObjectURL(blob)),
-        isReady: false
-      })
-
-      const webworker = this.tracker.posenet.workers[i]
-      webworker.worker.postMessage({
-        action: 'setup',
-        id: i,
-        settings: this.settings
-      })    
-      webworker.worker.onmessage = ev => this.onPosenetWorker(ev)
-    }
-  }
-
-  /**
-   * Initializes PoseNet within the main thread
-   */
-  Handsfree.prototype.initPosenetMainThread = async function () {
-    this.tracker.posenet.model = await PoseNet.load(this.settings.tracker.posenet.multiplier)
-    this.tracker.posenet.isReady = true
-  }
-
-  /**
-   * Called when posenet finishes inference
-   * @param {Object} ev The postMessage event from the worker
-   */
-  Handsfree.prototype.onPosenetWorker = function (ev) {
-    // @todo let's clean this up by using named functions (ie, this[`posenet${action}`])
-    switch (ev.data.action) {
-      case 'posenetReady':
-        this.tracker.posenet.isReady = true
-        this.tracker.posenet.workers[ev.data.id].isReady = true
-        this.onReadyHook()
-        this.isTracking = true
-      break
-
-      case 'posenetTracked':
-        this.onPoseNetTrackedWithWorker(ev)
-      break
-    }
-  }
-
-  /**
-   * Handles receiving the posenet results from the web worker
-   * - Enables `this.tracker.posenet.worker[ev.data.id]`
-   */
-  Handsfree.prototype.onPoseNetTrackedWithWorker = function (ev) {
-    this.tracker.posenet.workers[ev.data.id].isReady = true
-    this.poseCache.body = ev.data.poses
-  }
-
   /**
    * Toggles PoseNet on/off
    * - Also initializes posenet for the first time if it hasn't yet
@@ -121,46 +49,13 @@ module.exports = Handsfree => {
     }
 
     // Initialize posenet if it hasn'et been yet
-    !this.tracker.posenet._isDisabled && !this.tracker.posenet.isReady && this.initPoseNetWorker()
+    !this.tracker.posenet._isDisabled && !this.tracker.posenet.isReady && this.initPoseNet()
   }
-
-  /**
-   * Track heads and debug if needed
-   * - Chooses from the next available worker
-   * - Disables `this.tracker.posenet.worker[workerId]`
-   * 
-   * @param {Number} workerId The worker ID to infer inside of
-   */
-  Handsfree.prototype.trackBody = function () {
-    if (this.settings.tracker.posenet.useWithWorker) 
-      this.trackBodyWithWorker()
-    else
-      this.trackBodyInMain()
-  }
-  
-  /**
-   * Infer with PoseNet within a worker
-   */
-  Handsfree.prototype.trackBodyWithWorker = throttle(function () {
-    // Post to the first available worker
-    this.tracker.posenet.workers.some(webworker => {
-      if (webworker.isReady) {
-        webworker.isReady = false
-        webworker.worker.postMessage({
-          action: 'trackBody',
-          pixels: this.debug.$canvas.getContext('2d').getImageData(0, 0, this.debug.$canvas.width, this.debug.$canvas.height)
-        })
-        return true
-      }
-    })
-
-  // @TODO handle this programmatically
-  }, 1000 / 2)
 
   /**
    * Infer with PoseNet within the main thread
    */
-  Handsfree.prototype.trackBodyInMain = async function () {
+  Handsfree.prototype.trackBody = async function () {
     let poses = []
     
     // Get single pose

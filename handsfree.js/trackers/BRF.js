@@ -18,23 +18,12 @@
  * @see https://github.com/tensorflow/tfjs-models/tree/master/brf
  */
 const {TweenMax} = require('gsap')
-const {throttle} = require('lodash')
 
 module.exports = Handsfree => {
   /**
    * Reads the Web ASM Binary into a buffer if it's supported
    */
   Handsfree.prototype.initBRF = function () {
-    if (this.settings.tracker.brf.useWithWorker)
-      this.initBRFWorker()
-    else
-      this.initBRFMainThread()
-  }
-
-  /**
-   * Initializes brf within main thread
-   */
-  Handsfree.prototype.initBRFMainThread = function () {
     if (this.isWASMSupported) {
       let xhr = new XMLHttpRequest()
       let url = this.brf.baseURL + this.brf.sdkName + '.wasm'
@@ -63,151 +52,13 @@ module.exports = Handsfree => {
   }
   
   /**
-   * Initializes BRF within the worker
-   */
-  Handsfree.prototype.initBRFWorker = function () {
-    // Adds inline scripts inside `/public/lib`
-    let fileHeader = `
-      // eslint-disable-next-line
-      process = self;
-      module = {exports: {}}
-      // eslint-disable-next-line
-      importScripts('${Handsfree.libDomain}/models/BRFv4_JS_TK110718_v4.1.0_trial.js');
-      `
-    let blob = new Blob([fileHeader + require('raw-loader!../../public/workers/brf.js')])
-
-    // Create workers
-    for (let i = 0; i < this.settings.tracker.brf.workers; i++) {
-      this.tracker.brf.workers.push({
-        worker: new Worker(URL.createObjectURL(blob)),
-        isReady: false
-      })
-
-      const webworker = this.tracker.brf.workers[i]
-      webworker.worker.postMessage({
-        action: 'setup',
-        id: i,
-        settings: this.settings,
-        canvas: {
-          width: this.debug.$canvas.width,
-          height: this.debug.$canvas.height
-        },
-        brf: {
-          libDomain: Handsfree.libDomain, 
-          baseURL: Handsfree.libDomain + this.brf.baseURL,
-          sdkName: this.brf.sdkName
-        }
-      })    
-      webworker.worker.onmessage = ev => this.onBRFWorker(ev)
-    }
-  }
-
-  /**
-   * Called when the worker updates
-   */
-  Handsfree.prototype.onBRFWorker = function (ev) {
-    switch (ev.data.action) {
-      case 'brfOnLoad':
-        this.tracker.brf.isReady = true
-        this.tracker.brf.workers[ev.data.id].isReady = true
-      break
-
-      case 'onReadyHook':
-        this.onReadyHook()
-      break
-
-      case 'brfTracked':
-        this.onBRFTrackedWithWorker(ev)
-      break
-
-      case 'initSDK':
-        this.isTracking = true
-        this.trackPoses()  
-      break
-    }
-  }
-
-  /**
-   * Handles receiving the brf results from the web worker
-   * - Enables `this.tracker.brf.worker[ev.data.id]`
-   */
-  Handsfree.prototype.onBRFTrackedWithWorker = function (ev) {
-    this.tracker.brf.workers[ev.data.id].isReady = true
-    this.poseCache.face = ev.data.poses
-  }
-  
-  /**
-   * Tracks faces
-   * - Will look for opts.settings.maxPoses
-   * - Recurses until this.isTracking is false
-   * @todo Move this into a BRFv4 interface class
-   */
-  Handsfree.prototype.trackFaces = function () {
-    if (this.settings.tracker.brf.useWithWorker) 
-      this.trackFacesWithWorker()
-    else
-      this.trackFacesInMain()
-  }
-    
-  /**
-   * Starts BRFv4 either in the worker or main thread
-   */
-  Handsfree.prototype.startBRFv4 = function () {
-    if (this.settings.tracker.brf.useWithWorker) 
-      this.startBRFWithWorker()
-    else
-      this.startBRFInMain()
-  }
-
-  /**
-   * Start BRFv4 with the Web Worker
-   */
-  Handsfree.prototype.startBRFWithWorker = function () {
-    this.tracker.brf.workers.forEach(webworker => {
-      webworker.isReady = true
-      webworker.worker.postMessage({action: 'waitForBRFSDK'})
-    })
-  }
-
-  /**
-   * Actually starts BRFv4 (once stream dimensions are known)
-   * @emits handsfree:loading
-   */
-  Handsfree.prototype.startBRFInMain = function () {
-    if (this.debug.$webcam.videoWidth === 0) {
-      // @TODO let's optimize this wait time
-      setTimeout(() => this.startBRFv4(), 50)
-    } else {
-      window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 20}}))      
-      this.waitForBRFSDK()
-    }
-  }
-
-  /**
-   * Infer with brf within a worker
-   */
-  Handsfree.prototype.trackFacesWithWorker = throttle(function () {
-    // Post to the first available worker
-    this.tracker.brf.workers.some(webworker => {
-      if (webworker.isReady) {
-        webworker.isReady = false
-        webworker.worker.postMessage({
-          action: 'trackFaces',
-          pixels: this.debug.$canvas.getContext('2d').getImageData(0, 0, this.debug.$canvas.width, this.debug.$canvas.height)
-        })
-        return true
-      }
-    })
-  }, 1000 / 2)
-
-  /**
    * Track faces
    * - Automatically adjusts algorithm to match "single" or "multiple mode"
    * - If debug is on, displays the points and skeletons overlays on the webcam
    *
    * @param {Null|Array} poses Either null to estimate poses, or an array of poses to track
    */
-  Handsfree.prototype.trackFacesInMain = function () {
+  Handsfree.prototype.trackFaces = function () {
     const ctx = this.debug.ctx
     const resolution = this.brf.resolution
 
@@ -219,8 +70,20 @@ module.exports = Handsfree => {
     this.brf.manager.update(ctx.getImageData(0, 0, resolution.width, resolution.height).data)
     const faces = this.brf.manager.getFaces()
     faces.forEach((face, n) => this.pose[n].face = face)
-
-    console.log('trackFacesInMain', faces)
+  }
+    
+  /**
+   * Actually starts BRFv4 (once stream dimensions are known)
+   * @emits handsfree:loading
+   */
+  Handsfree.prototype.startBRFv4 = function () {
+    if (this.debug.$webcam.videoWidth === 0) {
+      // @TODO let's optimize this wait time
+      setTimeout(() => this.startBRFv4(), 50)
+    } else {
+      window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 20}}))      
+      this.waitForBRFSDK()
+    }
   }
 
   /**

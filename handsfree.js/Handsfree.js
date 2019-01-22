@@ -70,12 +70,6 @@ class Handsfree {
     this.pose = []
 
     /**
-     * This object contains their latest tracked values while we wait for next frame
-     * - Poses are estimated in separate workers at different speeds
-     */
-    this.poseCache = {face: [], body: []}
-
-    /**
      * Your settings
      * - This really just acts as a namespace for plugins to pull settings from
      * - To set a setting during instantiation, use:
@@ -126,20 +120,24 @@ class Handsfree {
      */
     this.tracker = {
       brf: {
-        model: null,
+        // Whether BRFv4 is disabled or not
         _isDisabled: !this.settings.tracker.brf.enabled,
+        // The BRFv4 model
+        model: null,
+        // Whether the BRFv4 model has been loaded
         isReady: false,
-        workers: []
+        // Whether the model is being loaded or not
+        isLoading: false,
       },
       posenet: {
-        // The PoseNet model, available only within the main thread (not with workers) 
-        model: null,
         // Whether posenet is disabled or not
         _isDisabled: !this.settings.tracker.posenet.enabled,
-        // Whether the posenet model has been loaded in the web worker
+        // The PoseNet model
+        model: null,
+        // Whether the posenet model has been loaded
         isReady: false,
-        // Web workers in the form {ready: false}
-        workers: []
+        // Whether the model is being loaded or not
+        isLoading: false,
       }
     }
 
@@ -226,6 +224,7 @@ class Handsfree {
           this.trackPoses()
         }
       } else if (this.settings.tracker.posenet.enabled) {
+        this.isTracking = true
         this.trackPoses()
       }
     })
