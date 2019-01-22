@@ -1,15 +1,27 @@
+const {throttle} = require('lodash')
+
 module.exports = Handsfree => {
   /**
    * Draws poses
    */
   Handsfree.prototype.debugPoses = function () {
-    this.debug.$canvas.width = this.debug.$webcam.videoWidth
-    this.debug.$canvas.height = this.debug.$webcam.videoHeight
     this.debug.$canvas.getContext('2d').clearRect(0, 0, this.debug.$canvas.width, this.debug.$canvas.height)
 
     this.pose[0].face && this.drawFaces()
     this.pose[0].body && !this.tracker.posenet._isDisabled && this.debugPoseNetPoses()
   }
+
+  /**
+   * Resizes the canvas to match video
+   */
+  Handsfree.prototype.resizeCanvas = throttle(function () {
+    if (this.debug.$webcam.videoWidth === 0) {
+      this.resizeCanvas()
+    } else {
+      this.debug.$canvas.width = this.debug.$webcam.videoWidth
+      this.debug.$canvas.height = this.debug.$webcam.videoHeight
+    }
+  }, 50)
   
   /**
    * Inject the debugger, which includes a video, canvas, and wrapping div

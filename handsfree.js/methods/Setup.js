@@ -11,7 +11,7 @@ module.exports = Handsfree => {
     this.settings.tracker.brf.enabled && this.initBRF()
     this.settings.tracker.posenet.enabled && this.initPoseNet()
   }
-  
+
   /**
    * Notifies the document that handsfree is ready
    * - Adds a body class

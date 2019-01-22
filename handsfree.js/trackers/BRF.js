@@ -81,7 +81,9 @@ module.exports = Handsfree => {
       // @TODO let's optimize this wait time
       setTimeout(() => this.startBRFv4(), 50)
     } else {
-      window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 20}}))      
+      this.debug.$canvas.width = this.debug.$webcam.videoWidth
+      this.debug.$canvas.height = this.debug.$webcam.videoHeight
+      window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 20}}))
       this.waitForBRFSDK()
     }
   }

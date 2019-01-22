@@ -225,6 +225,7 @@ class Handsfree {
         }
       } else if (this.settings.tracker.posenet.enabled) {
         this.isTracking = true
+        this.resizeCanvas()
         this.trackPoses()
       }
     })
