@@ -3,8 +3,6 @@ div
   v-container(grid-list-lg)
     v-layout.mb-5(justify-center wrap)
       v-flex(mb-4 xs12 md6)
-        //- p.mb-3.text-xs-center
-        //-   img(src='https://media.giphy.com/media/AFXBi87gYqWMth1T6m/giphy.gif')
         h1.text-xs-center.display-2.font-weight-bold.mb-3(style='margin-top: 250px') Handsfree.js
         p.text-xs-center
           | With support from <a href="https://glitch.com">Glitch.com</a>, the <a href="https://www.cmu.edu/cfa/studio/index.html">STUDIO at CMU</a>, and you:
