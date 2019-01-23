@@ -53,7 +53,8 @@
       "./test/jest-setup.js"
     ],
     "moduleNameMapper": {
-      "\\.(css|styl)$": "identity-obj-proxy"
+      "\\.(css|styl)$": "identity-obj-proxy",
+      "@tensorflow-models/posenet": "<rootDir>/test/mocks/posenet.js"
     },
     "setupTestFrameworkScriptFile": "./test/global-setup.js",
     "coveragePathIgnorePatterns": [

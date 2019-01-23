@@ -411,7 +411,7 @@ div
                 &lt;body>
                   &lt;button onclick="handsfree.start()">&lt;/button>
                   
-                  &lt;script src="https://unpkg.com/handsfree@&lt;4/dist/handsfree.js">&lt;/script&gt;
+                  &lt;script src="https://unpkg.com/handsfree@&lt;5/dist/handsfree.js">&lt;/script&gt;
                   &lt;script>
                     handsfree = new Handsfree()
                   &lt;/script>

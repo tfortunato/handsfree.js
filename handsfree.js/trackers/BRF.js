@@ -98,14 +98,14 @@ module.exports = Handsfree => {
     // Set up the namespace and initialize BRFv4.
     // locateFile tells the asm.js version where to find the .mem file.
     // wasmBinary gets the preloaded .wasm file.
-    if (this.brf.sdk === null) {
+    if (!this.brf.sdk) {
       const BRFvInitializer = await require('../../public/models/BRFv4_JS_TK110718_v4.1.0_trial.js')
       this.brf.sdk = {
         locateFile: fileName => this.brf.baseURL + fileName,
         wasmBinary: this.brf.WASMBuffer
       }
       BRFvInitializer(this.brf.sdk)
-      window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 30}}))
+      window.dispatchEvent(new CustomEvent('handsfree:loading', {bubbles: true, detail: {progress: 30}}))
     }
 
     if (this.brf.sdk && this.brf.sdk.sdkReady) {
