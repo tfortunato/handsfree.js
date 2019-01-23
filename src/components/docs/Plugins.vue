@@ -117,10 +117,9 @@ div
                 v-icon chevron_left
                 | Config &amp; Settings
               v-btn(color='primary' :to='{name: "docsEvents"}' style='float: right')
-                | Config &amp; Events
+                | Events
                 v-icon chevron_right
               .clear
-
 </template>
 
 <script>
