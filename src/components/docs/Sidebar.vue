@@ -11,8 +11,8 @@ v-flex(xs12 md4 lg3)
       v-list-tile-title Plugins
     v-list-tile(:to='{name: "docsEvents"}')
       v-list-tile-title Events
-    v-list-tile(:to='{name: "docsTarget"}')
-      v-list-tile-title handsfree.$target
+    v-list-tile(:to='{name: "docsCursor"}')
+      v-list-tile-title handsfree.cursor
 </template>
 
 <script>

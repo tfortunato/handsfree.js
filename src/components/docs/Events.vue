@@ -90,8 +90,8 @@ div
               v-btn(color='primary' :to='{name: "docsPlugins"}')
                 v-icon chevron_left
                 | Plugins
-              v-btn(color='primary' :to='{name: "docsTarget"}' style='float: right')
-                | Target
+              v-btn(color='primary' :to='{name: "docsCursor"}' style='float: right')
+                | Cursor
                 v-icon chevron_right
               .clear
 </template>
