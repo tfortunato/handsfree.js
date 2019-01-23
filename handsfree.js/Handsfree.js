@@ -267,9 +267,9 @@ class Handsfree {
     }
 
     // Do things with poses
-    this.getCursors()
     this.setPosesFromCache()
     this.debug.isDebugging && this.debugPoses()
+    this.getCursors()
     this.setTouchedElement()
     this.onFrameHooks(this.pose)
 

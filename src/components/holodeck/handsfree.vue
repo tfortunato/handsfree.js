@@ -79,7 +79,7 @@ export default {
             } else {
               handsfree.cursor.$el.style.display = 'inherit'
             }
-            
+
             // Update positions
             component.updateCamera(face)
             component.renderer.render(component.scene, component.camera)

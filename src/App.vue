@@ -27,6 +27,11 @@
             img(src='/favicon.png' width=48)
           v-list-tile-title Home
 
+        v-list-tile(:to='{name: "docs"}')
+          v-list-tile-action
+            v-icon book
+          v-list-tile-title Docs
+
         v-list-group
           v-list-tile(slot='activator')
             v-list-tile-action

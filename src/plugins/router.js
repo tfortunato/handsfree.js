@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import SpaceWhales from '../components/space-whales/Landing.vue'
 import Home from '../components/home/Landing.vue'
+import DocsLanding from '../components/docs/Landing.vue'
 import YouTubeLanding from '../components/youtube/Landing.vue'
 import YouTubeSingle from '../components/youtube/Single.vue'
 import HolodeckLanding from '../components/holodeck/Landing.vue'
@@ -16,6 +17,15 @@ export default new VueRouter({
     {name: 'youtubeLanding', path: '/youtube', component: YouTubeLanding},
     {name: 'youtubeSingle', path: '/youtube/:id', component: YouTubeSingle},
     {name: 'holodeckLanding', path: '/holodeck', component: HolodeckLanding},
-    {name: 'spaceWhalesLanding', path: '/space-whales', component: SpaceWhales}
+    {name: 'spaceWhalesLanding', path: '/space-whales', component: SpaceWhales},
+
+    // Docs
+    {name: 'docs', path: '/docs', component: DocsLanding},
+    {name: 'docsIntro', path: '/docs/intro', component: DocsLanding},
+    {name: 'docsQuickstart', path: '/docs/quickstart', component: DocsLanding},
+    {name: 'docsConfig', path: '/docs/config', component: DocsLanding},
+    {name: 'docsPlugins', path: '/docs/plugins', component: DocsLanding},
+    {name: 'docsEvents', path: '/docs/events', component: DocsLanding},
+    {name: 'docsTarget', path: '/docs/target', component: DocsLanding}
   ]
 })

@@ -138,6 +138,7 @@ module.exports = Handsfree => {
   Handsfree.prototype.getBRFCursors = function () {
     this.pose.forEach((pose, i) => {
       const face = pose.face
+      if (!face) return
 
       // Add enough helper object.
       while (i >= this.tweenFaces.length) {

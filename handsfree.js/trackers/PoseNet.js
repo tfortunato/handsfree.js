@@ -186,8 +186,6 @@ module.exports = Handsfree => {
       x = poseAverages.x
       y = poseAverages.y
 
-      // y = 300
-
       // Update cursor
       this.cursor.x = x;
       this.cursor.y = y;
@@ -195,7 +193,7 @@ module.exports = Handsfree => {
       // Update pointer and vars
       this.cursor.$el.style.left = `${x}px`
       this.cursor.$el.style.top  = `${y}px`
-      
+
       // Assign values
       this.pose[i].body.cursor = {x, y}
       pose.body.angles = {pitch, yaw}
@@ -226,14 +224,12 @@ module.exports = Handsfree => {
     let yaw = 0
     let distanceRatio
     let sideLookingAt
-    let totalDistance
 
     // 1. What is the x distance from the nose to each eye?
     let eyeNoseDistance = {
       left: Math.abs(points[1].position.x - points[0].position.x),
       right: Math.abs(points[2].position.x - points[0].position.x)
     }
-    totalDistance = eyeNoseDistance.left + eyeNoseDistance.right
 
     // 2. The difference between these distances determines the angle
     if (eyeNoseDistance.left > eyeNoseDistance.right) {
