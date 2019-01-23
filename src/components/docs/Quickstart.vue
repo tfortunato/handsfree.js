@@ -55,7 +55,7 @@ div
                 v-icon chevron_left
                 | Intro
               v-btn(color='primary' :to='{name: "docsConfig"}' style='float: right')
-                | Quickstart
+                | Config &amp; Settings
                 v-icon chevron_right
               .clear
 </template>
@@ -68,6 +68,7 @@ export default {
   name: 'docsQuickstart',
   components: {DocsSidebar},
 
+  // @todo Turn this into a $store action
   mounted () {
     window.hljs = hljs
     hljs.initHighlighting.called = false

@@ -9,6 +9,7 @@ import Settings from '../components/Settings.vue'
 
 import DocsLanding from '../components/docs/Landing.vue'
 import DocsQuickstart from '../components/docs/Quickstart.vue'
+import DocsConfig from '../components/docs/Config.vue'
 
 Vue.use(VueRouter)
 export default new VueRouter({
@@ -25,7 +26,7 @@ export default new VueRouter({
     {name: 'docs', path: '/docs', component: DocsLanding},
     {name: 'docsIntro', path: '/docs/intro', component: DocsLanding},
     {name: 'docsQuickstart', path: '/docs/quickstart', component: DocsQuickstart},
-    {name: 'docsConfig', path: '/docs/config', component: DocsLanding},
+    {name: 'docsConfig', path: '/docs/config', component: DocsConfig},
     {name: 'docsPlugins', path: '/docs/plugins', component: DocsLanding},
     {name: 'docsEvents', path: '/docs/events', component: DocsLanding},
     {name: 'docsTarget', path: '/docs/target', component: DocsLanding}

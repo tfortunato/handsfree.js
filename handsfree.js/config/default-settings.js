@@ -5,6 +5,12 @@ module.exports = {
   // Maximum number of poses to track
   maxPoses: 1,
 
+  // Hides the cursor when true, or displays it when false
+  hideCursor: false,
+
+  // Either shows the webcam canvas or not
+  debug: false,
+
   sensitivity: {
     // A factor to adjust the cursors move speed by
     xy: 0.7,
