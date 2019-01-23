@@ -188,6 +188,7 @@ class Handsfree {
      * Let the browser know that we've finished instantiated
      */
     this.init()
+    this.toggleCursor(!opts.hideCursor)
     document.body.classList.add('handsfree-stopped')
     window.dispatchEvent(new CustomEvent('handsfree:instantiated', {detail: opts}))
   }
@@ -365,6 +366,21 @@ class Handsfree {
     // Remove all
     } else {
       forEach(this.listening, (callback, eventName) => {this.off(eventName)})
+    }
+  }
+
+  /**
+   * Toggle Cursor
+   * @param {Boolean|Null} state Whether to turn it on (true), off (false), or flip between the two (null)
+   */
+  toggleCursor (state = null) {
+    if (typeof state === 'boolean') this.settings.hideCursor = !state
+    else this.settings.hideCursor = !this.settings.hideCursor
+
+    if (this.settings.hideCursor) {
+      document.body.classList.add('handsfree-hide-cursor')
+    } else {
+      document.body.classList.remove('handsfree-hide-cursor')
     }
   }
 }

@@ -86,6 +86,9 @@ const handsfree = new Handsfree({
   // - You can toggle the debugger later with handsfree.toggleDebugger(true|false)
   debug: false,
 
+  // Whether to hide the cursor (true) or leave it visible (false)
+  hideCursor: false,
+
   // Available settings
   // - You can change any of these later with: handsfree.settings['settingName'] = newVal;
   settings: {
@@ -163,6 +166,10 @@ handsfree.stop()
 
 // Toggles the debugger on (true), off (false), or flips the state (null)
 handsfree.toggleDebugger(true|false|null)
+
+// Toggles the cursor on (true), off (false), or flips the state (null)
+// - You'll still be able to click (disable the SmileClick plugin to disable this)
+handsfree.toggleCursor(true|false|null)
 ```
 
 Changing settings is done with:
