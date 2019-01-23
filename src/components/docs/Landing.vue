@@ -7,7 +7,7 @@ div
       v-flex(xs12 md8 lg9)
         v-card
           v-card-title
-            h1 Intro
+            h2.headline.mb-0 Intro
           v-card-text
             p <strong>Handsfree.js</strong> is a drop-in library that adds head tracked cursors in just a few lines. By default, <strong>Handsfree.js</strong> is configured for web browsing: clicking, typing, and page scrolling all work out the box with no setup!
             p To calculate where to place these cursors, <strong>Handsfree.js</strong> uses computer vision libraries like <a href="https://github.com/Tastenkunst/brfv4_javascript_examples">BRFv4</a> and <a href="https://github.com/tensorflow/tfjs-models/tree/master/posenet">PoseNet</a> to extract pose information.
