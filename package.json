@@ -60,12 +60,14 @@
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/test/",
-      "/handsfree.js/models/"
+      "/handsfree.js/models/",
+      "/public/models/"
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/test/",
-      "/handsfree.js/models/"
+      "/handsfree.js/models/",
+      "/public/models/"
     ]
   },
   "dependencies": {

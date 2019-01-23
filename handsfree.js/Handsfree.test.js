@@ -111,25 +111,6 @@ describe('Handsfree.prototype.stop', () => {
 })
 
 /**
- * Handsfree.prototype.trackFaces
- * @todo Move this into the BRFv4 interface class test suite once ready
- */
-describe('Handsfree.prototype.trackFaces', () => {
-  it('draws faces only when debugger is on', () => {
-    Handsfree._mock.brfv4(handsfree)
-    handsfree._injectDebugger()
-
-    handsfree.debug.isDebugging = false
-    handsfree._trackFaces()
-    expect(handsfree.drawFaces).not.toHaveBeenCalled()
-
-    handsfree.debug.isDebugging = true
-    handsfree._trackFaces()
-    expect(handsfree.drawFaces).toHaveBeenCalled()
-  })
-})
-
-/**
  * Handsfree.prototype.trackPoses
  */
 describe('Handsfree.prototype.trackPoses', () => {
