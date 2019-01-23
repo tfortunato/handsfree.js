@@ -44,17 +44,10 @@ div
 
 <script>
 import DocsSidebar from './Sidebar'
-import hljs from 'highlight.js'
 
 export default {
   name: 'docsCursor',
   components: {DocsSidebar},
-
-  // @todo Turn this into a $store action
-  mounted () {
-    window.hljs = hljs
-    hljs.initHighlighting.called = false
-    hljs.initHighlighting()
-  }
+  mounted () {this.$store.dispatch('syntaxHighlight')}
 }
 </script>
