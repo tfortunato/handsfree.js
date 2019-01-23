@@ -31,4 +31,12 @@ module.exports = Handsfree => {
     alert(msg)
     throw new Error(msg)
   }
+
+  /**
+   * Converts a position to a tuple
+   * - Essentially converts an {x, y} object into a [y, x] array
+   *
+   * @param {OBJ} position {x, y}
+   */
+  Handsfree.prototype.toTuple = function ({x, y}) {return [y, x]}
 }

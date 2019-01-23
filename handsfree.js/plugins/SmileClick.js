@@ -13,6 +13,8 @@ module.exports = {
   mouseUp: [],
 
   onFrame: function (poses, instance) {
+    if (!poses[0].face) return
+    
     poses.forEach((pose, faceIndex) => {
       const face = pose.face
       let a

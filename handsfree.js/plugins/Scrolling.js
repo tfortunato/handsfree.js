@@ -11,16 +11,12 @@ module.exports = {
   /**
    * Scrolls the page when the cursor is above/below the screen
    * @param {Array}     poses    The array of face objects
-   * @param {Handsfree} instance The handsfree instance
    */
-  onFrame (poses, instance) {
-    poses.forEach(pose => {
-      let x = pose.face.cursor.x
-      let y = pose.face.cursor.y
+  onFrame (poses) {
+    if (!poses[0].face) return
 
-      // Then add the points to the cursor!
-      instance.cursor.$el.style.left = x + 'px'
-      instance.cursor.$el.style.top = y + 'px'
+    poses.forEach(pose => {
+      let y = pose.face.cursor.y
 
       // Scroll the page
       if (y < 0)

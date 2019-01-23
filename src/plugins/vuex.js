@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 import {set} from 'lodash'
 import youtube from '../store/youtube'
 import spacewhale from '../store/spacewhale'
+import hljs from 'highlight.js'
+window.hljs = hljs
 
 Vue.use(Vuex)
 const store = new Vuex.Store({
@@ -58,7 +60,15 @@ const store = new Vuex.Store({
       store.commit('set', ['loading.color', 'error'])
       window.handsfree.start()
     },
-    stopHandsfree () {window.handsfree.stop()}
+    stopHandsfree () {window.handsfree.stop()},
+
+    /**
+     * Syntax Highlight
+     */
+    syntaxHighlight () {
+      hljs.initHighlighting.called = false
+      hljs.initHighlighting()
+    }
   }
 })
 

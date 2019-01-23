@@ -3,8 +3,6 @@ div
   v-container(grid-list-lg)
     v-layout.mb-5(justify-center wrap)
       v-flex(mb-4 xs12 md6)
-        //- p.mb-3.text-xs-center
-        //-   img(src='https://media.giphy.com/media/AFXBi87gYqWMth1T6m/giphy.gif')
         h1.text-xs-center.display-2.font-weight-bold.mb-3(style='margin-top: 250px') Handsfree.js
         p.text-xs-center
           | With support from <a href="https://glitch.com">Glitch.com</a>, the <a href="https://www.cmu.edu/cfa/studio/index.html">STUDIO at CMU</a>, and you:
@@ -37,7 +35,7 @@ div
             h2.headline.mb-0 🎨 Try It
           v-card-text
             p Smile wide to start a click and make a normal face to release it. Lean in and back to adjust brush size. <a href="https://glitch.com/~handsfree-drawing">Try the Handsfree Drawing Starter Kit on Glitch</a>.
-            canvas#paperjs(style="width: 100%; height: 400px; box-shadow: 0 0 3px rgba(0,0,0,0.35)")
+            canvas#paperjs(style='width: 100%; height: 400px; box-shadow: 0 0 3px rgba(0,0,0,0.35)' resize)
             div
               v-btn.mx-0(large color='primary' @click='clearDrawing' style='width: 100%;')
                 v-icon.mr-2 refresh
@@ -117,30 +115,62 @@ div
                   p When instantiating <code>Handsfree</code>, you can pass in a config object.
                   pre
                     code.javascript.
-                      const handsfree = new Handsfree({
-                        // Whether to show (true) the debugger (face mask over video) or not (false)
-                        debug: false,
+                     const handsfree = new Handsfree({
+                        // Maximum number of poses to track
+                        maxPoses: 1,
 
-                        // Available settings
-                        settings: {
-                          // Maximum number of poses to track
-                          maxPoses: 1,
+                        sensitivity: {
+                          // A factor to adjust the cursors move speed by
+                          xy: 0.7,
+                          // How much wider (+) or narrower (-) a smile needs to be to click
+                          click: 0
+                        },
+                        
+                        stabilizer: {
+                          // How much stabilization to use: 0 = none, 3 = heavy
+                          factor: 1,
+                          // Number of frames to stabilizer over
+                          buffer: 30
+                        },
 
-                          sensitivity: {
-                            // A factor to adjust the cursors move speed by
-                            xy: 0.7,
-                            // How much wider (+) or narrower (-) a smile needs to be to click
-                            click: 0
-                          },
+                        // Sets up the webcam
+                        webcam: {
+                          video: {
+                            width: 640,
+                            height: 480
+                          }
+                        },
 
-                          stabilizer: {
-                            // How much stabilization to use: 0 = none, 3 = heavy
-                            factor: 1,
-                            // Number of frames to stabilizer over
-                            buffer: 30
+                        tracker: {
+                          // PoseNet
+                          // @see https://github.com/tensorflow/tfjs-models/tree/master/posenet
+                          posenet: {
+                            // @todo Make these comments more succinct
+                            // The float multiplier for the depth (number of channels) for all convolution operations.
+                            // - The value corresponds to a MobileNet architecture and checkpoint
+                            // - The larger the value, the larger the size of the layers, and more accurate the model at the cost of speed
+                            // - Set this to a smaller value to increase speed at the cost of accuracy.
+                            // - Possible values [0.5, 0.75, 1.0, 1.01]
+                            multiplier: 0.75,
+                            // A number between 0.2 and 1.0 representing what to scale the image by before feeding it through the network
+                            // - Set this number lower to scale down the image and increase the speed when feeding through the network at the cost of accuracy.
+                            imageScaleFactor: 0.4,
+                            // The minimum overall confidence score required for the a pose/person to be detected.
+                            minPoseConfidence: 0.1,
+                            // The minimum confidence score for an individual keypoint, like the nose or a shoulder, to be detected.
+                            minPartConfidence: 0.5,
+                            // the desired stride for the outputs when feeding the image through the model.
+                            // - The higher the number, the faster the performance but slower the accuracy
+                            // - Possible values [8, 16, 32]
+                            outputStride: 16,
+                            // Non-maximum suppression part distance
+                            // - It needs to be strictly positive
+                            // - Two parts suppress each other if they are less than nmsRadius pixels away
+                            nmsRadius: 20,
+                            // Only return instance detections that have root part score greater or equal to this value.
+                            scoreThreshold: 0.5
                           }
                         }
-                      })
 
                   p Settings can later be updated with <code>handsfree.settings['my.setting'] = newValue;</code>
             
@@ -381,7 +411,7 @@ div
                 &lt;body>
                   &lt;button onclick="handsfree.start()">&lt;/button>
                   
-                  &lt;script src="https://unpkg.com/handsfree@&lt;4/dist/handsfree.js">&lt;/script&gt;
+                  &lt;script src="https://unpkg.com/handsfree@&lt;5/dist/handsfree.js">&lt;/script&gt;
                   &lt;script>
                     handsfree = new Handsfree()
                   &lt;/script>

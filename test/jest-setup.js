@@ -10,7 +10,9 @@ require('./polyfills/xhr.mock')
 require('./polyfills/window.scrollTo.mock')
 
 // Mock models
-jest.mock('../handsfree.js/models/BRFv4_JS_TK110718_v4.1.0_trial.js')
+jest.mock('../public/models/BRFv4_JS_TK110718_v4.1.0_trial.js')
+jest.mock('@tensorflow-models/posenet')
+jest.mock('@tensorflow/tfjs-core')
 jest.mock('simple-keyboard', () => ({
   default: function (config) {
     this.setInput = jest.fn()

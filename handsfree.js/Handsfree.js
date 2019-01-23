@@ -7,7 +7,7 @@
  *                         \/\  ####  /\/
  *                             `##'
  * 
- *                      🔮 Handsfree.js 🔮
+ *                      🔮 /Handsfree.js 🔮
  * 
  * @description Use computer vision to handsfree-ify websites, apps, games,
  * tools, robotics and anything else with a webcam just...like...✨...that!
@@ -51,6 +51,8 @@
  * @see https://twitter.com/labofoz
  * 
  */
+const {trimStart, merge, forEach} = require('lodash')
+
 class Handsfree {
   /**
    * Doing nothing by default (eg: new Handsfree()) would:
@@ -114,6 +116,32 @@ class Handsfree {
     }
 
     /**
+     * Configs for trackers
+     */
+    this.tracker = {
+      brf: {
+        // Whether BRFv4 is disabled or not
+        _isDisabled: !this.settings.tracker.brf.enabled,
+        // The BRFv4 model
+        model: null,
+        // Whether the BRFv4 model has been loaded
+        isReady: false,
+        // Whether the model is being loaded or not
+        isLoading: false,
+      },
+      posenet: {
+        // Whether posenet is disabled or not
+        _isDisabled: !this.settings.tracker.posenet.enabled,
+        // The PoseNet model
+        model: null,
+        // Whether the posenet model has been loaded
+        isReady: false,
+        // Whether the model is being loaded or not
+        isLoading: false,
+      }
+    }
+
+    /**
      * Configs for BRFv4
      * @see https://tastenkunst.github.io/brfv4_docs/
      */
@@ -145,6 +173,7 @@ class Handsfree {
     }
     // Helper object to remove jittering
     this.tweenFaces = []
+    this.tweenBody = []
 
     // True when webcam stream is set and poses are being tracked
     // - this.isTracking && requestAnimationFrame(Handsfree.trackPoses())
@@ -186,13 +215,19 @@ class Handsfree {
       this.debug.$webcam.play()
       this.onStartHooks()
 
-      if (!this.brf.sdk) {
-        window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 10}}))
-        this.startBRFv4()
-      } else {
-        window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 100}}))
+      if (this.settings.tracker.brf.enabled) {
+        if (!this.brf.sdk) {
+          window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 10}}))
+          this.startBRFv4()
+        } else {
+          window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 100}}))
+          this.isTracking = true
+          this.brf.manager.setNumFacesToTrack(this.settings.maxPoses)
+          this.trackPoses()
+        }
+      } else if (this.settings.tracker.posenet.enabled) {
         this.isTracking = true
-        this.brf.manager.setNumFacesToTrack(this.settings.maxPoses)
+        this.resizeCanvas()
         this.trackPoses()
       }
     })
@@ -220,8 +255,22 @@ class Handsfree {
    * Goes through and tracks poses for all active models
    */
   trackPoses () {
-    this.trackFaces()
-    this.getBRFv4Cursors()
+    this.debug.ctx.clearRect(0, 0, this.debug.$canvas.width, this.debug.$canvas.height)
+
+    // BRFv4 (face tracker)
+    if (!this.tracker.brf._isDisabled && this.tracker.brf.isReady) {
+      this.trackFaces()
+    }
+
+    // PoseNet (full body pose estimator)
+    if (!this.tracker.posenet._isDisabled && this.tracker.posenet.isReady) {
+      this.trackBody()
+    }
+
+    // Do things with poses
+    this.setPosesFromCache()
+    this.debug.isDebugging && this.debugPoses()
+    this.getCursors()
     this.setTouchedElement()
     this.onFrameHooks(this.pose)
 
@@ -235,30 +284,29 @@ class Handsfree {
     }}))
     this.isTracking && requestAnimationFrame(() => this.trackPoses())
   }
+
+  /**
+   * Sets the cursor, based on the dominant tracker
+   */
+  getCursors () {
+    if (!this.tracker.brf._isDisabled) {
+      this.getBRFCursors()
+    } else if (!this.tracker.posenet._isDisabled) {
+      this.getPoseNetCursors()
+    }
+  }
   
   /**
-   * Tracks faces
-   * - Will look for opts.settings.maxPoses
-   * - Recurses until this.isTracking is false
-   * @todo Move this into a BRFv4 interface class
+   * Updates this.pose with cached data
    */
-  trackFaces () {
-    const ctx = this.debug.ctx
-    const resolution = this.brf.resolution
-
-    // mirrors the context
-    ctx.drawImage(this.debug.$webcam, 0, 0, resolution.width, resolution.height)
-    ctx.setTransform(1, 0, 0, 1, 0, 0)
-
-    // Get faces
-    this.brf.manager.update(ctx.getImageData(0, 0, resolution.width, resolution.height).data)
-    const faces = this.brf.manager.getFaces()
-    faces.forEach((face, n) => this.pose[n].face = face)
-
-    // Do things with faces
-    this.debug.isDebugging && this.drawFaces()
+  setPosesFromCache () {
+    forEach(this.poseCache, (cache, pose) => {
+      for (let i = 0; i < cache.length; i++) {
+        this.pose[i][pose] = cache[i]
+      }
+    })
   }
-
+  
   /**
    * Returns the element under the face and stores it as face.$target
    * - If there's no target, then null is returned
@@ -267,7 +315,9 @@ class Handsfree {
    */
   setTouchedElement () {
     this.pose.forEach((pose) => {
-      pose.face.cursor.$target = document.elementFromPoint(pose.face.cursor.x, pose.face.cursor.y)
+      if (pose.face) {
+        pose.face.cursor.$target = document.elementFromPoint(pose.face.cursor.x, pose.face.cursor.y)
+      }
     })
   }
 
@@ -342,23 +392,29 @@ class Handsfree {
 const defaultSettings = require('./config/default-settings')
 const pkg = require('../package.json')
 
-// Dependencies
-const {trimStart, merge, forEach} = require('lodash')
-
 // Add class to body to style loading
 document.body.classList.add('handsfree-is-loading')
 
 // Set the lib path to whereever this file is, this is required for loading the BRFv4 SDK
-Handsfree.libPath = trimStart(document.currentScript.getAttribute('src').replace('handsfree.js', ''), '/')
-Handsfree.version = pkg.version
+const libSrc = document.currentScript.getAttribute('src')
+Handsfree.libPath = trimStart(libSrc.replace('handsfree.js', ''), '/')
+
+// Set the lib domain too
+if (libSrc[0] === '/' || libSrc.substring(0, 4) !== 'http') {
+  Handsfree.libDomain = window.location.origin + '/' + Handsfree.libPath
+} else {
+  Handsfree.libDomain = Handsfree.libPath
+}
 
 // Let the magic begin ✨
 require('./methods/Setup')(Handsfree)
 require('./methods/Util')(Handsfree)
 require('./methods/Debug')(Handsfree)
 require('./methods/Plugin')(Handsfree)
-require('./trackers/BRFv4')(Handsfree)
+require('./trackers/BRF')(Handsfree)
+require('./trackers/PoseNet')(Handsfree)
 
 // Finally, include stylesheets
+Handsfree.version = pkg.version
 require('../public/handsfree.styl')
 module.exports = Handsfree

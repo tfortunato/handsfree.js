@@ -1,22 +1,53 @@
 /**
- * Boids Debugger Plugin
- * - Adds a fullscreen canvas
- * - Places boids on the screen
- * - Boids do their own thing when camera is off
- * - Boids gather to face landmark points when turned on
- * - Disabled by default
- *
- * @see https://codepen.io/scorch/pen/aWzJgW
+ * @description This is where the main Handsfree.js instance is created
+ * @todo move the boids plugin into it's file
  */
 const facesOfOz = require('./store/faces/1-wink-face.json')
 
 document.addEventListener('DOMContentLoaded', () => {
-  window.handsfree = new window.Handsfree()
+  console.log(`
+
+          ✨
+           (\\.   \\      ,/)
+            \\(   |\\     )/
+            //\\  | \\   /\\\\
+          (/ /\\_#👓#_/\\ \\)
+            \\/\\  ####  /\\/
+                \\\`##' /
+  
+      🔮 Handsfree.js ${window.Handsfree.version} 🔮
+      
+      https://twitter.com/labofoz
+      https://glitch.com/@handsfreejs
+      https://glitch.com/~handsfree-starter
+
+  `)
+  window.handsfree = new window.Handsfree({
+    settings: {
+      tracker: {
+        brf: {
+          enabled: true
+        },
+        posenet: {
+          enabled: false
+        }
+      }
+    }
+  })
   const handsfree = window.handsfree
+
+  /**
+   * Boids Debugger Plugin
+   * - Adds a fullscreen canvas
+   * - Places boids on the screen
+   * - Boids do their own thing when camera is off
+   * - Boids gather to face landmark points when turned on
+   * - Disabled by default
+   *
+   * @see https://codepen.io/scorch/pen/aWzJgW
+   */
   const BoidsDebugger = handsfree.use({
     name: 'boids-debugger',
-
-    _isDisabled: false,
 
     // The canvas context
     canvas: [
@@ -213,6 +244,9 @@ document.addEventListener('DOMContentLoaded', () => {
     this.history = []
 
     this.update = function () {
+      // if (!handsfree.pose[0].face || !handsfree.pose[0].face.points[this.id]) return
+      if ((handsfree.isTracking && !handsfree.pose[0].face) || (handsfree.isTracking && !handsfree.pose[0].face.points[this.id])) return
+      
       //////////////////////////////////////
       this.step ++
       this.step %= 400

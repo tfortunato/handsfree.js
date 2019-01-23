@@ -26,7 +26,10 @@
     }
   },
   "eslintIgnore": [
-    "handsfree.js/models/**/*"
+    "public/models/**/*",
+    "public/3d/**/*",
+    "public/brf/**/*",
+    "public/lib/**/*"
   ],
   "postcss": {
     "plugins": {
@@ -50,21 +53,26 @@
       "./test/jest-setup.js"
     ],
     "moduleNameMapper": {
-      "\\.(css|styl)$": "identity-obj-proxy"
+      "\\.(css|styl)$": "identity-obj-proxy",
+      "@tensorflow-models/posenet": "<rootDir>/test/mocks/posenet.js"
     },
     "setupTestFrameworkScriptFile": "./test/global-setup.js",
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/test/",
-      "/handsfree.js/models/"
+      "/handsfree.js/models/",
+      "/public/models/"
     ],
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/test/",
-      "/handsfree.js/models/"
+      "/handsfree.js/models/",
+      "/public/models/"
     ]
   },
   "dependencies": {
+    "@tensorflow-models/posenet": "^0.2.3",
+    "@tensorflow/tfjs": "^0.14.2",
     "idempotent-babel-polyfill": "^7.0.0",
     "javascript-time-ago": "^1.0.32",
     "simple-keyboard": "^2.8.0",
