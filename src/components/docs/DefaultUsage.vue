@@ -20,15 +20,30 @@ div
                 strong(slot='header') Buttons and Switches
                 v-card
                   v-card-text
-                    p Last pressed button: <strong>{{lastButton}}</strong>
-                    v-btn(large color='primary' @click='lastButton = "A"') Test button A
-                    v-btn(large color='success' @click='lastButton = "B"') Test button B
-                    v-btn(large color='error' @click='lastButton = "C"') Test button C
+                    v-flex(xs12)
+                      v-btn-toggle(v-model='lastButton')
+                        v-btn(flat large)
+                          v-icon format_align_left
+                        v-btn(flat large)
+                          v-icon format_align_center
+                        v-btn(flat large)
+                          v-icon format_align_right
+                        v-btn(flat large)
+                          v-icon format_align_justify
+                        v-divider.mx-2(vertical)
+                        v-btn(flat large)
+                          v-icon format_bold
+                        v-btn(flat large)
+                          v-icon format_italic
+                        v-btn(flat large)
+                          v-icon format_underlined
+                        v-btn(flat large)
+                          v-icon format_color_fill
                     br
                     v-radio-group(v-model='lastRadio')
-                      v-radio(label='Test Switch A' value=0)
-                      v-radio(label='Test Switch B' value=1)
-                      v-radio(label='Test Switch C' value=2)
+                      v-radio(label='Test Switch A' value=1)
+                      v-radio(label='Test Switch B' value=2)
+                      v-radio(label='Test Switch C' value=3)
 
             v-flex
               v-btn(color='primary' :to='{name: "docs"}')
@@ -50,8 +65,8 @@ export default {
 
   data () {
     return {
-      lastButton: '',
-      lastRadio: 0,
+      lastButton: 0,
+      lastRadio: 1,
       tab: 0
     }
   }
