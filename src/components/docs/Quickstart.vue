@@ -51,7 +51,7 @@ div
                         handsfree.start()
 
             v-flex
-              v-btn(color='primary' :to='{name: "docsIntro"}')
+              v-btn(color='primary' :to='{name: "docsGettingStarted"}')
                 v-icon chevron_left
                 | Intro
               v-btn(color='primary' :to='{name: "docsConfig"}' style='float: right')
