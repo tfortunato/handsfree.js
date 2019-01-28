@@ -9,7 +9,7 @@ module.exports = {
   scrollSpeed: 0.1,
 
   // Number of pixels from the top/bottom edge to start scrolling at
-  scrollZone: 100,
+  scrollZone: 150,
 
   /**
    * Scrolls the page when the cursor is above/below the screen
@@ -22,10 +22,11 @@ module.exports = {
       let y = pose.face.cursor.y
 
       // Scroll the page
-      if (y < this.scrollZone)
-        window.scrollTo(0, window.scrollY + y * this.scrollSpeed)
-      else if (y > window.innerHeight - this.scrollZone)
-        window.scrollTo(0, window.scrollY + (y - window.innerHeight - this.scrollZone) * this.scrollSpeed)
+      if (y < this.scrollZone) {
+        window.scrollTo(0, window.scrollY + (y - this.scrollZone) * this.scrollSpeed)
+      } else if (y > window.innerHeight - this.scrollZone) {
+        window.scrollTo(0, window.scrollY + (y - window.innerHeight + this.scrollZone) * this.scrollSpeed)
+      }
     })
   }
 }
