@@ -8,6 +8,9 @@ module.exports = {
   // @TODO Implement this on handsfree.js.org
   scrollSpeed: 0.1,
 
+  // Number of pixels from the top/bottom edge to start scrolling at
+  scrollZone: 100,
+
   /**
    * Scrolls the page when the cursor is above/below the screen
    * @param {Array}     poses    The array of face objects
@@ -19,10 +22,10 @@ module.exports = {
       let y = pose.face.cursor.y
 
       // Scroll the page
-      if (y < 0)
+      if (y < this.scrollZone)
         window.scrollTo(0, window.scrollY + y * this.scrollSpeed)
-      else if (y > window.innerHeight)
-        window.scrollTo(0, window.scrollY + (y - window.innerHeight) * this.scrollSpeed)
+      else if (y > window.innerHeight - this.scrollZone)
+        window.scrollTo(0, window.scrollY + (y - window.innerHeight - this.scrollZone) * this.scrollSpeed)
     })
   }
 }

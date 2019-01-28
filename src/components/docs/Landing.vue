@@ -7,7 +7,7 @@ div
 
       v-flex(xs12 md8)
         v-card
-          v-card-title
+          v-card-title(primary-title)
             h1.headline.mb-0 Getting Started
           v-card-text
             p <strong>Handsfree.js is a drop-in library that adds head tracked cursors in just a few lines.</strong> By default, Handsfree.js is configured for web browsing: clicking, typing, and page scrolling all work out the box with no setup!
@@ -70,8 +70,8 @@ div
                         handsfree.start()
 
             v-flex
-              v-btn(color='primary' :to='{name: "docsQuickstart"}' style='float: right')
-                | Quickstart
+              v-btn(color='primary' :to='{name: "docsDefaultUsage"}' style='float: right')
+                | Default Usage
                 v-icon chevron_right
               .clear
 </template>

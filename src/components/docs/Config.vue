@@ -87,7 +87,7 @@ div
             p Settings can later be updated with <code>handsfree.settings['my.setting'] = newValue;</code>
 
             v-flex
-              v-btn(color='primary' :to='{name: "docsQuickstart"}')
+              v-btn(color='primary' :to='{name: "docsDefaultUsage"}')
                 v-icon chevron_left
                 | Quickstart
               v-btn(color='primary' :to='{name: "docsPlugins"}' style='float: right')
