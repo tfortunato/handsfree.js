@@ -1,5 +1,5 @@
 <template lang="pug">
-v-flex(xs12 md4 lg3)
+v-flex(xs12 md4)
   v-list
     v-list-tile(:to='{name: "docsIntro"}')
       v-list-tile-title Intro
