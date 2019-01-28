@@ -1,10 +1,10 @@
 <template lang="pug">
 div
-  v-container(grid-list-lg)
+  v-container(grid-list-lg flex)
     v-layout(row wrap)
       DocsSidebar
 
-      v-flex(xs12 md8 lg9)
+      v-flex(xs12 md8)
         v-card
           v-card-title(primary-title)
             h2.headline.mb-0 Events

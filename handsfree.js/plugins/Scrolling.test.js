@@ -19,13 +19,13 @@ describe('Plugin: Scrolling', () => {
     document.body.style.height = '10000px'
     window.scrollTo(0, scrollTo)
     handsfree._onFrameHooks(poses)
-    expect(window.scrollY).toBe(scrollTo + poses[0].face.cursor.y * handsfree.plugin.Scrolling.scrollSpeed)
+    expect(window.scrollY).toBe(scrollTo + (poses[0].face.cursor.y - handsfree.plugin.Scrolling.scrollZone) * handsfree.plugin.Scrolling.scrollSpeed)
 
     // Scroll down
     poses[0].face.cursor.y = window.innerHeight + 1
     window.scrollTo(0, 0)
     handsfree._onFrameHooks(poses)
-    expect(window.scrollY).toBe((poses[0].face.cursor.y - window.innerHeight) * handsfree.plugin.Scrolling.scrollSpeed)
+    expect(window.scrollY).toBe((poses[0].face.cursor.y - window.innerHeight + handsfree.plugin.Scrolling.scrollZone) * handsfree.plugin.Scrolling.scrollSpeed)
 
     // No Scroll
     poses[0].face.cursor.y = window.innerHeight / 2

@@ -7,8 +7,8 @@ import YouTubeSingle from '../components/youtube/Single.vue'
 import HolodeckLanding from '../components/holodeck/Landing.vue'
 import Settings from '../components/Settings.vue'
 
-import DocsLanding from '../components/docs/Landing.vue'
-import DocsQuickstart from '../components/docs/Quickstart.vue'
+import docsGettingStarted from '../components/docs/Landing.vue'
+import docsDefaultUsage from '../components/docs/DefaultUsage.vue'
 import DocsConfig from '../components/docs/Config.vue'
 import DocsPlugins from '../components/docs/Plugins.vue'
 import DocsEvents from '../components/docs/Events.vue'
@@ -26,9 +26,8 @@ export default new VueRouter({
     {name: 'spaceWhalesLanding', path: '/space-whales', component: SpaceWhales},
 
     // Docs
-    {name: 'docs', path: '/docs', component: DocsLanding},
-    {name: 'docsIntro', path: '/docs/intro', component: DocsLanding},
-    {name: 'docsQuickstart', path: '/docs/quickstart', component: DocsQuickstart},
+    {name: 'docs', path: '/docs', component: docsGettingStarted},
+    {name: 'docsDefaultUsage', path: '/docs/default-usage', component: docsDefaultUsage},
     {name: 'docsConfig', path: '/docs/config', component: DocsConfig},
     {name: 'docsPlugins', path: '/docs/plugins', component: DocsPlugins},
     {name: 'docsEvents', path: '/docs/events', component: DocsEvents},

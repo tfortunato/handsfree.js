@@ -1,15 +1,15 @@
 <template lang="pug">
 div
-  v-container(grid-list-lg)
+  v-container(grid-list-lg flex)
     v-layout(row wrap)
       DocsSidebar
 
-      v-flex(xs12 md8 lg9)
+      v-flex(xs12 md8)
         v-card
           v-card-title(primary-title)
-            h2.headline.mb-0 Config and Settings
+            h2.headline.mb-0 Config & Settings
           v-card-text
-            p When instantiating <code>Handsfree</code>, you can pass in a config object.
+            p When instantiating <code>Handsfree</code>, you can pass in a config object. The config is saved under <code>handsfree.settings</code>, so to change a setting after instantiation you can use <code>handsfree.settings['my']['setting'] = newValue;</code>:
             pre
               code.javascript.
                const handsfree = new Handsfree({
@@ -84,12 +84,10 @@ div
                   }
                 }
 
-            p Settings can later be updated with <code>handsfree.settings['my.setting'] = newValue;</code>
-
             v-flex
-              v-btn(color='primary' :to='{name: "docsQuickstart"}')
+              v-btn(color='primary' :to='{name: "docsDefaultUsage"}')
                 v-icon chevron_left
-                | Quickstart
+                | Default Usage
               v-btn(color='primary' :to='{name: "docsPlugins"}' style='float: right')
                 | Plugins
                 v-icon chevron_right
