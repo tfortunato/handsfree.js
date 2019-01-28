@@ -104,6 +104,11 @@ export default {
           to: {name: "holodeckLanding"},
           icon: 'blur_on'
         },
+        // {
+        //   title: 'Kinematics',
+        //   to: {name: "kinematicsLanding"},
+        //   icon: 'android'
+        // },
         {
           title: 'Space Whales',
           to: {name: "spaceWhalesLanding"},
