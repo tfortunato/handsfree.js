@@ -5,7 +5,7 @@
   <p>A platform for creating handsfree user interfaces, tools, games, and experiences for the web and IoT 🤯</p>
   <p>Powered by <a href="https://github.com/Tastenkunst/brfv4_javascript_examples">BRFv4</a> and <a href="https://github.com/tensorflow/tfjs-models/tree/master/posenet">PoseNet</a></p>
 <p>
-  <img class="mr-1" src="https://img.shields.io/github/release-pre/labofoz/handsfree.js.svg"> <img class="mr-1" src="https://img.shields.io/github/last-commit/labofoz/handsfree.js.svg"> <img class="mr-1" src="https://img.shields.io/github/commits-since/labofoz/handsfree.js/0.0.1.svg">
+  <img class="mr-1" src="https://img.shields.io/github/release-pre/labofoz/handsfree.js.svg"> <img class="mr-1" src="https://img.shields.io/github/last-commit/labofoz/handsfree.js.svg"> <img class="mr-1" src="https://img.shields.io/github/commits-since/labofoz/handsfree.js/4.0.1.svg">
   <img src="https://img.shields.io/github/repo-size/labofoz/handsfree.js.svg">
 </p>
 <p>
@@ -15,7 +15,7 @@
   <img class="mr-1" src="https://img.shields.io/github/issues/labofoz/handsfree.js/🐞 bug.svg"> <img src="https://img.shields.io/github/issues/labofoz/handsfree.js/👷 help wanted.svg">
 </p>
 <p>
-  <img src="https://travis-ci.org/labofoz/handsfree.js.svg?branch=master">
+  <img src="https://img.shields.io/circleci/project/github/labofoz/handsfree.js.svg">
   <img src="https://img.shields.io/codecov/c/github/labofoz/handsfree.js/master.svg?style=flat">
 </p>
 </div>

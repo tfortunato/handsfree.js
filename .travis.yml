@@ -1,8 +1,0 @@
-language: node_js
-node_js:
-  - "8"
-install:
-  - npm install -g codecov jest
-  - npm install babel-preset-env jest-canvas-mock lodash custom-event-polyfill gsap simple-keyboard identity-obj-proxy babel-preset-es2015 babel-preset-stage-0 @tensorflow/tfjs-core @tensorflow/tfjs
-script:
-  - jest --coverage --detectOpenHandles && codecov
