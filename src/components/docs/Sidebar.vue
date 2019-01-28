@@ -25,7 +25,7 @@ v-flex(xs12 md4)
             v-img(style='border-radius: 0 !important' src='/favicon.png')
           v-list-tile-content
             v-list-tile-title Config and Settings
-            v-list-tile-sub-title Description ...
+            v-list-tile-sub-title Instantiate and update Handsfree.js to behave in different ways
 
         v-divider
         v-list-tile(:to='{name: "docsPlugins"}')
@@ -33,7 +33,7 @@ v-flex(xs12 md4)
             v-img(style='border-radius: 0 !important' src='/favicon.png')
           v-list-tile-content
             v-list-tile-title Plugins
-            v-list-tile-sub-title Description ...
+            v-list-tile-sub-title Extend Handsfree.js to work within your project with plugins
 
         v-divider
         v-list-tile(:to='{name: "docsEvents"}')
@@ -41,7 +41,7 @@ v-flex(xs12 md4)
             v-img(style='border-radius: 0 !important' src='/favicon.png')
           v-list-tile-content
             v-list-tile-title Events
-            v-list-tile-sub-title Description ...
+            v-list-tile-sub-title Events allow disconnected parts of your project to communicate with Handsfree.js
 
         v-divider
         v-list-tile(:to='{name: "docsCursor"}')
