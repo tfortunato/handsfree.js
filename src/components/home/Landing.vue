@@ -41,6 +41,29 @@ div
                 v-icon.mr-2 refresh
                 | Clear Drawing
 
+    //- Going further
+    v-layout(justify-center style='margin-top: 200px')
+      v-flex(xs12 md8)
+        v-card(light)
+          v-card-text
+            p.text-xs-center
+              img(src='/favicon.png' width=100)
+            h2.mb-3.text-xs-center Quickstart
+            p By default, Handsfree.js is configured for web browsing: clicking, typing, and page scrolling all work out the box with no setup!
+            pre 
+              code.xml.
+               &lt;!DOCTYPE html&gt;
+                &lt;body&gt;
+                  &lt;script src="https://unpkg.com/handsfree@&lt;5/dist/handsfree.js">&lt;/script&gt;
+                  &lt;script&gt;
+                    handsfree = new Handsfree()
+                    handsfree.start()
+                  &lt;/script&gt;
+                &lt;/body&gt;
+
+            p
+              v-btn(large block color='primary' :to='{name: "docs"}') Explore the Docs
+
     //- Tweets
     v-layout(style='margin-top: 200px' wrap)
       v-flex(xs12)
@@ -59,339 +82,6 @@ div
       v-flex(xs12 md6 lg4)
         <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Demo 005: Handsfree DOOM 🤘<br>Glitch: <a href="https://t.co/PLhrNtNZsQ">https://t.co/PLhrNtNZsQ</a><br><br>Day 6: Works best on desktops for now, once settings API is in place it will be performant on mobile devices too! Tutorial in next day or so <a href="https://twitter.com/hashtag/100DaysOfMLCode?src=hash&amp;ref_src=twsrc%5Etfw">#100DaysOfMLCode</a> <a href="https://twitter.com/hashtag/100DaysOfCode?src=hash&amp;ref_src=twsrc%5Etfw">#100DaysOfCode</a> <a href="https://t.co/09qlGMK0eE">pic.twitter.com/09qlGMK0eE</a></p>&mdash; Oz Ramos 🧙 (@LabOfOz) <a href="https://twitter.com/LabOfOz/status/1064765062416523264?ref_src=twsrc%5Etfw">November 20, 2018</a></blockquote>
 
-  //- Instructions
-  v-container(ref='instructions' grid-list-lg style='margin-top: 200px')
-    v-layout(justify-center)
-      v-flex(xs12 md8)
-        v-stepper(v-model='currentStep' alt-labels)
-          v-stepper-header
-            template(v-for='(step, i) in steps')
-              v-stepper-step(:complete='currentStep > i + 1' :step='i + 1' editable) {{step}}
-              v-divider(v-if='i < steps.length - 1')
-        
-          v-stepper-items
-            //- Step 1
-            v-stepper-content(step='1')
-              v-card
-                v-card-title(primary-title)
-                  h2.headline.mb-0 Installation
-                v-card-text
-                  h3 With HTML:
-                  p This is how we encourage you to use Handsfree.js when using standard web technologies or when experimenting on sites like <a href="https://glitch.com/~handsfree-starter">Glitch.com (check out the Handsfree Starter!)</a>:
-                  pre 
-                    code.xml.
-                      &lt;!-- Latest with version patches (Recommended for production) --&gt;
-                      &lt;script src="https://unpkg.com/handsfree@&lt;3.1/dist/handsfree.js">&lt;/script&gt;
-
-                      &lt;!-- Latest with new features (Recommended for development) --&gt;
-                      &lt;script src="https://unpkg.com/handsfree@&lt;4/dist/handsfree.js">&lt;/script&gt;
-
-                      &lt;!-- Latest with potential backwards incompatability (Recommended for testers) --&gt;
-                      &lt;script src="https://unpkg.com/handsfree/dist/handsfree.js">&lt;/script&gt;
-
-                      &lt;script&gt;
-                        handsfree = new Handsfree()
-                        handsfree.start()
-                      &lt;/script>
-
-                  h3 With Node:
-                  p When developing for the Internet of Things or non-browser based environments, we encourage you to use the below method:
-                  pre
-                    code.bash npm install handsfree
-
-                  div then:
-                  pre 
-                    code.javascript.
-                      import Handsfree from 'handsfree'
-                      const handsfree = new Handsfree()
-                      handsfree.start()
-
-            //- Step 2
-            v-stepper-content(step='2')
-              v-card
-                v-card-title(primary-title)
-                  h2.headline.mb-0 Settings
-                v-card-text
-                  p When instantiating <code>Handsfree</code>, you can pass in a config object.
-                  pre
-                    code.javascript.
-                     const handsfree = new Handsfree({
-                        // Maximum number of poses to track
-                        maxPoses: 1,
-
-                        sensitivity: {
-                          // A factor to adjust the cursors move speed by
-                          xy: 0.7,
-                          // How much wider (+) or narrower (-) a smile needs to be to click
-                          click: 0
-                        },
-                        
-                        stabilizer: {
-                          // How much stabilization to use: 0 = none, 3 = heavy
-                          factor: 1,
-                          // Number of frames to stabilizer over
-                          buffer: 30
-                        },
-
-                        // Sets up the webcam
-                        webcam: {
-                          video: {
-                            width: 640,
-                            height: 480
-                          }
-                        },
-
-                        tracker: {
-                          // PoseNet
-                          // @see https://github.com/tensorflow/tfjs-models/tree/master/posenet
-                          posenet: {
-                            // @todo Make these comments more succinct
-                            // The float multiplier for the depth (number of channels) for all convolution operations.
-                            // - The value corresponds to a MobileNet architecture and checkpoint
-                            // - The larger the value, the larger the size of the layers, and more accurate the model at the cost of speed
-                            // - Set this to a smaller value to increase speed at the cost of accuracy.
-                            // - Possible values [0.5, 0.75, 1.0, 1.01]
-                            multiplier: 0.75,
-                            // A number between 0.2 and 1.0 representing what to scale the image by before feeding it through the network
-                            // - Set this number lower to scale down the image and increase the speed when feeding through the network at the cost of accuracy.
-                            imageScaleFactor: 0.4,
-                            // The minimum overall confidence score required for the a pose/person to be detected.
-                            minPoseConfidence: 0.1,
-                            // The minimum confidence score for an individual keypoint, like the nose or a shoulder, to be detected.
-                            minPartConfidence: 0.5,
-                            // the desired stride for the outputs when feeding the image through the model.
-                            // - The higher the number, the faster the performance but slower the accuracy
-                            // - Possible values [8, 16, 32]
-                            outputStride: 16,
-                            // Non-maximum suppression part distance
-                            // - It needs to be strictly positive
-                            // - Two parts suppress each other if they are less than nmsRadius pixels away
-                            nmsRadius: 20,
-                            // Only return instance detections that have root part score greater or equal to this value.
-                            scoreThreshold: 0.5
-                          }
-                        }
-
-                  p Settings can later be updated with <code>handsfree.settings['my.setting'] = newValue;</code>
-            
-            //- Step 3
-            v-stepper-content(step='3')
-              v-card
-                v-card-title(primary-title)
-                  h2.headline.mb-0 Adding Plugins
-                v-card-text
-                  p Handsfree.js is built around plugins. Plugins have several callbacks that hook into different events, and are added with <code>handsfree.use(config)</code>.
-                  p Each callback receives two arguments, <code>(poses, instance)</code>. <code>instance</code> refers to the <code>new Handsfree</code> instance you created. <code>poses</code> is an array of objects containing the following:
-                  pre
-                    code.javascript.
-                      {
-                        /**
-                         * A BRFv4 tracked face
-                         * @see https://tastenkunst.github.io/brfv4_docs/#hl_BRFFace
-                         */
-                        face: {
-                          cursor: {
-                            // Where on the screen the user is pointed at
-                            x: 0,
-                            y: 0,
-                            
-                            // The target currently under the mouse
-                            $target: 0,
-                            
-                            // Mouse states for this face
-                            state: {
-                              // The first frame of a click
-                              mouseDown: false,
-                              // Every subsequent frame of a click
-                              mouseDrag: false,
-                              // When the click is finally released
-                              mouseUp: false
-                            }
-                          },
-                          
-                          // A list of all 64 landmarks
-                          points: [{x, y}, ...],
-                        
-                          // The head's pitch (facing up/down)
-                          rotationX: 0,
-                          // The head's yaw (facing left/right)
-                          rotationY: 0,
-                          // The head's roll (as if doing a cartwheel while facing straight ahead)
-                          rotationZ: 0,
-                        
-                          // The heads overall size within the camera
-                          scale: 0,
-                        
-                          // Where the head is relative to the left edge of the video feed
-                          translationX: 0,
-                          // Where the head is relative to the top edge of the video feed
-                          translationY: 0
-                        }
-                      }
-                      
-                  p Here are the landmark points, with #27 being the reference point for rotation/translation:
-                  p
-                    img(src='../../assets/img/brfv4_landmarks.jpg')
-
-                  p The following are the available plugin methods:
-                  pre
-                    code.javascript.
-                      const myPlugin = handsfree.use({
-                        // Must be unique. Spaces and special characters are fine
-                        name: '',
-
-                        // The plugins execution priority
-                        // - Lower numbers run before higher numbers
-                        // - Numbers can be negative and fractional
-                        priority: 10,
-
-                        // Set to true to have this plugin disabled by default
-                        _isDisabled: false,
-
-                        // Called once when the use method is called and after the plugin is added to the instance
-                        onUse: () => {},
-
-                        // Called once per frame, after calculations, along with the detected pose object
-                        // - {Return}       To overwrite/modify the properties of handsfree.pose for use within other plugins, return an array with modifications
-                        onFrame: (poses, handsfree) => {},
-
-                        // Called any time Handsfree.start() is called
-                        onStart: (handsfree) => {},
-
-                        // Called any time Handsfree.stop() is called
-                        onStop: (handsfree) => {},
-
-                        // Called when .disable() is explicitely called on this plugin
-                        onDisable: (handsfree) => {},
-
-                        // Called when .enable() is explicitely called on this plugin
-                        onEnable: (handsfree) => {},
-
-                        // Called the first frame a face clicks
-                        onMouseDown: (face, faceIndex) => {},
-
-                        // Called every frame after a face clicks and is still in "click mode"
-                        onMouseDrag: (face, faceIndex) => {},
-
-                        // Called after a face releases a click
-                        onMouseUp: (face, faceIndex) => {}
-                      })
-
-                  p Additionally, every plugin has a <code>.disable()</code> and an <code>.enable()</code> method, which sets a <code>._isDisabled</code> flag to either true or false:
-                  pre
-                    code.javascript.
-                      handsfree.plugin['my-plugin'].disable() // handsfree.plugin['my-plugin']._isDisabled === true
-                      handsfree.plugin['my-plugin'].enable() // handsfree.plugin['my-plugin']._isDisabled === false
-                      
-            //- Step 4
-            v-stepper-content(step='4')
-              v-card
-                v-card-title(primary-title)
-                  h2.headline.mb-0 Window Events
-                v-card-text
-                  p If you don't have access to the handsfree instance, or if you don't want to create a plugin (for instance, to communicate with disconnected parts of your app/service), an alternative is to just listen to the following window events:
-                  
-                  pre
-                    code.javascript.
-                      /**
-                        * Bind to the handsfree:trackPoses event, which is called once per frame
-                        * @param {Handsfree} ev.detail.scope The handsfree instance
-                        * @param {Array}     ev.detail.poses Collection of pose objects
-                        */
-                      window.addEventListener('handsfree:trackPoses', (ev) => {
-                        // Do code with the handsfree instance: ev.detail.scope
-                        // or with the the pose: ev.detail.poses
-                      })
-
-                      /**
-                        * Called for every chunk while BRFv4 is loading
-                        * - Good for showing load progress
-                        * - ev.data.progress is between 0 and 1
-                        */
-                      window.addEventListener('handsfree:loading', (ev) => {
-                        const progress = ev.data.progress
-                        // Display progress
-                      })
-
-                      /**
-                        * Called after handsfree is instantiated and ready to be used
-                        * - Models are loaded and ready to be used
-                        * - Use this to enable a [onclick="handsfree.start()"]
-                        * - Also good for ending a loading screen
-                        */
-                      window.addEventListener('handsfree:ready', () => {
-                        // Enable .start() buttons
-                      })
-
-                      /**
-                        * Called the first frame that a face clicks
-                        */
-                      window.addEventListener('handsfree:mouseDown', (ev) => {
-                        const face = ev.detail.face
-                        const faceIndex = ev.detail.faceIndex
-
-                        // Do things with face and faceIndex here
-                      })
-
-                      /**
-                        * Called every frame after a face clicks and is still in "click mode"
-                        */
-                      window.addEventListener('handsfree:mouseDrag', (ev) => {
-                        const face = ev.detail.face
-                        const faceIndex = ev.detail.faceIndex
-
-                        // Do things with face and faceIndex here
-                      })
-
-                      /**
-                        * Called when a face releases a click
-                        */
-                      window.addEventListener('handsfree:mouseUp', (ev) => {
-                        const face = ev.detail.face
-                        const faceIndex = ev.detail.faceIndex
-
-                        // Do things with face and faceIndex here
-                      })
-
-                v-card-text
-                  p You can use <code>handsfree.dispatch(eventName)</code> to trigger events. This helper is the equivalent of using <code>window.dispatchEvent()</code>. One thing to note is that eventNames are namespaced with <code>handsfree:</code>, for instance:
-
-                  pre
-                    code.javascript.
-                      // This...
-                      handsfree.dispatch('SimpleKeyboard:change', 'abc')
-
-                      // ...and this are equivalent
-                      window.dispatchEvent(new CustomEvent('handsfree:SimpleKeyboard:change'), {
-                        detail: 'abc'
-                      })
-
-            //- Step 5
-            v-stepper-content(step='5')
-              v-card
-                v-card-title(primary-title)
-                  h2.headline.mb-0 Getting Elements
-                v-card-text
-                  p You can get the element currently underneath the cursor with <code>.cursor.$target</code>:
-                  pre
-                    code.javascript.
-                      // Outside of plugins
-                      const $target = handsfree.poses[n].face.cursor.$target
-                      
-                      // Inside plugins
-                      handsfree.use({
-                        onFrame (poses) {
-                          const $target = poses[n].cursor.$target
-                        }
-                      })
-
-                  p You can do anything with the target including manipulating it (eg with jQuery) and dispatching events with the <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Creating_and_triggering_events">dispatchEvent API</a>.
-
-          v-stepper-header
-            template(v-for='(step, i) in steps')
-              v-stepper-step(:complete='currentStep > i + 1' :step='i + 1' editable) {{step}}
-              v-divider(v-if='i < steps.length - 1')
-
   //- Going further
   v-container(style='margin-top: 200px; margin-bottom: 200px')
     v-layout(justify-center)
@@ -405,17 +95,8 @@ div
             h2.text-xs-center.headline.mb-5 <strong>Going Further:</strong> Try the Handsfree Starter
             p <a href="https://glitch.com/~handsfree-starter">The Handsfree Starter on Glitch</a> is a slimmed down version of this site, designed to help you prototype quickly. If you'd rather work on something locally, here's the bare minimum you need:
 
-            pre 
-              code.xml.
-               &lt;!DOCTYPE html>
-                &lt;body>
-                  &lt;button onclick="handsfree.start()">&lt;/button>
-                  
-                  &lt;script src="https://unpkg.com/handsfree@&lt;5/dist/handsfree.js">&lt;/script&gt;
-                  &lt;script>
-                    handsfree = new Handsfree()
-                  &lt;/script>
-                &lt;/body>
+            p
+              v-btn(large block color='primary' href='https://glitch.com/~handsfree-starter') Remix the Handsfree Starter
 </template>
 
 <script>

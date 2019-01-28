@@ -49,7 +49,7 @@ v-flex(xs12 md4)
             v-img(style='border-radius: 0 !important' src='/favicon.png')
           v-list-tile-content
             v-list-tile-title handsfree.cursor
-            v-list-tile-sub-title Description ...
+            v-list-tile-sub-title This object contains the (x, y) the user is facing as well as the element underneath
 </template>
 
 <script>
