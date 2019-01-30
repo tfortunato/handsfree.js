@@ -67,7 +67,7 @@ div
     //- Tweets
     v-layout(style='margin-top: 200px' wrap)
       v-flex(xs12)
-        h1 Check out these examples
+        h1 Try these examples...
     
       v-flex(xs12 md6 lg4)
         <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">🔮 Check it out! <a href="https://t.co/IzYryASdhe">https://t.co/IzYryASdhe</a><br><br>It&#39;s not &quot;holographic&quot; yet, but the 360 controls are actually easy to use now! I was over engineering it, see the /starter.js for how I&#39;m doing it: <a href="https://t.co/W1xDMeZU88">https://t.co/W1xDMeZU88</a><br><br>Try some others here: <a href="https://t.co/fBmF1AFm2B">https://t.co/fBmF1AFm2B</a> <a href="https://t.co/iIZGMHcDJ0">pic.twitter.com/iIZGMHcDJ0</a></p>&mdash; Oz Ramos 🧙 (@LabOfOz) <a href="https://twitter.com/LabOfOz/status/1069060554503815169?ref_src=twsrc%5Etfw">December 2, 2018</a></blockquote>
@@ -81,6 +81,13 @@ div
         <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Demo 002: Pan and Zoom Google Maps Handsfree 🧙‍♂️<br>Glitch: <a href="https://t.co/HMi0ir4z0H">https://t.co/HMi0ir4z0H</a> …<br>Tutorial: <a href="https://t.co/S0Oxe9rGyF">https://t.co/S0Oxe9rGyF</a> …<br><br>Day 3: Today I also launched a forum, the placeholder for <a href="https://t.co/w99puonGRG">https://t.co/w99puonGRG</a> , and continued studying Image Segmentation! <a href="https://twitter.com/hashtag/100DaysOfMLCode?src=hash&amp;ref_src=twsrc%5Etfw">#100DaysOfMLCode</a> <a href="https://twitter.com/hashtag/100DaysOfCode?src=hash&amp;ref_src=twsrc%5Etfw">#100DaysOfCode</a> <a href="https://t.co/ZKL9HIa329">pic.twitter.com/ZKL9HIa329</a></p>&mdash; Oz Ramos 🧙 (@LabOfOz) <a href="https://twitter.com/LabOfOz/status/1063644373043171328?ref_src=twsrc%5Etfw">November 17, 2018</a></blockquote>
       v-flex(xs12 md6 lg4)
         <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Demo 005: Handsfree DOOM 🤘<br>Glitch: <a href="https://t.co/PLhrNtNZsQ">https://t.co/PLhrNtNZsQ</a><br><br>Day 6: Works best on desktops for now, once settings API is in place it will be performant on mobile devices too! Tutorial in next day or so <a href="https://twitter.com/hashtag/100DaysOfMLCode?src=hash&amp;ref_src=twsrc%5Etfw">#100DaysOfMLCode</a> <a href="https://twitter.com/hashtag/100DaysOfCode?src=hash&amp;ref_src=twsrc%5Etfw">#100DaysOfCode</a> <a href="https://t.co/09qlGMK0eE">pic.twitter.com/09qlGMK0eE</a></p>&mdash; Oz Ramos 🧙 (@LabOfOz) <a href="https://twitter.com/LabOfOz/status/1064765062416523264?ref_src=twsrc%5Etfw">November 20, 2018</a></blockquote>
+
+      v-flex.mt-5(xs12)
+        h1 ...and check out what else you can do!
+      v-flex(xs12 md6 lg4)
+        <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">I&#39;m experimenting with controlling robot arms using inverse kinematics inside the browser. I&#39;ll have a demo out later!<br><br>Kinematics.js: <a href="https://t.co/igFEo9CDV1">https://t.co/igFEo9CDV1</a><br>Robot GUI: <a href="https://t.co/UMs9Vcrroc">https://t.co/UMs9Vcrroc</a> <a href="https://t.co/5lajFU7zT4">pic.twitter.com/5lajFU7zT4</a></p>&mdash; Oz Ramos 🧙 (@LabOfOz) <a href="https://twitter.com/LabOfOz/status/1090246536414543878?ref_src=twsrc%5Etfw">January 29, 2019</a></blockquote>
+      v-flex(xs12 md6 lg4)
+        <blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">Added a head, upped the speed a tiny bit, and added more degrees of freedom!<br><br>This is a <a href="https://twitter.com/Universal_Robot?ref_src=twsrc%5Etfw">@Universal_Robot</a> being controlled with my head via webcam with Handsfree.js from the browser.<br><br>The model I&#39;m using is <a href="https://twitter.com/hashtag/BRFv4?src=hash&amp;ref_src=twsrc%5Etfw">#BRFv4</a>, but I added PoseNet last week so we can use that too! <a href="https://t.co/6YFVVhKLkv">pic.twitter.com/6YFVVhKLkv</a></p>&mdash; Oz Ramos 🧙 (@LabOfOz) <a href="https://twitter.com/LabOfOz/status/1090662898232410113?ref_src=twsrc%5Etfw">January 30, 2019</a></blockquote>
 
   //- Going further
   v-container(style='margin-top: 200px; margin-bottom: 200px')

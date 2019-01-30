@@ -13,8 +13,16 @@ div
             p <strong>Handsfree.js is a drop-in library that adds head tracked cursors in just a few lines.</strong> By default, Handsfree.js is configured for web browsing: clicking, typing, and page scrolling all work out the box with no setup!
             p To calculate where to place these cursors, <strong>Handsfree.js</strong> uses computer vision models like <a href="https://github.com/Tastenkunst/brfv4_javascript_examples">BRFv4</a> and <a href="https://github.com/tensorflow/tfjs-models/tree/master/posenet">PoseNet</a> to extract pose information. Depending on your specific use case and performance requirements, you can hot-swap these models to explore new ways to interact with your devices!
 
-            p.text-xs-center
-              img(src='https://media.giphy.com/media/1BfxclKOXRBVQyX2OV/source.gif')
+            pre 
+              code.xml.
+               &lt;!DOCTYPE html&gt;
+                &lt;body&gt;
+                  &lt;script src="https://unpkg.com/handsfree@4.0.2/dist/handsfree.js">&lt;/script&gt;
+                  &lt;script&gt;
+                    handsfree = new Handsfree()
+                    handsfree.start()
+                  &lt;/script&gt;
+                &lt;/body&gt;
 
             v-expansion-panel(v-model='tab')
               v-expansion-panel-content

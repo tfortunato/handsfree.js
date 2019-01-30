@@ -1,7 +1,6 @@
 /**
  * Companion store for the Space Whale plugin
  */
-
 export default {
   namespaced: true,
 
