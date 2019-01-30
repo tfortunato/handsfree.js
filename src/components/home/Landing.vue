@@ -98,7 +98,7 @@ div
             p.text-xs-center
               img(src='/favicon.png' width=100)
             p.text-xs-center
-              img(src='https://media.giphy.com/media/3Z15Ve7WEQGkLa1FwC/giphy.gif')
+              img(v-lazy='"https://media.giphy.com/media/3Z15Ve7WEQGkLa1FwC/giphy.gif"')
             h2.text-xs-center.headline.mb-5 <strong>Going Further:</strong> Try the Handsfree Starter
             p <a href="https://glitch.com/~handsfree-starter">The Handsfree Starter on Glitch</a> is a slimmed down version of this site, designed to help you prototype quickly. If you'd rather work on something locally, here's the bare minimum you need:
 

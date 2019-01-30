@@ -75,7 +75,8 @@
     "@tensorflow/tfjs": "^0.14.2",
     "idempotent-babel-polyfill": "^7.0.0",
     "javascript-time-ago": "^1.0.32",
-    "simple-keyboard": "^2.8.0"
+    "simple-keyboard": "^2.8.0",
+    "vue-lazyload": "^1.2.6"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
