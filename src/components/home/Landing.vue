@@ -107,7 +107,6 @@ div
 </template>
 
 <script>
-import hljs from 'highlight.js'
 import './handsfree.js'
 import {mapState} from 'vuex'
 
@@ -130,21 +129,12 @@ export default {
   },
   
   mounted () {
-    window.hljs = hljs
-    hljs.initHighlighting.called = false
-    hljs.initHighlighting()
-
     // @TODO Let's make use of plugin enable/disables
     window.handsfree && window.handsfree.plugin.PaperDraw.reInit()
     window.addEventListener('load', () => {window.handsfree.plugin.PaperDraw.reInit()})
 
-    // Add scripts
-    let scripts = ['https://platform.twitter.com/widgets.js', 'https://buttons.github.io/buttons.js']
-    scripts.forEach(script => {
-      const $script = document.createElement('script')
-      $script.src = script
-      document.body.appendChild($script)
-    })
+    this.$store.dispatch('syntaxHighlight')
+    this.$store.dispatch('loadScripts', ['https://platform.twitter.com/widgets.js', 'https://buttons.github.io/buttons.js'])
   },
 
   methods: {

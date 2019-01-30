@@ -29,7 +29,6 @@ import Handsfree from './handsfree'
 import {mapState} from 'vuex'
 import {debounce} from 'lodash'
 const BABYLON = require('babylonjs')
-import hljs from 'highlight.js'
 require('babylonjs-loaders')
 require('babylonjs-materials')
 
@@ -87,19 +86,8 @@ export default {
    * Create the scene
    */
   mounted () {
-    // Highlighting
-    window.hljs = hljs
-    hljs.initHighlighting.called = false
-    hljs.initHighlighting()
-
-    // Add scripts
-    let scripts = ['https://platform.twitter.com/widgets.js', 'https://buttons.github.io/buttons.js']
-    scripts.forEach(script => {
-      const $script = document.createElement('script')
-      $script.src = script
-      document.body.appendChild($script)
-    })
-
+    this.$store.dispatch('loadScripts', ['https://platform.twitter.com/widgets.js', 'https://buttons.github.io/buttons.js'])
+    this.$store.dispatch('syntaxHighlight')
     this.setupScene()
   },
 

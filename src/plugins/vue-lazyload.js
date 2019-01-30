@@ -1,5 +1,5 @@
 /**
- * Adds image lazyloading via <img v-lazy='img.jpg'>
+ * Adds image lazyloading via <img v-lazy='"img.jpg"'>
  * @see https://github.com/hilongjw/vue-lazyload
  */
 import Vue from 'vue'
