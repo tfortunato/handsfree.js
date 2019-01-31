@@ -75,7 +75,6 @@
 import Keyboard from './components/Keyboard'
 import WebcamToggle from './components/WebcamToggle'
 import {mapState} from 'vuex'
-require('./handsfree')
 
 export default {
   name: 'App',

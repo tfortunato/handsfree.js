@@ -65,7 +65,7 @@ div
               v-btn(large block color='primary' :to='{name: "docs"}') Explore the Docs
 
     //- Tweets
-    v-layout(style='margin-top: 200px' wrap)
+    v-layout(style='margin-top: 200px;' wrap)
       v-flex(xs12)
         h1 Try these examples...
     
@@ -148,4 +148,12 @@ export default {
 <style scoped lang="stylus">
 h1
   text-shadow: 0 0 20px rgba(255, 255, 255, 0.5)
+
+blockquote
+  background: #fff
+  padding: 20px
+  border-radius: 3px
+  box-shadow: 1px 1px 3px rgab(0, 0, 0, 0.35)
+  overflow-wrap: break-word
+  word-wrap: break-word
 </style>

@@ -4,7 +4,6 @@ import {set} from 'lodash'
 import youtube from '../store/youtube'
 import spacewhale from '../store/spacewhale'
 import hljs from 'highlight.js'
-window.hljs = hljs
 
 Vue.use(Vuex)
 const store = new Vuex.Store({
