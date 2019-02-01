@@ -2,7 +2,7 @@
 div
   v-container(grid-list-lg flex)
     v-layout(row wrap)
-      DocsSidebar
+      DocsSidebar(activeGroup='gettingStarted')
 
       v-flex(xs12 md8)
         v-card

@@ -2,7 +2,7 @@
 div
   v-container(grid-list-lg flex)
     v-layout(row wrap)
-      DocsSidebar
+      DocsSidebar(activeGroup='gettingStarted')
         v-img(src='https://media.giphy.com/media/1BfxclKOXRBVQyX2OV/source.gif')
 
       v-flex(xs12 md8)

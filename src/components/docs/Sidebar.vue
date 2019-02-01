@@ -4,7 +4,7 @@ v-flex(xs12 md4)
     slot
     v-card-text
       v-list(three-line)
-        v-list-group
+        v-list-group(:value='theActiveGroup === "gettingStarted"')
           v-list-tile(slot='activator')
             v-list-tile-content
               v-list-tile-title Getting Started
@@ -26,7 +26,7 @@ v-flex(xs12 md4)
               v-list-tile-sub-title See what Handsfree.js can do without any setup
 
         v-divider
-        v-list-group
+        v-list-group(:value='theActiveGroup === "config"')
           v-list-tile(slot='activator')
             v-list-tile-content
               v-list-tile-title Config and Settings
@@ -35,8 +35,8 @@ v-flex(xs12 md4)
             v-list-tile-avatar
               v-img(style='border-radius: 0 !important' src='/favicon.png')
             v-list-tile-content
-              v-list-tile-title Config and Settings
-              v-list-tile-sub-title Instantiate and update Handsfree.js to behave in different ways
+              v-list-tile-title Config
+              v-list-tile-sub-title Explore the different instantiation configs
 
         v-divider
         v-list-tile(:to='{name: "docsPlugins"}')
@@ -65,7 +65,14 @@ v-flex(xs12 md4)
 
 <script>
 export default {
-  name: 'DemoSidebar'
+  name: 'DemoSidebar',
+  props: ['activeGroup'],
+
+  data () {
+    return {
+      theActiveGroup: this.activeGroup
+    }
+  },
 }
 </script>
 
