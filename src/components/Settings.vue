@@ -139,6 +139,7 @@ export default {
     this.$store.dispatch('onReady', () => {
       this.usePoseNet = window.handsfree.settings.tracker.posenet.enabled
       this.useBRF = window.handsfree.settings.tracker.brf.enabled
+      this.isWebcamVisible = window.handsfree.debug.isEnabled
     })
   },
 
