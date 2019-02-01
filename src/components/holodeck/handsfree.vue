@@ -71,17 +71,15 @@ export default {
          */
         onFrame (poses) {
           poses.forEach(pose => {
-            const face = pose.face
-
             // Hide cursor when over the iframe
-            if (face.cursor.$target && face.cursor.$target.nodeName === 'CANVAS') {
+            if (pose.cursor.$target && pose.cursor.$target.nodeName === 'CANVAS') {
               handsfree.cursor.$el.style.display = this.showCursor ? 'inherit' : 'none'
             } else {
               handsfree.cursor.$el.style.display = 'inherit'
             }
 
             // Update positions
-            component.updateCamera(face)
+            component.updateCamera(pose.face)
             component.renderer.render(component.scene, component.camera)
           })
         }

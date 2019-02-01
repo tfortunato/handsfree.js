@@ -26,7 +26,7 @@ div
             pre
               code.javascript.
                 // Outside of plugins
-                const $target = handsfree.poses[n].face.cursor.$target
+                const $target = handsfree.poses[n].cursor.$target
                 
                 // Inside plugins
                 handsfree.use({

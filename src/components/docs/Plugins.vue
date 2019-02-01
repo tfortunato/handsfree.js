@@ -97,14 +97,14 @@ div
                   // Called when .enable() is explicitely called on this plugin
                   onEnable: (handsfree) => {},
 
-                  // Called the first frame a face clicks
-                  onMouseDown: (face, faceIndex) => {},
+                  // Called the first frame a pose clicks
+                  onMouseDown: (pose, poseIndex) => {},
 
-                  // Called every frame after a face clicks and is still in "click mode"
-                  onMouseDrag: (face, faceIndex) => {},
+                  // Called every frame after a pose clicks and is still in "click mode"
+                  onMouseDrag: (pose, poseIndex) => {},
 
-                  // Called after a face releases a click
-                  onMouseUp: (face, faceIndex) => {}
+                  // Called after a pose releases a click
+                  onMouseUp: (pose, poseIndex) => {}
                 })
 
             p Additionally, every plugin has a <code>.disable()</code> and an <code>.enable()</code> method, which sets a <code>._isDisabled</code> flag to either true or false:

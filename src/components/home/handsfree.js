@@ -30,10 +30,10 @@ window.addEventListener('load', () => {
     /**
      * Start path, select new color
      */
-    onMouseDown (face, faceIndex) {
-      if (!$canvas || face.cursor.$target !== $canvas) return
+    onMouseDown (pose, poseIndex) {
+      if (!$canvas || pose.cursor.$target !== $canvas) return
 
-      this.setLastPoint(face, faceIndex)
+      this.setLastPoint(pose, poseIndex)
       path = new paper.Path()
       path.strokeColor = {
         hue: Math.random() * 360,
@@ -41,53 +41,53 @@ window.addEventListener('load', () => {
         brightness: 1
       }
       path.strokeJoin = 'round'
-      path.strokeWidth = face.scale / 10
-      path.moveTo(this.lastPoint[faceIndex])
+      path.strokeWidth = pose.face.scale / 10
+      path.moveTo(this.lastPoint[poseIndex])
     },
 
     /**
      * Draw the path
      */
-    onMouseDrag (face, faceIndex) {
-      if (!$canvas || face.cursor.$target !== $canvas) return
-      const newPoint = this.getPoint(face)
+    onMouseDrag (pose, poseIndex) {
+      if (!$canvas || pose.cursor.$target !== $canvas) return
+      const newPoint = this.getPoint(pose)
 
-      if (newPoint.getDistance(this.getLastPoint(faceIndex)) > tool.minDistance) {
-        path.strokeWidth = Math.max(face.scale / 2 - 50, 1)
+      if (newPoint.getDistance(this.getLastPoint(poseIndex)) > tool.minDistance) {
+        path.strokeWidth = Math.max(pose.face.scale / 2 - 50, 1)
         path.lineTo(new paper.Point(
-          face.cursor.x - $canvas.getBoundingClientRect().left,
-          face.cursor.y - $canvas.getBoundingClientRect().top
+          pose.cursor.x - $canvas.getBoundingClientRect().left,
+          pose.cursor.y - $canvas.getBoundingClientRect().top
         ))
         paper.view.draw()
         path.smooth()
 
-        this.setLastPoint(face, faceIndex)
+        this.setLastPoint(pose, poseIndex)
       }
     },
 
     /**
-     * Gets a paper point from a face
-     * @param  {FaceObject} face The full face object
+     * Gets a paper point from a pose
+     * @param  {poseObject} pose The full pose object
      * @return {Point}           The point
      */
-    getPoint (face) {
+    getPoint (pose) {
       return new paper.Point(
-        face.cursor.x - $canvas.getBoundingClientRect().left,
-        face.cursor.y - $canvas.getBoundingClientRect().top
+        pose.cursor.x - $canvas.getBoundingClientRect().left,
+        pose.cursor.y - $canvas.getBoundingClientRect().top
       )
     },
 
     /**
-     * Sets the last point for the faceIndex
+     * Sets the last point for the poseIndex
      */
-    setLastPoint (face, faceIndex) {
-      this.lastPoint[faceIndex] = this.getPoint(face)
+    setLastPoint (pose, poseIndex) {
+      this.lastPoint[poseIndex] = this.getPoint(pose)
     },
 
     /**
-     * Gets the last point for the faceIndex
+     * Gets the last point for the poseIndex
      */
-    getLastPoint (faceIndex) { return this.lastPoint[faceIndex] }
+    getLastPoint (poseIndex) { return this.lastPoint[poseIndex] }
   })
 
   // Setup Paper.js

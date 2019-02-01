@@ -10,7 +10,7 @@ module.exports = Handsfree => {
    *   name: {String},
    *
    *   // Called once when the .use method is called and after the plugin is added to the instance
-   *   onUse: {Function (face)},
+   *   onUse: {Function (pose)},
    *
    *   // Called once per frame, after calculations
    *   onFrame: {Function}
@@ -45,9 +45,9 @@ module.exports = Handsfree => {
     }, config)
     
     // Call onMouseDown, onMouseDrag, onMouseUp
-    if (config.onMouseDown) window.addEventListener('handsfree:mouseDown', (ev) => {!config._isDisabled && config.onMouseDown(ev.detail.face, ev.detail.id)})
-    if (config.onMouseDrag) window.addEventListener('handsfree:mouseDrag', (ev) => {!config._isDisabled && config.onMouseDrag(ev.detail.face, ev.detail.id)})
-    if (config.onMouseUp) window.addEventListener('handsfree:mouseUp', (ev) => {!config._isDisabled && config.onMouseUp(ev.detail.face, ev.detail.id)})
+    if (config.onMouseDown) window.addEventListener('handsfree:mouseDown', (ev) => {!config._isDisabled && config.onMouseDown(ev.detail.pose, ev.detail.id)})
+    if (config.onMouseDrag) window.addEventListener('handsfree:mouseDrag', (ev) => {!config._isDisabled && config.onMouseDrag(ev.detail.pose, ev.detail.id)})
+    if (config.onMouseUp) window.addEventListener('handsfree:mouseUp', (ev) => {!config._isDisabled && config.onMouseUp(ev.detail.pose, ev.detail.id)})
     
     // Prioritize plugins
     let newPlugins = {}

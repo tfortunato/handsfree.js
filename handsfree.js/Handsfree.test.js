@@ -166,11 +166,11 @@ describe('Handsfree.prototype.setTouchedElement', () => {
     handsfree.pose = []
     Handsfree._mock.pose.forEach((face, i) => {
       handsfree.pose.push({face})
-      handsfree.pose[i].face.cursor.$target = null
+      handsfree.pose[i].cursor.$target = null
     })
     handsfree._setTouchedElement()
     
-    expect(handsfree.pose[0].face.cursor.$target).not.toBeNull()
+    expect(handsfree.pose[0].cursor.$target).not.toBeNull()
   })
 })
 

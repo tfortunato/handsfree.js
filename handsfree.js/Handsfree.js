@@ -308,15 +308,15 @@ class Handsfree {
   }
   
   /**
-   * Returns the element under the face and stores it as face.$target
+   * Returns the element under the cursor and stores it as pose.cursor.$target
    * - If there's no target, then null is returned
    * 
    * @todo move this to Cursor.js
    */
   setTouchedElement () {
-    this.pose.forEach((pose) => {
-      if (pose.face) {
-        pose.face.cursor.$target = document.elementFromPoint(pose.face.cursor.x, pose.face.cursor.y)
+    this.pose.forEach(pose => {
+      if (pose.cursor) {
+        pose.cursor.$target = document.elementFromPoint(pose.cursor.x, pose.cursor.y)
       }
     })
   }
