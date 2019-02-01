@@ -124,6 +124,7 @@ module.exports = Handsfree => {
     this.brf.manager = new this.brf.sdk.BRFManager()
     this.brf.manager.init(this.brf.resolution, this.brf.resolution, 'js.handsfree')
     this.brf.manager.setNumFacesToTrack(this.settings.maxPoses)
+    console.log('this.settings.maxPoses', this.settings.maxPoses)
     window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 100}}))
 
     this.tracker.brf.isReady = true
