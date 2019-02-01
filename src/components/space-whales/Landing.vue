@@ -121,8 +121,40 @@ export default {
         }
         engine.loadingScreen = new handsfreeLoadingScreen()
 
+        // Add manta rays
+        BABYLON.SceneLoader.ImportMesh(null, '/3d/manta-ray/', 'scene.gltf', scene, meshes => {
+          meshes[0].scaling = new BABYLON.Vector3(0.07, 0.07, 0.07)
+          meshes[0].position = {x: 3.12, y: -2.71, z: 12.8}
+          meshes[0].rotation.y = Math.PI
+        })
+        BABYLON.SceneLoader.ImportMesh(null, '/3d/manta-ray/', 'scene.gltf', scene, meshes => {
+          meshes[0].scaling = new BABYLON.Vector3(0.05, 0.05, 0.05)
+          meshes[0].position = {x: -3, y: -1.25, z: 15}
+          meshes[0].rotation.y = Math.PI
+        })
+        BABYLON.SceneLoader.ImportMesh(null, '/3d/manta-ray/', 'scene.gltf', scene, meshes => {
+          meshes[0].scaling = new BABYLON.Vector3(0.035, 0.035, 0.035)
+          meshes[0].position = {x: -13, y: -0.25, z: 12}
+          meshes[0].rotation.y = Math.PI
+        })
+        BABYLON.SceneLoader.ImportMesh(null, '/3d/manta-ray/', 'scene.gltf', scene, meshes => {
+          meshes[0].scaling = new BABYLON.Vector3(0.1, 0.1, 0.1)
+          meshes[0].position = {x: -11, y: -4.25, z: 20}
+          meshes[0].rotation.y = Math.PI
+        })
+        BABYLON.SceneLoader.ImportMesh(null, '/3d/manta-ray/', 'scene.gltf', scene, meshes => {
+          meshes[0].scaling = new BABYLON.Vector3(0.05, 0.05, 0.05)
+          meshes[0].position = {x: -3, y: 4.25, z: 30}
+          meshes[0].rotation.y = Math.PI
+        })
+        BABYLON.SceneLoader.ImportMesh(null, '/3d/manta-ray/', 'scene.gltf', scene, meshes => {
+          meshes[0].scaling = new BABYLON.Vector3(0.2, 0.2, 0.2)
+          meshes[0].position = {x: 19, y: -1.25, z: 25}
+          meshes[0].rotation.y = Math.PI
+        })
+
         // Add whales
-        BABYLON.SceneLoader.ImportMesh(null, '/3d/blue-whale/', 'scene.gltf', scene, (meshes) => {
+        BABYLON.SceneLoader.ImportMesh(null, '/3d/blue-whale/', 'scene.gltf', scene, meshes => {
           // Create and orient player/whale
           this.$store.commit('set', ['spacewhale.entity.player', meshes[0]])
           this.$store.state.spacewhale.entity.player.rotation.set(new BABYLON.Vector3(100, 0, 0))
