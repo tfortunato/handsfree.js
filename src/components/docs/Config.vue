@@ -3,11 +3,12 @@ div
   v-container(grid-list-lg flex)
     v-layout(row wrap)
       DocsSidebar(activeGroup='config')
+        v-img(src='https://media.giphy.com/media/1BfxclKOXRBVQyX2OV/source.gif')
 
       v-flex(xs12 md8)
         v-card
           v-card-title(primary-title)
-            h2.headline.mb-0 Config
+            h2.headline.mb-0 Config Overview
           v-card-text
             p When instantiating <code>Handsfree</code>, you can pass in a config object. The config is saved under <code>handsfree.settings</code>, so to change a setting after instantiation you can use <code>handsfree.settings['my']['setting'] = newValue;</code>:
             pre
