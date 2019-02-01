@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
       https://twitter.com/labofoz
       https://glitch.com/@handsfreejs
-      https://glitch.com/~handsfree-starter
+      https://glitch.com/~handsfree-mini-boilerplate
 
   `)
   window.handsfree = new window.Handsfree({

@@ -55,7 +55,7 @@
 
         v-spacer
         v-divider
-        v-list-tile(href='https://glitch.com/~handsfree-starter')
+        v-list-tile(href='https://glitch.com/~handsfree-mini-boilerplate')
           v-list-tile-action
             v-icon developer_board
           v-list-tile-title Handsfree Starter Kit

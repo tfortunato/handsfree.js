@@ -100,10 +100,10 @@ div
             p.text-xs-center
               img(v-lazy='"https://media.giphy.com/media/3Z15Ve7WEQGkLa1FwC/giphy.gif"')
             h2.text-xs-center.headline.mb-5 <strong>Going Further:</strong> Try the Handsfree Starter
-            p <a href="https://glitch.com/~handsfree-starter">The Handsfree Starter on Glitch</a> is a slimmed down version of this site, designed to help you prototype quickly. If you'd rather work on something locally, here's the bare minimum you need:
+            p <a href="https://glitch.com/~handsfree-mini-boilerplate">The Handsfree Starter on Glitch</a> is a slimmed down version of this site, designed to help you prototype quickly. If you'd rather work on something locally, here's the bare minimum you need:
 
             p
-              v-btn(large block color='primary' href='https://glitch.com/~handsfree-starter') Remix the Handsfree Starter
+              v-btn(large block color='primary' href='https://glitch.com/~handsfree-mini-boilerplate') Remix the Handsfree Starter
 </template>
 
 <script>
