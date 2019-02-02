@@ -14,14 +14,15 @@ div
             pre
               code.javascript.
                const handsfree = new Handsfree({
+                // Hides the cursor when true, or displays it when false
+                hideCursor: false,
+
+                // Either shows the webcam canvas or not
+                debug: false,
+                
+                settings: {
                   // Maximum number of poses to track
                   maxPoses: 1,
-
-                  // Hides the cursor when true, or displays it when false
-                  hideCursor: false,
-
-                  // Either shows the webcam canvas or not
-                  debug: false,
 
                   sensitivity: {
                     // A factor to adjust the cursors move speed by

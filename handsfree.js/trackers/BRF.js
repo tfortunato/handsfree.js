@@ -255,8 +255,8 @@ module.exports = Handsfree => {
       }
 
       // Update cursor
-      this.cursor.x = tweenFace.x;
-      this.cursor.y = tweenFace.y;
+      pose.cursor.x = tweenFace.x;
+      pose.cursor.y = tweenFace.y;
 
       // Update pointer and vars
       if (pose.cursor.$el) {

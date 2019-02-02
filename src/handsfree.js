@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.handsfree = new window.Handsfree({
     debug: true,
     settings: {
-      maxPoses: 2,
+      maxPoses: 1,
       tracker: {
         brf: {
           enabled: true

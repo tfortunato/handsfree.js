@@ -15,7 +15,7 @@
   <img class="mr-1" src="https://img.shields.io/github/issues/labofoz/handsfree.js/🐞 bug.svg"> <img src="https://img.shields.io/github/issues/labofoz/handsfree.js/👷 help wanted.svg">
 </p>
 <p>
-  <img src="https://img.shields.io/circleci/project/github/labofoz/handsfree.js.svg">
+  <img src="https://img.shields.io/circleci/project/github/labofoz/handsfree.js/master.svg">
   <img src="https://img.shields.io/codecov/c/github/labofoz/handsfree.js/master.svg?style=flat">
 </p>
 </div>
