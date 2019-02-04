@@ -316,6 +316,7 @@ class Handsfree {
   setTouchedElement () {
     this.pose.forEach(pose => {
       if (pose.cursor && pose.cursor.x && pose.cursor.y) {
+        console.log('setTouchedElement')
         pose.cursor.$target = document.elementFromPoint(pose.cursor.x, pose.cursor.y)
       }
     })
