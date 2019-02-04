@@ -15,29 +15,30 @@ div
             pre
               code.javascript.
                 {
+                  cursor: {
+                    // Where on the screen the user is pointed at
+                    x: 0,
+                    y: 0,
+                    
+                    // The target currently under the mouse
+                    $target: 0,
+                    
+                    // Mouse states for this face
+                    state: {
+                      // The first frame of a click
+                      mouseDown: false,
+                      // Every subsequent frame of a click
+                      mouseDrag: false,
+                      // When the click is finally released
+                      mouseUp: false
+                    }
+                  },
+
                   /**
                     * A BRFv4 tracked face
                     * @see https://tastenkunst.github.io/brfv4_docs/#hl_BRFFace
                     */
                   face: {
-                    cursor: {
-                      // Where on the screen the user is pointed at
-                      x: 0,
-                      y: 0,
-                      
-                      // The target currently under the mouse
-                      $target: 0,
-                      
-                      // Mouse states for this face
-                      state: {
-                        // The first frame of a click
-                        mouseDown: false,
-                        // Every subsequent frame of a click
-                        mouseDrag: false,
-                        // When the click is finally released
-                        mouseUp: false
-                      }
-                    },
                     
                     // A list of all 64 landmarks
                     points: [{x, y}, ...],
@@ -56,6 +57,33 @@ div
                     translationX: 0,
                     // Where the head is relative to the top edge of the video feed
                     translationY: 0
+                  },
+
+                  /**
+                   * PoseNet tracked full body pose estimation
+                   * @see https://github.com/tensorflow/tfjs-models/tree/master/posenet
+                   */
+                  body: {
+                    // A confidence score between 0-1 representing the overall pose confidence,
+                    // representing how sure the model is that a pose is there
+                    score: 1.0,
+
+                    keypoints: [
+                      // Represents one keypoint
+                      {
+                        // Other values include:
+                        // leftEye, leftEar, leftShoulder, leftWrist, leftHip, leftKnee, leftAnkle...rightAnkle
+                        part: 'nose',
+
+                        // A confidence score between 0 and 1
+                        // representing how sure the model thinks the keypoint is there
+                        score: 1.0,
+
+                        // The position relative to the top/left of the video stream
+                        // Max values are (handsfree.debug.$canvas.width, handsfree.debug.$canvas.height)
+                        position: {x: 0, y: 0}
+                      }
+                    ]
                   }
                 }
                 
