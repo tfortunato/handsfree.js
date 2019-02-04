@@ -193,7 +193,7 @@ module.exports = Handsfree => {
       let rxp         = Math.sin((tweenFace.rx / maxRxp * (Math.PI * 0.5)));
 
       // ryp and rxp are between -1.0 to 1.0 with slower movements on the edges due to Math.sin
-      // Center of screen is (window.innerWidth * 0.5), so eg. 0.5 + 1.0 would be too much over the edge
+      // Center of screen is (screen.width * 0.5), so eg. 0.5 + 1.0 would be too much over the edge
 
       // Let's reduce the values by 40% to go only 10% over the edge...
 
@@ -205,13 +205,13 @@ module.exports = Handsfree => {
       rxp *= this.settings.sensitivity.xy;
       ryp *= this.settings.sensitivity.xy;
 
-      let _x          = window.innerWidth  * (ryp + 0.5);
-      let _y          = window.innerHeight * (rxp + 0.5);
+      let _x          = screen.width  * (ryp + 0.5);
+      let _y          = screen.height * (rxp + 0.5);
 
       if(face.state !== this.brf.sdk.BRFState.FACE_TRACKING) {
         // reset
-        tweenFace.x   = window.innerWidth  * 0.5;
-        tweenFace.y   = window.innerHeight * 0.5;
+        tweenFace.x   = screen.width  * 0.5;
+        tweenFace.y   = screen.height * 0.5;
 
         tweenFace.positionList.length = 0;
       }
@@ -228,8 +228,8 @@ module.exports = Handsfree => {
         // leave the cursor in the center to get rid
         // of the annoying jumping at start up.
 
-        tweenFace.x   = window.innerWidth  * 0.5;
-        tweenFace.y   = window.innerHeight * 0.5;
+        tweenFace.x   = screen.width  * 0.5;
+        tweenFace.y   = screen.height * 0.5;
 
       } else {
 

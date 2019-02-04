@@ -73,9 +73,9 @@ export default {
           poses.forEach(pose => {
             // Hide cursor when over the iframe
             if (pose.cursor.$target && pose.cursor.$target.nodeName === 'CANVAS') {
-              handsfree.cursor.$el.style.display = this.showCursor ? 'inherit' : 'none'
+              pose.cursor.$el.style.display = this.showCursor ? 'inherit' : 'none'
             } else {
-              handsfree.cursor.$el.style.display = 'inherit'
+              pose.cursor.$el.style.display = 'inherit'
             }
 
             // Update positions

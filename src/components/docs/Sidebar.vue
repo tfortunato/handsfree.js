@@ -35,7 +35,7 @@ v-flex(xs12 md4)
             v-list-tile-avatar
               v-img(style='border-radius: 0 !important' src='/favicon.png')
             v-list-tile-content
-              v-list-tile-title Config
+              v-list-tile-title Config Overview
               v-list-tile-sub-title Explore the different instantiation configs
 
         v-divider
