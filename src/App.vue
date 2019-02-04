@@ -55,7 +55,7 @@
 
         v-spacer
         v-divider
-        v-list-tile(href='https://glitch.com/~handsfree-starter')
+        v-list-tile(href='https://glitch.com/~handsfree-mini-boilerplate')
           v-list-tile-action
             v-icon developer_board
           v-list-tile-title Handsfree Starter Kit
@@ -75,7 +75,6 @@
 import Keyboard from './components/Keyboard'
 import WebcamToggle from './components/WebcamToggle'
 import {mapState} from 'vuex'
-require('./handsfree')
 
 export default {
   name: 'App',

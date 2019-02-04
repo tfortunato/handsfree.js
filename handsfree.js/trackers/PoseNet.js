@@ -79,7 +79,7 @@ module.exports = Handsfree => {
   Handsfree.prototype.debugPoseNetPoses = function () {
     const settings = this.settings.tracker.posenet
     this.pose.forEach(pose => {
-      if (pose.body.score >= settings.minPoseConfidence) {
+      if (pose.body && pose.body.score >= settings.minPoseConfidence) {
         const adjacentKeypoints = PoseNet.getAdjacentKeyPoints(pose.body.keypoints, settings.minPartConfidence, this.debug.ctx)
 
         this.drawPoseNetSkeleton(adjacentKeypoints, this.debug.ctx)
@@ -99,14 +99,17 @@ module.exports = Handsfree => {
    * @param {OBJ} context The canvas context to draw into
    */
   Handsfree.prototype.drawPoseNetKeypoints = function (keypoints, minConfidence, context) {
-    const scale = this.settings.tracker.posenet.useWithWorker ? 1 : 0.5
+    const scale = 1
 
     keypoints.forEach(({position, score}) => {
       if (score > minConfidence) {
         context.beginPath()
         context.arc(position.x * scale, position.y * scale, 15, 0, 2 * Math.PI)
-        context.fillStyle = '#00ff00'
+        context.fillStyle = '#fff'
+        context.strokeStyle = '#000'
+        context.lineWidth = 3
         context.fill()
+        context.stroke()
       }
     })
   }
@@ -121,7 +124,19 @@ module.exports = Handsfree => {
    * @param {OBJ} context The canvas context to draw into
    */
   Handsfree.prototype.drawPoseNetSkeleton = function (adjacentPoints, context) {
-    adjacentPoints.forEach(keypoints => {
+    adjacentPoints.forEach((keypoints) => {
+      if (keypoints[0].part === 'leftElbow' || keypoints[1].part === 'leftElbow') {
+        context.strokeStyle = '#f00'
+      } else if (keypoints[0].part === 'rightElbow' || keypoints[1].part === 'rightElbow') {
+        context.strokeStyle = '#0f0'
+      } else if (keypoints[0].part === 'rightKnee' || keypoints[1].part === 'rightKnee') {
+        context.strokeStyle = '#0ff'
+      } else if (keypoints[0].part === 'leftKnee' || keypoints[1].part === 'leftKnee') {
+        context.strokeStyle = '#f0f'
+      } else {
+        context.strokeStyle = '#ff0'
+      }
+      
       this.drawSegment(this.toTuple(keypoints[0].position), this.toTuple(keypoints[1].position), context)
     })
   }
@@ -136,13 +151,12 @@ module.exports = Handsfree => {
    * @param {OBJ} context The canvas context to draw in
    */
   Handsfree.prototype.drawSegment = function ([ay, ax], [by, bx], context) {
-    const scale = this.settings.tracker.posenet.useWithWorker ? 1 : 0.5
+    const scale = 1
 
     context.beginPath()
     context.moveTo(ax * scale, ay * scale)
     context.lineTo(bx * scale, by * scale)
     context.lineWidth = 10
-    context.strokeStyle = '#ff00ff'
     context.stroke()
   }
 
@@ -187,15 +201,14 @@ module.exports = Handsfree => {
       y = poseAverages.y
 
       // Update cursor
-      this.cursor.x = x;
-      this.cursor.y = y;
+      pose.cursor.x = x;
+      pose.cursor.y = y;
 
       // Update pointer and vars
-      this.cursor.$el.style.left = `${x}px`
-      this.cursor.$el.style.top  = `${y}px`
+      pose.cursor.$el.style.left = `${x}px`
+      pose.cursor.$el.style.top  = `${y}px`
 
       // Assign values
-      this.pose[i].body.cursor = {x, y}
       pose.body.angles = {pitch, yaw}
       this.pose[i] = pose
     })

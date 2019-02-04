@@ -29,7 +29,6 @@ import Handsfree from './handsfree'
 import {mapState} from 'vuex'
 import {debounce} from 'lodash'
 const BABYLON = require('babylonjs')
-import hljs from 'highlight.js'
 require('babylonjs-loaders')
 require('babylonjs-materials')
 
@@ -87,19 +86,8 @@ export default {
    * Create the scene
    */
   mounted () {
-    // Highlighting
-    window.hljs = hljs
-    hljs.initHighlighting.called = false
-    hljs.initHighlighting()
-
-    // Add scripts
-    let scripts = ['https://platform.twitter.com/widgets.js', 'https://buttons.github.io/buttons.js']
-    scripts.forEach(script => {
-      const $script = document.createElement('script')
-      $script.src = script
-      document.body.appendChild($script)
-    })
-
+    this.$store.dispatch('loadScripts', ['https://platform.twitter.com/widgets.js', 'https://buttons.github.io/buttons.js'])
+    this.$store.dispatch('syntaxHighlight')
     this.setupScene()
   },
 
@@ -133,8 +121,25 @@ export default {
         }
         engine.loadingScreen = new handsfreeLoadingScreen()
 
+        // Add manta rays
+        BABYLON.SceneLoader.ImportMesh(null, '/3d/manta-ray/', 'scene.gltf', scene, meshes => {
+          meshes[0].scaling = new BABYLON.Vector3(0.07, 0.07, 0.07)
+          meshes[0].position = {x: 8.12, y: -2.71, z: 12.8}
+          meshes[0].rotation.y = Math.PI
+        })
+        BABYLON.SceneLoader.ImportMesh(null, '/3d/manta-ray/', 'scene.gltf', scene, meshes => {
+          meshes[0].scaling = new BABYLON.Vector3(0.035, 0.035, 0.035)
+          meshes[0].position = {x: -9, y: -0.25, z: 12}
+          meshes[0].rotation.y = Math.PI
+        })
+        BABYLON.SceneLoader.ImportMesh(null, '/3d/manta-ray/', 'scene.gltf', scene, meshes => {
+          meshes[0].scaling = new BABYLON.Vector3(0.05, 0.05, 0.05)
+          meshes[0].position = {x: -5, y: -1, z: 3}
+          meshes[0].rotation.y = Math.PI
+        })
+
         // Add whales
-        BABYLON.SceneLoader.ImportMesh(null, '/3d/blue-whale/', 'scene.gltf', scene, (meshes) => {
+        BABYLON.SceneLoader.ImportMesh(null, '/3d/blue-whale/', 'scene.gltf', scene, meshes => {
           // Create and orient player/whale
           this.$store.commit('set', ['spacewhale.entity.player', meshes[0]])
           this.$store.state.spacewhale.entity.player.rotation.set(new BABYLON.Vector3(100, 0, 0))

@@ -4,7 +4,6 @@ import {set} from 'lodash'
 import youtube from '../store/youtube'
 import spacewhale from '../store/spacewhale'
 import hljs from 'highlight.js'
-window.hljs = hljs
 
 Vue.use(Vuex)
 const store = new Vuex.Store({
@@ -68,6 +67,19 @@ const store = new Vuex.Store({
     syntaxHighlight () {
       hljs.initHighlighting.called = false
       hljs.initHighlighting()
+    },
+
+    /**
+     * Loads scripts
+     * @param {Object} store A reference to this store
+     * @param {String/Array} scripts Either a script {STR} or list of scripts {ARR} to load
+     */
+    loadScripts (store, scripts) {
+      scripts.forEach(script => {
+        const $script = document.createElement('script')
+        $script.src = script
+        document.body.appendChild($script)
+      })
     }
   }
 })

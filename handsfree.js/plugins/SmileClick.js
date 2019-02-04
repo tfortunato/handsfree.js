@@ -15,7 +15,7 @@ module.exports = {
   onFrame: function (poses, instance) {
     if (!poses[0].face) return
     
-    poses.forEach((pose, faceIndex) => {
+    poses.forEach((pose, poseIndex) => {
       const face = pose.face
       let a
       let b
@@ -43,13 +43,13 @@ module.exports = {
       if (smileFactor > 1) smileFactor = 1
 
       // Update states and fire events
-      instance.pose[faceIndex].face.cursor.state = this.updateMouseStates({
-        face,
-        faceIndex,
+      instance.pose[poseIndex].cursor.state = this.updateMouseStates({
+        pose,
+        poseIndex,
         instance,
         smileFactor
       })
-      this.maybeFireEvents(instance.pose, faceIndex)
+      this.maybeFireEvents(instance.pose, poseIndex)
     })
 
     return instance.pose
@@ -61,35 +61,35 @@ module.exports = {
    */
   updateMouseStates (state) {
     if (state.smileFactor >= 1) {
-      this.mouseDrag[state.faceIndex] = this.mouseDowned[state.faceIndex]
+      this.mouseDrag[state.poseIndex] = this.mouseDowned[state.poseIndex]
       // Every frame after first frame of click
-      if (this.mouseDowned[state.faceIndex]) {
-        this.mouseDown[state.faceIndex] = false
+      if (this.mouseDowned[state.poseIndex]) {
+        this.mouseDown[state.poseIndex] = false
       // First frame of click
       } else {
-        this.mouseDowned[state.faceIndex] = true
-        this.mouseDown[state.faceIndex] = true
+        this.mouseDowned[state.poseIndex] = true
+        this.mouseDown[state.poseIndex] = true
       }
-      this.triggerClick(state.face, state.faceIndex)
+      this.triggerClick(state.pose, state.poseIndex)
 
       // Styles
-      state.instance.cursor.$el.style.background = '#f00'
-      state.instance.cursor.$el.style.border = '2px solid #ff0'
-      state.instance.cursor.$el.classList.add('handsfree-clicked')
+      state.instance.pose[state.poseIndex].cursor.$el.style.background = '#f00'
+      state.instance.pose[state.poseIndex].cursor.$el.style.border = '2px solid #ff0'
+      state.instance.pose[state.poseIndex].cursor.$el.classList.add('handsfree-clicked')
     } else {
-      this.mouseUp[state.faceIndex] = this.mouseDowned[state.faceIndex]
-      this.mouseDowned[state.faceIndex] = this.mouseDrag[state.faceIndex] = this.mouseDown[state.faceIndex] = false
+      this.mouseUp[state.poseIndex] = this.mouseDowned[state.poseIndex]
+      this.mouseDowned[state.poseIndex] = this.mouseDrag[state.poseIndex] = this.mouseDown[state.poseIndex] = false
 
       // Styles
-      state.instance.cursor.$el.style.background = '#ff0'
-      state.instance.cursor.$el.style.border = '2px solid #f00'
-      state.instance.cursor.$el.classList.remove('handsfree-clicked')
+      state.instance.pose[state.poseIndex].cursor.$el.style.background = '#ff0'
+      state.instance.pose[state.poseIndex].cursor.$el.style.border = '2px solid #f00'
+      state.instance.pose[state.poseIndex].cursor.$el.classList.remove('handsfree-clicked')
     }
 
     return {
-      mouseDown: this.mouseDown[state.faceIndex],
-      mouseDrag: this.mouseDrag[state.faceIndex],
-      mouseUp: this.mouseUp[state.faceIndex]
+      mouseDown: this.mouseDown[state.poseIndex],
+      mouseDrag: this.mouseDrag[state.poseIndex],
+      mouseUp: this.mouseUp[state.poseIndex]
     }
   },
 
@@ -97,7 +97,7 @@ module.exports = {
    * Maybe fire events
    */
   maybeFireEvents (poses, index) {
-    const state = poses[index].face.cursor.state
+    const state = poses[index].cursor.state
     let eventName = ''
     
     if (state.mouseDown) {
@@ -111,7 +111,7 @@ module.exports = {
     if (eventName) {
       window.dispatchEvent(new CustomEvent(`handsfree:${eventName}`, {
         detail: {
-          face: poses[index].face,
+          pose: poses[index],
           id: index
         }
       }))
@@ -123,19 +123,19 @@ module.exports = {
    * - Fires a click event
    * - Focuses the element if it's focusable
    *
-   * @param {Object}  face  The face object
-   * @param {Integer} index The face index
+   * @param {Object}  pose  The pose object
+   * @param {Integer} index The pose index
    */
-  triggerClick: function (face, index) {
-    const $el = face.cursor.$target
+  triggerClick: function (pose, index) {
+    const $el = pose.cursor.$target
 
     if ($el && this.mouseDown[index]) {
       // Click
       $el.dispatchEvent(new MouseEvent('click', {
         bubbles: true,
         cancelable: true,
-        clientX: face.cursor.x,
-        clientY: face.cursor.y
+        clientX: pose.cursor.x,
+        clientY: pose.cursor.y
       }))
 
       // Focus

@@ -131,16 +131,36 @@ module.exports = {
       const name = ev.target.nodeName
       const type = ev.target.type
       
-      if (name === 'INPUT' && type === 'text' && !ev.target.classList.contains('simple-keyboard-input')) {
-        this.$target = ev.target
-        this.show()
+      if (!ev.target.classList.contains('simple-keyboard-input')) {
+        if ((name === 'INPUT' && (type === 'text' || type === 'password'))
+          || (name === 'TEXTAREA')) {
+          this.$target = ev.target
+          this.show()
+        }
       }
+
+      this.$target && this.setInputType()
     }
     this.callbacks.focusin.push(callback)
 
     document.addEventListener('click', callback)
     document.addEventListener('focusin', callback)
   },
+
+  /**
+   * Changes the simple-keyboarde input type to text/password
+   */
+  setInputType () {
+    let type = 'text'
+    
+    switch (this.$target.type) {
+      case 'password': type = 'password'; break
+    }
+
+    this.keyboards.forEach(board => {
+      board.$input.type = type
+    })
+},
 
   /**
    * Stop listening to document.addEventListener

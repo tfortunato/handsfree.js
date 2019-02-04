@@ -19,7 +19,7 @@ module.exports = {
     if (!poses[0].face) return
 
     poses.forEach(pose => {
-      let y = pose.face.cursor.y
+      let y = pose.cursor.y
 
       // Scroll the page
       if (y < this.scrollZone) {

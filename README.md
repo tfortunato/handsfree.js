@@ -15,7 +15,7 @@
   <img class="mr-1" src="https://img.shields.io/github/issues/labofoz/handsfree.js/🐞 bug.svg"> <img src="https://img.shields.io/github/issues/labofoz/handsfree.js/👷 help wanted.svg">
 </p>
 <p>
-  <img src="https://img.shields.io/circleci/project/github/labofoz/handsfree.js.svg">
+  <img src="https://img.shields.io/circleci/project/github/labofoz/handsfree.js/master.svg">
   <img src="https://img.shields.io/codecov/c/github/labofoz/handsfree.js/master.svg?style=flat">
 </p>
 </div>
@@ -221,14 +221,14 @@ const myPlugin = handsfree.use({
   // Called when .enable() is explicitely called on this plugin
   onEnable: (handsfree) => {},
 
-  // Called the first frame a face clicks
-  onMouseDown: (face, faceIndex) => {},
+  // Called the first frame a click
+  onMouseDown: (pose, poseIndex) => {},
 
-  // Called every frame after a face clicks and is still in "click mode"
-  onMouseDrag: (face, faceIndex) => {},
+  // Called every frame after a click and is still in "click mode"
+  onMouseDrag: (pose, poseIndex) => {},
 
-  // Called after a face releases a click
-  onMouseUp: (face, faceIndex) => {}
+  // Called after a click release
+  onMouseUp: (pose, poseIndex) => {}
 })
 ```
 

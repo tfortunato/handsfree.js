@@ -27,20 +27,24 @@ class HandsfreePose {
     this.face = null
 
     /**
-     * Points to the most relevant cursor element
+     * The cursor object
      */
-    this.$el = null
-
-    this.createPointer()
+    this.cursor = {
+      x: 0,
+      y: 0,
+      $el: this.createPointer()
+    }
   }
 
   /**
    * Creates the pointer element
    */
   createPointer () {
-    this.$el = document.createElement('div')
-    this.$el.classList.add('handsfree-cursor')
-    document.body.appendChild(this.$el)
+    const $cursor = document.createElement('div')
+    $cursor.classList.add('handsfree-cursor')
+    document.body.appendChild($cursor)
+
+    return $cursor
   }
 }
 

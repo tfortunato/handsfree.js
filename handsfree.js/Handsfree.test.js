@@ -156,25 +156,6 @@ describe('Handsfree.prototype.trackPoses', () => {
 })
 
 /**
- * Handsfree.prototype.setTouchedElement
- */
-describe('Handsfree.prototype.setTouchedElement', () => {
-  it('Sets a target for every tracked face', () => {
-    Handsfree._mock.brfv4(handsfree)
-    handsfree._injectDebugger()
-
-    handsfree.pose = []
-    Handsfree._mock.pose.forEach((face, i) => {
-      handsfree.pose.push({face})
-      handsfree.pose[i].face.cursor.$target = null
-    })
-    handsfree._setTouchedElement()
-    
-    expect(handsfree.pose[0].face.cursor.$target).not.toBeNull()
-  })
-})
-
-/**
  * Handsfree.prototype.on
  */
 describe('Handsfree.prototype.on', () => {

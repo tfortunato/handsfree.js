@@ -32,8 +32,7 @@
                 v-flex(shrink style='width: 80px')
                   v-text-field(v-model='stabilizerBuffer')
 
-              h3.mt-5 Multi User <small>(experimental)</small>
-              v-alert(type='warning' value=1 style='color: #444') This currently does not work with the existing plugins but is exposed for experimentation.
+              h3.mt-5 Multi User
               v-layout(row)
                 v-flex
                   v-slider(label='Max Poses (users)' max=20 min=1 step=1 v-model='maxPoses')
@@ -139,6 +138,7 @@ export default {
     this.$store.dispatch('onReady', () => {
       this.usePoseNet = window.handsfree.settings.tracker.posenet.enabled
       this.useBRF = window.handsfree.settings.tracker.brf.enabled
+      this.isWebcamVisible = window.handsfree.debug.isEnabled
     })
   },
 

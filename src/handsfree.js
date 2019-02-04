@@ -19,11 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
       
       https://twitter.com/labofoz
       https://glitch.com/@handsfreejs
-      https://glitch.com/~handsfree-starter
+      https://glitch.com/~handsfree-mini-boilerplate
 
   `)
   window.handsfree = new window.Handsfree({
+    debug: true,
     settings: {
+      maxPoses: 1,
       tracker: {
         brf: {
           enabled: true
