@@ -62,7 +62,7 @@ module.exports = {
       // the desired stride for the outputs when feeding the image through the model.
       // - The higher the number, the faster the performance but slower the accuracy
       // - Possible values [8, 16, 32]
-      outputStride: 32,
+      outputStride: 16,
       // Non-maximum suppression part distance
       // - It needs to be strictly positive
       // - Two parts suppress each other if they are less than nmsRadius pixels away
