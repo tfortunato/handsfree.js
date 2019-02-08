@@ -39,7 +39,10 @@ export default {
         onStart () {window.App.$store.dispatch('youtube/play')},
         onStop () {
           window.App.$store.dispatch('youtube/pause')
-          handsfree.cursor.$el.style.display = 'inherit'
+
+          handsfree.pose.forEach(pose => {
+            pose.cursor.$el.style.display = 'inherit'
+          })
         },
 
         /**
@@ -58,7 +61,7 @@ export default {
             // When cursor is over youtube...
             if (window.App.$store.state.youtube.player.getPlayerState && pose.cursor.$target && pose.cursor.$target.getAttribute('id') === 'youtube-player') {
               // ...toggle the player
-              if (face.cursor.state.mouseDown) {
+              if (pose.cursor.state.mouseDown) {
                 if (window.App.$store.state.youtube.player.getPlayerState() === 1) {
                   this.onStop()
                 } else {
@@ -67,10 +70,16 @@ export default {
               }
 
               // Hide cursor
-              if (window.App.$store.state.youtube.player.getPlayerState && window.App.$store.state.youtube.player.getPlayerState() === 1) handsfree.cursor.$el.style.display = 'none'
+              if (window.App.$store.state.youtube.player.getPlayerState && window.App.$store.state.youtube.player.getPlayerState() === 1) {
+                handsfree.pose.forEach(pose => {
+                  pose.cursor.$el.style.display = 'none'
+                })
+              }
             } else {
               // Show cursor
-              handsfree.cursor.$el.style.display = 'inherit'
+              handsfree.pose.forEach(pose => {
+                pose.cursor.$el.style.display = 'inherit'
+              })
             }
           })
         },
