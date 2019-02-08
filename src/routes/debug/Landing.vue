@@ -14,7 +14,26 @@ div
 export default {
   name: 'debugLanding',
 
+  // Turn on the webcam for this route
   mounted () {
+    this.$store.dispatch('onReady', () => {
+      const handsfree = window.handsfree
+      this.originalDebugState = handsfree.debug.isDebugging
+      handsfree.toggleDebugger(true)
+    })
+  },
+
+  // Reset the debug state
+  beforeRouteLeave (to, from, next) {
+    window.handsfree.toggleDebugger(this.originalDebugState)
+    next()
+  },
+
+  data () {
+    return {
+      // The original debug state, which will be restored onRouteLeave
+      originalDebugState: null
+    }
   }
 }
 </script>
