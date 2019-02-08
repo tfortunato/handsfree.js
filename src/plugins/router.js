@@ -9,11 +9,13 @@ import YouTubeSingle from '../components/youtube/Single.vue'
 import HolodeckLanding from '../components/holodeck/Landing.vue'
 import KinematicsLanding from '../components/kinematics/Landing.vue'
 
-import docsGettingStarted from '../components/docs/Landing.vue'
-import docsDefaultUsage from '../components/docs/DefaultUsage.vue'
-import DocsConfig from '../components/docs/Config.vue'
-import DocsPlugins from '../components/docs/Plugins.vue'
-import DocsEvents from '../components/docs/Events.vue'
+import docsGettingStarted from '../routes/docs/Landing.vue'
+import docsDefaultUsage from '../routes/docs/DefaultUsage.vue'
+import DocsConfig from '../routes/docs/Config.vue'
+import DocsPlugins from '../routes/docs/Plugins.vue'
+import DocsEvents from '../routes/docs/Events.vue'
+
+import workshopsLanding from '../routes/workshop/Landing.vue'
 
 Vue.use(VueRouter)
 export default new VueRouter({
@@ -34,6 +36,9 @@ export default new VueRouter({
     {name: 'docsDefaultUsage', path: '/docs/default-usage', component: docsDefaultUsage},
     {name: 'docsConfig', path: '/docs/config', component: DocsConfig},
     {name: 'docsPlugins', path: '/docs/plugins', component: DocsPlugins},
-    {name: 'docsEvents', path: '/docs/events', component: DocsEvents}
+    {name: 'docsEvents', path: '/docs/events', component: DocsEvents},
+
+    // Workshops
+    {name: 'workshops', path: '/workshop', component: workshopsLanding}
   ]
 })

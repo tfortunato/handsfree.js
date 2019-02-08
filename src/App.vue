@@ -32,6 +32,11 @@
             v-icon book
           v-list-tile-title Docs
 
+        v-list-tile(:to='{name: "workshops"}')
+          v-list-tile-action
+            v-icon school
+          v-list-tile-title Workshops
+
         v-list-group
           v-list-tile(slot='activator')
             v-list-tile-action
