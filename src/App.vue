@@ -53,10 +53,17 @@
             v-list-tile-action
             v-list-tile-title(v-html='demo.title')
 
+        v-divider
         v-list-tile(:to='{name: "settings"}')
           v-list-tile-action
             v-icon settings
           v-list-tile-title Settings
+
+        v-list-tile(:to='{name: "debugLanding"}')
+          v-list-tile-action
+            v-icon grain
+          v-list-tile-title Debug
+        v-divider
 
         v-spacer
         v-divider
