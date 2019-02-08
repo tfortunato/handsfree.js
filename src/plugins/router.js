@@ -1,13 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Settings from '../components/Settings.vue'
-import Home from '../components/home/Landing.vue'
+import Home from '../routes/home/Landing.vue'
 
-import SpaceWhales from '../components/space-whales/Landing.vue'
-import YouTubeLanding from '../components/youtube/Landing.vue'
-import YouTubeSingle from '../components/youtube/Single.vue'
-import HolodeckLanding from '../components/holodeck/Landing.vue'
-import KinematicsLanding from '../components/kinematics/Landing.vue'
+import SpaceWhales from '../routes/space-whales/Landing.vue'
+import YouTubeLanding from '../routes/youtube/Landing.vue'
+import YouTubeSingle from '../routes/youtube/Single.vue'
+import HolodeckLanding from '../routes/holodeck/Landing.vue'
 
 import docsGettingStarted from '../routes/docs/Landing.vue'
 import docsDefaultUsage from '../routes/docs/DefaultUsage.vue'
@@ -29,7 +28,6 @@ export default new VueRouter({
     {name: 'youtubeSingle', path: '/youtube/:id', component: YouTubeSingle},
     {name: 'holodeckLanding', path: '/holodeck', component: HolodeckLanding},
     {name: 'spaceWhalesLanding', path: '/space-whales', component: SpaceWhales},
-    {name: 'kinematicsLanding', path: '/kinematics', component: KinematicsLanding},
 
     // Docs
     {name: 'docs', path: '/docs', component: docsGettingStarted},

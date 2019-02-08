@@ -24,7 +24,7 @@ div
 </template>
 
 <script>
-import WebcamToggle from '../WebcamToggle'
+import WebcamToggle from '@/components/WebcamToggle'
 import Handsfree from './handsfree'
 import {mapState} from 'vuex'
 import {debounce} from 'lodash'
