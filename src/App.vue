@@ -56,7 +56,7 @@
           v-list-tile-title Twitter @Labofoz
 
     v-content
-      .handsfree-debug-wrap
+      Webcam
       Keyboard
       router-view
 </template>
@@ -64,6 +64,7 @@
 <script>
 import Keyboard from './components/Keyboard'
 import WebcamToggle from './components/WebcamToggle'
+import Webcam from './components/Webcam'
 import {mapState} from 'vuex'
 
 export default {
@@ -71,6 +72,7 @@ export default {
 
   components: {
     Keyboard,
+    Webcam,
     WebcamToggle
   },
 
