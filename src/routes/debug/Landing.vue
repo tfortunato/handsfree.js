@@ -1,16 +1,14 @@
 <template lang="pug">
 div
-  v-container(grid-list-md)
+  v-container(grid-list-md flex)
     v-layout(wrap)
-      v-flex(xs12)
+      v-flex(xs12 lg8)
         v-card
           v-card-title
-            h2 Debug
+            h2 Debug: Pose
           v-card-text
-            v-alert.mb-3(type='info' value=1) This route displays useful debug information. For each of these tables, one row represents one pose/user
-
             h3 Current
-            v-data-table.elevation-1(hide-actions :items='table.values.current' :headers='table.headers')
+            v-data-table.elevation-1(hide-actions :items='table.values.current' :headers='table.headers.face')
               template(slot='items' slot-scope='prop')
                 td {{prop.item.face.translationX.toFixed(2)}}
                 td {{prop.item.face.translationY.toFixed(2)}}
@@ -20,7 +18,7 @@ div
                 td {{prop.item.face.rotationZ.toFixed(4)}} ({{(prop.item.face.rotationZ * 180 / Math.PI).toFixed(2)}}°)
 
             h3.mt-3 Min
-            v-data-table.elevation-1(hide-actions :items='table.values.min' :headers='table.headers')
+            v-data-table.elevation-1(hide-actions :items='table.values.min' :headers='table.headers.face')
               template(slot='items' slot-scope='prop')
                 td {{prop.item.face.translationX.toFixed(2)}}
                 td {{prop.item.face.translationY.toFixed(2)}}
@@ -30,7 +28,7 @@ div
                 td {{prop.item.face.rotationZ.toFixed(4)}} ({{(prop.item.face.rotationZ * 180 / Math.PI).toFixed(2)}}°)
 
             h3.mt-3 Max
-            v-data-table.elevation-1(hide-actions :items='table.values.max' :headers='table.headers')
+            v-data-table.elevation-1(hide-actions :items='table.values.max' :headers='table.headers.face')
               template(slot='items' slot-scope='prop')
                 td {{prop.item.face.translationX.toFixed(2)}}
                 td {{prop.item.face.translationY.toFixed(2)}}
@@ -38,6 +36,25 @@ div
                 td {{prop.item.face.rotationX.toFixed(4)}} ({{(prop.item.face.rotationX * 180 / Math.PI).toFixed(2)}}°)
                 td {{prop.item.face.rotationY.toFixed(4)}} ({{(prop.item.face.rotationY * 180 / Math.PI).toFixed(2)}}°)
                 td {{prop.item.face.rotationZ.toFixed(4)}} ({{(prop.item.face.rotationZ * 180 / Math.PI).toFixed(2)}}°)
+
+      v-flex(xs12 lg4)
+        v-card
+          v-card-title
+            h2 Debug: Cursor
+          v-card-text
+            h3 Position
+            v-data-table.elevation-1(hide-actions :items='table.values.current' :headers='table.headers.cursor')
+              template(slot='items' slot-scope='prop')
+                td {{prop.item.cursor.x.toFixed(2)}}
+                td {{prop.item.cursor.y.toFixed(2)}}
+                td {{prop.item.cursor.$target && prop.item.cursor.$target.toString()}}
+
+            h3.mt-3 States
+            v-data-table.elevation-1(hide-actions :items='table.values.current' :headers='table.headers.cursorStates')
+              template(slot='items' slot-scope='prop')
+                td {{prop.item.cursor.state.mouseDown}}
+                td {{prop.item.cursor.state.mouseDrag}}
+                td {{prop.item.cursor.state.mouseUp}}
 </template>
 
 <script>
@@ -75,14 +92,28 @@ export default {
       originalDebugState: null,
 
       table: {
-        headers: [
-          {text: 'x', value: 'face.translationX'},
-          {text: 'y', value: 'face.translationY'},
-          {text: 'scale', value: 'face.scale'},
-          {text: 'pitch', value: 'face.translationZ'},
-          {text: 'yaw', value: 'face.translationY'},
-          {text: 'roll', value: 'face.translationZ'}
-        ],
+        headers: {
+          cursor: [
+            {text: 'x', value: 'cursor.x'},
+            {text: 'y', value: 'cursor.y'},
+            {text: '$target', value: 'cursor.$target'}
+          ],
+
+          cursorStates: [
+            {text: 'mouseDown', value: 'cursor.state.mouseDown'},
+            {text: 'mouseDrag', value: 'cursor.state.mouseDrag'},
+            {text: 'mouseUp', value: 'cursor.state.mouseUp'}
+          ],
+          
+          face: [
+            {text: 'x', value: 'face.translationX'},
+            {text: 'y', value: 'face.translationY'},
+            {text: 'scale', value: 'face.scale'},
+            {text: 'pitch', value: 'face.translationZ'},
+            {text: 'yaw', value: 'face.translationY'},
+            {text: 'roll', value: 'face.translationZ'}
+          ],
+        },
 
         values: {
           // Current values

@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../routes/home/Landing.vue'
 import Settings from '../routes/settings/Landing.vue'
-import workshopsLanding from '../routes/workshop/Landing.vue'
 import DebugLanding from '../routes/debug/Landing.vue'
 
 import SpaceWhales from '../routes/space-whales/Landing.vue'
@@ -35,9 +34,6 @@ export default new VueRouter({
     {name: 'docsDefaultUsage', path: '/docs/default-usage', component: DocsDefaultUsage},
     {name: 'docsConfig', path: '/docs/config', component: DocsConfig},
     {name: 'docsPlugins', path: '/docs/plugins', component: DocsPlugins},
-    {name: 'docsEvents', path: '/docs/events', component: DocsEvents},
-
-    // Workshops
-    {name: 'workshops', path: '/workshop', component: workshopsLanding}
+    {name: 'docsEvents', path: '/docs/events', component: DocsEvents}
   ]
 })
