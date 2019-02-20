@@ -32,23 +32,6 @@
             v-icon book
           v-list-tile-title Docs
 
-        v-list-group
-          v-list-tile(slot='activator')
-            v-list-tile-action
-              v-icon category
-            v-list-tile-content
-              v-list-tile-title Demos
-            
-          v-list-tile(
-          v-for='demo in demos'
-          :to='demo.to'
-          :key='demo.title'
-          :prepend-icon='demo.icon'
-          no-action)
-            v-list-tile-action
-            v-list-tile-title(v-html='demo.title')
-
-        v-divider
         v-list-tile(:to='{name: "settings"}')
           v-list-tile-action
             v-icon settings
@@ -98,30 +81,6 @@ export default {
 
   data () {
     return {
-      // Collection of demos
-      demos: [
-        {
-          title: 'YouTube Client',
-          to: {name: "youtubeLanding"},
-          icon: 'ondemand_video'
-        },
-        {
-          title: '"VR Display"',
-          to: {name: "holodeckLanding"},
-          icon: 'blur_on'
-        },
-        // {
-        //   title: 'Kinematics',
-        //   to: {name: "kinematicsLanding"},
-        //   icon: 'android'
-        // },
-        {
-          title: 'Space Whales',
-          to: {name: "spaceWhalesLanding"},
-          icon: 'blur_on'
-        }
-      ],
-      
       // The favicon next to the title
       favicon: '/favicon.png',
       
