@@ -5,6 +5,8 @@
 <script>
 // Number of pixels from the webcam border to use for resizing
 const resizeBorder = 20
+// A magic number that seems to help with margins due to navbar
+const magicMargin = 100
 
 export default {
   name: 'Webcam',
@@ -25,6 +27,13 @@ export default {
       clickStart: {
         x: 0,
         y: 0
+      },
+
+      // The original size
+      sizeStart: {
+        width: 0,
+        height: 0,
+        ratio: 0
       }
     }
   },
@@ -37,8 +46,10 @@ export default {
   methods: {
     /**
      * Sets the drag mode to either moving or resizing
+     * @param {Object} ev The event object
+     * @param {Boolean} boolean Whether to presist this (true) or just set the icon (false)
      */
-    setDragMode (ev) {
+    setDragMode (ev, remember = false) {
       let dragMode = 'move'
 
       // North, North West, North East
@@ -58,19 +69,27 @@ export default {
       // West
       else if (ev.offsetX > this.$refs.debugger.clientWidth - resizeBorder) dragMode = 'w-resize'
 
-      this.dragMode = dragMode
+      // Update the icon and maybe persist it
       this.$refs.debugger.style.cursor = dragMode
+      if (remember) this.dragMode = dragMode
     },
     
     /**
      * Captures where on the debugger the user clicked
      */
     startDrag (ev) {
-      this.isDragging = true
       this.clickStart = {
         x: ev.offsetX - this.$refs.debugger.clientWidth,
         y: ev.offsetY
       }
+      this.sizeStart = {
+        width: this.$refs.debugger.clientWidth,
+        height: this.$refs.debugger.clientHeight,
+        ratio: this.$refs.debugger.clientWidth / this.$refs.debugger.clientHeight 
+      }
+
+      this.isDragging = true
+      this.setDragMode(ev, true)
     },
 
     /**
@@ -85,10 +104,40 @@ export default {
      */
     maybeDrag (ev) {
       if (this.isDragging) {
-        this.$refs.debugger.style.left = `${ev.screenX + this.clickStart.x}px`
-        this.$refs.debugger.style.top = `${ev.screenY - 100 - this.clickStart.y}px`
-        this.$refs.debugger.style.bottom = 'inherit'
+        switch (this.dragMode) {
+          case 'move': this.moveDebugger(ev); break
+
+          case 'se-resize': 
+          case 'e-resize': this.resizeDebuggerE(ev); break
+          case 's-resize': this.resizeDebuggerS(ev); break
+        }
       }
+    },
+
+    /**
+     * Moves the debugger to where the cursor is
+     */
+    moveDebugger (ev) {
+      this.$refs.debugger.style.left = `${ev.screenX + this.clickStart.x}px`
+      this.$refs.debugger.style.top = `${ev.screenY - magicMargin - this.clickStart.y}px`
+      this.$refs.debugger.style.bottom = 'inherit'
+    },
+
+    /**
+     * Resizes the debugger south
+     */
+    resizeDebuggerS (ev) {
+      const height = this.$refs.debugger.offsetTop - ev.screenY + magicMargin
+      const width = height * -this.sizeStart.ratio
+      this.$refs.debugger.style.width = `${width}px`
+    },
+
+    /**
+     * Resizes the debugger south
+     */
+    resizeDebuggerE (ev) {
+      const width = ev.screenX - this.$refs.debugger.offsetLeft
+      this.$refs.debugger.style.width = `${width}px`
     }
   }
 }

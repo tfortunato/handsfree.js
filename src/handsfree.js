@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   `)
   window.handsfree = new window.Handsfree({
-    debug: true,
+    debug: false,
     settings: {
       maxPoses: 1,
       tracker: {
