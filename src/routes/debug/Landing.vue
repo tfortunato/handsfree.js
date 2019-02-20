@@ -2,10 +2,35 @@
 div
   v-container(grid-list-md flex)
     v-layout(wrap)
+      v-flex(xs12 lg4)
+        v-card.mb-2(color='primary' style='color: #fff')
+          v-card-title
+            h2 Debug
+          v-card-text
+            p Use this route to debug Handsfree.js while it's running, as well as for gauging different metrics that can help you while developing your plugins.
+            p This route is a work in progress and will become more useful over time!
+
+        v-card
+          v-card-title
+            h2 Cursor
+          v-card-text
+            h3 Position
+            v-data-table.elevation-1(hide-actions :items='table.values.current' :headers='table.headers.cursor')
+              template(slot='items' slot-scope='prop')
+                td {{prop.item.cursor.x.toFixed(2)}}
+                td {{prop.item.cursor.y.toFixed(2)}}
+                td {{prop.item.cursor.$target && prop.item.cursor.$target.toString()}}
+
+            h3.mt-3 States
+            v-data-table.elevation-1(hide-actions :items='table.values.current' :headers='table.headers.cursorStates')
+              template(slot='items' slot-scope='prop')
+                td {{prop.item.cursor.state.mouseDown}}
+                td {{prop.item.cursor.state.mouseDrag}}
+                td {{prop.item.cursor.state.mouseUp}}
       v-flex(xs12 lg8)
         v-card
           v-card-title
-            h2 Debug: Pose
+            h2 Pose
           v-card-text
             h3 Current
             v-data-table.elevation-1(hide-actions :items='table.values.current' :headers='table.headers.face')
@@ -37,24 +62,6 @@ div
                 td {{prop.item.face.rotationY.toFixed(4)}} ({{(prop.item.face.rotationY * 180 / Math.PI).toFixed(2)}}°)
                 td {{prop.item.face.rotationZ.toFixed(4)}} ({{(prop.item.face.rotationZ * 180 / Math.PI).toFixed(2)}}°)
 
-      v-flex(xs12 lg4)
-        v-card
-          v-card-title
-            h2 Debug: Cursor
-          v-card-text
-            h3 Position
-            v-data-table.elevation-1(hide-actions :items='table.values.current' :headers='table.headers.cursor')
-              template(slot='items' slot-scope='prop')
-                td {{prop.item.cursor.x.toFixed(2)}}
-                td {{prop.item.cursor.y.toFixed(2)}}
-                td {{prop.item.cursor.$target && prop.item.cursor.$target.toString()}}
-
-            h3.mt-3 States
-            v-data-table.elevation-1(hide-actions :items='table.values.current' :headers='table.headers.cursorStates')
-              template(slot='items' slot-scope='prop')
-                td {{prop.item.cursor.state.mouseDown}}
-                td {{prop.item.cursor.state.mouseDrag}}
-                td {{prop.item.cursor.state.mouseUp}}
 </template>
 
 <script>
