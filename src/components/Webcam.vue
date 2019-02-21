@@ -99,6 +99,8 @@ export default {
      */
     maybeDrag (ev) {
       if (this.isDragging) {
+        this.$refs.debugger.style.bottom = 'inherit'
+
         switch (this.dragMode) {
           case 'move': this.moveDebugger(ev); break
 
@@ -120,7 +122,6 @@ export default {
     moveDebugger (ev) {
       this.$refs.debugger.style.left = `${ev.screenX + this.clickStart.x}px`
       this.$refs.debugger.style.top = `${ev.screenY - magicMargin - this.clickStart.y}px`
-      this.$refs.debugger.style.bottom = 'inherit'
     },
 
     /**
