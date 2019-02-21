@@ -18,8 +18,11 @@ div
           v-card-text
             p Enabling/Disabling the Debug Previewer is done using <code>handsfree.togglePreviwer()</code>. On this site, you can move it by drag from the center or resize it by dragging from the edges. It'll also follow you between pages:
             v-img(src='https://media.giphy.com/media/mRmNNQNKed2ExuSoob/source.gif')
+
           v-card-actions
-            v-btn.primary(flat block @click='toggleDebugger') Show Previewer
+            v-btn.primary(flat block @click='toggleDebugger')
+              | Toggle Previewer
+              span.ml-1.handsfree-show-when-stopped and start webcam
 
         v-card.mb-2.primary.lighten-2
           v-card-title
@@ -123,11 +126,22 @@ export default {
   mounted () {
     this.$store.dispatch('onReady', () => {
       window.handsfree.on('trackPoses', this.trackPoses)
+      this.isPreviewing = window.handsfree.debug.isDebugging
+    })
+  },
+
+  // Stop listening to trackPoses
+  destroyed () {
+    this.$store.dispatch('onReady', () => {
+      window.handsfree.off('trackPoses', this.trackPoses)
     })
   },
 
   data () {
     return {
+      // Whether we are previewing or not
+      isPreviewing: false,
+      
       table: {
         headers: {
           cursor: [
@@ -203,7 +217,11 @@ export default {
      * Toggles the debugger
      */
     toggleDebugger () {
-      window.handsfree.toggleDebugger()
+      const handsfree = window.handsfree
+      
+      !handsfree.isTracking && handsfree.start()
+      handsfree.toggleDebugger()
+      this.isPreviewing = handsfree.debug.isDebugging
     }
   }
 }
