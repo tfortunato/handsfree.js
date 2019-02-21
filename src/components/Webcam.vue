@@ -7,6 +7,8 @@
 const resizeBorder = 20
 // A magic number that seems to help with margins due to navbar
 const magicMargin = 100
+// Used to prevent weird scale issues
+const minWebcamWidth = 200
 
 export default {
   name: 'Webcam',
@@ -29,12 +31,8 @@ export default {
         y: 0
       },
 
-      // The original size
-      sizeStart: {
-        width: 0,
-        height: 0,
-        ratio: 0
-      }
+      // Original bounding box, used to calculate resize dimensions
+      origBounds: {}
     }
   },
 
@@ -78,14 +76,11 @@ export default {
      * Captures where on the debugger the user clicked
      */
     startDrag (ev) {
+      this.origBounds = this.$refs.debugger.getBoundingClientRect()
+      this.origBounds.ratio = this.$refs.debugger.clientWidth / this.$refs.debugger.clientHeight 
       this.clickStart = {
         x: ev.offsetX - this.$refs.debugger.clientWidth,
         y: ev.offsetY
-      }
-      this.sizeStart = {
-        width: this.$refs.debugger.clientWidth,
-        height: this.$refs.debugger.clientHeight,
-        ratio: this.$refs.debugger.clientWidth / this.$refs.debugger.clientHeight 
       }
 
       this.isDragging = true
@@ -107,9 +102,14 @@ export default {
         switch (this.dragMode) {
           case 'move': this.moveDebugger(ev); break
 
-          case 'se-resize': 
+          case 'n-resize': this.resizeDebuggerN(ev); break
+          case 'ne-resize': this.resizeDebuggerNE(ev); break
           case 'e-resize': this.resizeDebuggerE(ev); break
+          case 'se-resize': this.resizeDebuggerE(ev); break 
           case 's-resize': this.resizeDebuggerS(ev); break
+          case 'sw-resize': this.resizeDebuggerSW(ev); break
+          case 'w-resize': this.resizeDebuggerW(ev); break
+          case 'nw-resize': this.resizeDebuggerNW(ev); break
         }
       }
     },
@@ -124,20 +124,77 @@ export default {
     },
 
     /**
-     * Resizes the debugger south
+     * Resize the webcam northward
      */
-    resizeDebuggerS (ev) {
-      const height = this.$refs.debugger.offsetTop - ev.screenY + magicMargin
-      const width = height * -this.sizeStart.ratio
-      this.$refs.debugger.style.width = `${width}px`
+    resizeDebuggerN (ev) {
+      const height = this.origBounds.bottom - ev.screenY + magicMargin
+      const width = height * this.origBounds.ratio
+      this.$refs.debugger.style.width = `${Math.max(width, minWebcamWidth)}px`
+      this.$refs.debugger.style.top = `${ev.screenY - magicMargin}px`
     },
 
     /**
-     * Resizes the debugger south
+     * Resize the webcam North Eastward
+     */
+    resizeDebuggerNE (ev) {
+      const height = this.origBounds.bottom - ev.screenY + magicMargin
+      const width = height * this.origBounds.ratio
+      this.$refs.debugger.style.width = `${Math.max(width, minWebcamWidth)}px`
+      this.$refs.debugger.style.top = `${ev.screenY - magicMargin}px`
+    },
+
+    /**
+     * Resizes the debugger eastward
      */
     resizeDebuggerE (ev) {
       const width = ev.screenX - this.$refs.debugger.offsetLeft
-      this.$refs.debugger.style.width = `${width}px`
+      this.$refs.debugger.style.width = `${Math.max(width, minWebcamWidth)}px`
+    },
+
+    /**
+     * Resizes the debugger southward
+     */
+    resizeDebuggerSE (ev) {
+      const height = this.$refs.debugger.offsetTop - ev.screenY + magicMargin
+      const width = height * -this.origBounds.ratio
+      this.$refs.debugger.style.width = `${Math.max(width, minWebcamWidth)}px`
+    },
+
+    /**
+     * Resizes the debugger southward
+     */
+    resizeDebuggerS (ev) {
+      const height = this.$refs.debugger.offsetTop - ev.screenY + magicMargin
+      const width = height * -this.origBounds.ratio
+      this.$refs.debugger.style.width = `${Math.max(width, minWebcamWidth)}px`
+    },
+
+    /**
+     * Resize the webcam northward
+     */
+    resizeDebuggerSW (ev) {
+      const width = this.origBounds.right - ev.screenX
+      this.$refs.debugger.style.width = `${Math.max(width, minWebcamWidth)}px`
+      this.$refs.debugger.style.left = `${ev.screenX}px`
+    },
+
+    /**
+     * Resize the webcam northward
+     */
+    resizeDebuggerW (ev) {
+      const width = this.origBounds.right - ev.screenX
+      this.$refs.debugger.style.width = `${Math.max(width, minWebcamWidth)}px`
+      this.$refs.debugger.style.left = `${ev.screenX}px`
+    },
+
+    /**
+     * Resize the webcam northward
+     */
+    resizeDebuggerNW (ev) {
+      const width = this.origBounds.right - ev.screenX
+      this.$refs.debugger.style.width = `${Math.max(width, minWebcamWidth)}px`
+      this.$refs.debugger.style.top = `${ev.screenY - magicMargin}px`
+      this.$refs.debugger.style.left = `${ev.screenX}px`
     }
   }
 }
