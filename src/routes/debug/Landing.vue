@@ -10,13 +10,18 @@ div
             p
               | 🚧 
               em This page is currently being updated (<a href="https://github.com/labofoz/handsfree.js/issues/67">see tasks</a>)
-            //- p
-              //- v-btn(show web)
             p Use this route to debug Handsfree.js while it's running, as well as for gauging different metrics that can help you while developing your plugins.
-            p 
-              | 🧙 
-              em You can drag the preview window by clicking and dragging it near the center, and you can resize it by doing the same near the edges.
+        
         v-card.mb-2.primary.lighten-1
+          v-card-title
+            h2 The Previewer
+          v-card-text
+            p Enabling/Disabling the Debug Previewer is done using <code>handsfree.togglePreviwer()</code>. On this site, you can move it by drag from the center or resize it by dragging from the edges. It'll also follow you between pages:
+            v-img(src='https://media.giphy.com/media/mRmNNQNKed2ExuSoob/source.gif')
+          v-card-actions
+            v-btn.primary(flat block) Show Previewer
+
+        v-card.mb-2.primary.lighten-2
           v-card-title
             h2 What throws off the face tracker?
           v-card-text
@@ -26,7 +31,8 @@ div
               li Reflective glasses
               li Thick/long beards
               li Being too close/far
-        v-card.mb-2.primary.lighten-2
+
+        v-card.mb-2.primary.lighten-3
           v-card-title
             h2 What throws off the body tracker?
           v-card-text
