@@ -47,12 +47,6 @@
             p(v-if='statsMode === 1') <strong>MS</strong>: Milliseconds needed to render a frame. The lower the number the better.
             p(v-if='statsMode === 2') <strong>MB</strong>: MBytes of allocated memory
       
-        v-card.mb-2
-          v-card-title
-            h2 Quick Settings
-          v-card-text
-            v-checkbox(label='Show webcam with debug mask?' v-model='isWebcamVisible')
-      
         v-card
           v-card-title
             h2 Models
@@ -69,13 +63,6 @@ export default {
   name: 'Settings',
 
   watch: {
-    /**
-     * Checkboxes
-     */
-    isWebcamVisible () {
-      window.handsfree.debug.isEnabled = this.isWebcamVisible
-      window.handsfree.toggleDebugger(this.isWebcamVisible)
-    },
     usePoseNet () {window.handsfree.toggleBodyTracker(!this.usePoseNet)},
     useBRF () {window.handsfree.toggleFaceTracker(!this.useBRF)},
 
@@ -110,7 +97,6 @@ export default {
       sensitivity: 0.7,
       stabilizerFactor: 1,
       stabilizerBuffer: 30,
-      isWebcamVisible: false,
 
       // Models
       usePoseNet: false,
@@ -137,7 +123,6 @@ export default {
     this.$store.dispatch('onReady', () => {
       this.usePoseNet = window.handsfree.settings.tracker.posenet.enabled
       this.useBRF = window.handsfree.settings.tracker.brf.enabled
-      this.isWebcamVisible = window.handsfree.debug.isEnabled
     })
   },
 
