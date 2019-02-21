@@ -14,9 +14,13 @@
  * 
  *                    🔮 /Pose.js 🔮
  * 
- * @description A class describing different poses.
- * Each pose has a:
- * - .$el: The pointer element
+ * @description A class describing different poses. These are
+ * stored in `handsfree.pose[]` and represents one tracked user.
+ * 
+ * Each `handsfree.pose[n]` has the following:
+ * `.cursor` - The cursors `.position`, `.state`, and `.$target`
+ * `.face` - Face/head keypoints and pose information
+ * `.body` - Full body pose keypoints and scores
  */
 class HandsfreePose {
   constructor () {

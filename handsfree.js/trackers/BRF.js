@@ -15,7 +15,7 @@
  * and populates:
  * - `handsfree.pose[].face`
  * 
- * @see https://github.com/tensorflow/tfjs-models/tree/master/brf
+ * @see https://github.com/Tastenkunst/brfv4_javascript_examples
  */
 const {TweenMax} = require('gsap')
 
