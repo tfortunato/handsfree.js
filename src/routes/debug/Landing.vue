@@ -7,8 +7,15 @@ div
           v-card-title
             h2 Debug
           v-card-text
+            p
+              | 🚧 
+              em This page is currently being updated (<a href="https://github.com/labofoz/handsfree.js/issues/67">see tasks</a>)
+            //- p
+              //- v-btn(show web)
             p Use this route to debug Handsfree.js while it's running, as well as for gauging different metrics that can help you while developing your plugins.
-            p This route is a work in progress and will become more useful over time!
+            p 
+              | 🧙 
+              em You can drag the preview window by clicking and dragging it near the center, and you can resize it by doing the same near the edges.
         v-card.mb-2.primary.lighten-1
           v-card-title
             h2 What throws off the face tracker?
