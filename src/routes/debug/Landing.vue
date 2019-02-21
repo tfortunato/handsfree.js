@@ -19,7 +19,7 @@ div
             p Enabling/Disabling the Debug Previewer is done using <code>handsfree.togglePreviwer()</code>. On this site, you can move it by drag from the center or resize it by dragging from the edges. It'll also follow you between pages:
             v-img(src='https://media.giphy.com/media/mRmNNQNKed2ExuSoob/source.gif')
           v-card-actions
-            v-btn.primary(flat block) Show Previewer
+            v-btn.primary(flat block @click='toggleDebugger') Show Previewer
 
         v-card.mb-2.primary.lighten-2
           v-card-title
@@ -122,28 +122,12 @@ export default {
    */
   mounted () {
     this.$store.dispatch('onReady', () => {
-      const handsfree = window.handsfree
-
-      this.originalDebugState = handsfree.debug.isDebugging
-      handsfree.toggleDebugger(true)
-      handsfree.on('trackPoses', this.trackPoses)
+      window.handsfree.on('trackPoses', this.trackPoses)
     })
-  },
-
-  // Reset the debug state
-  beforeRouteLeave (to, from, next) {
-    const handsfree = window.handsfree
-
-    handsfree.toggleDebugger(this.originalDebugState)
-    handsfree.off('trackPoses', this.trackPoses)
-    next()
   },
 
   data () {
     return {
-      // The original debug state, which will be restored onRouteLeave
-      originalDebugState: null,
-
       table: {
         headers: {
           cursor: [
@@ -213,6 +197,13 @@ export default {
         this.table.values.max[i].face.rotationY = Math.max(this.table.values.max[i].face.rotationY, pose.face.rotationY)
         this.table.values.max[i].face.rotationZ = Math.max(this.table.values.max[i].face.rotationZ, pose.face.rotationZ)
       })
+    },
+
+    /**
+     * Toggles the debugger
+     */
+    toggleDebugger () {
+      window.handsfree.toggleDebugger()
     }
   }
 }
