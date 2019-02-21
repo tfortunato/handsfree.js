@@ -205,7 +205,7 @@ class Handsfree {
    * @emits handsfree:loading {detail: {progress: 0}} Useful giving user feedback
    */
   start () {
-    this.toggleDebugger(this.debug.isEnabled)
+    this.toggleDebugger(this.debug.isDebugging)
     document.body.classList.add('handsfree-started')
     document.body.classList.remove('handsfree-stopped')
     window.dispatchEvent(new CustomEvent('handsfree:loading', {detail: {progress: 0}}))

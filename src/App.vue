@@ -32,31 +32,16 @@
             v-icon book
           v-list-tile-title Docs
 
-        v-list-tile(:to='{name: "workshops"}')
-          v-list-tile-action
-            v-icon school
-          v-list-tile-title Workshops
-
-        v-list-group
-          v-list-tile(slot='activator')
-            v-list-tile-action
-              v-icon category
-            v-list-tile-content
-              v-list-tile-title Demos
-            
-          v-list-tile(
-          v-for='demo in demos'
-          :to='demo.to'
-          :key='demo.title'
-          :prepend-icon='demo.icon'
-          no-action)
-            v-list-tile-action
-            v-list-tile-title(v-html='demo.title')
-
         v-list-tile(:to='{name: "settings"}')
           v-list-tile-action
             v-icon settings
           v-list-tile-title Settings
+
+        v-list-tile(:to='{name: "debugLanding"}')
+          v-list-tile-action
+            v-icon grain
+          v-list-tile-title Debug
+        v-divider
 
         v-spacer
         v-divider
@@ -71,7 +56,7 @@
           v-list-tile-title Twitter @Labofoz
 
     v-content
-      .handsfree-debug-wrap
+      Webcam
       Keyboard
       router-view
 </template>
@@ -79,6 +64,7 @@
 <script>
 import Keyboard from './components/Keyboard'
 import WebcamToggle from './components/WebcamToggle'
+import Webcam from './components/Webcam'
 import {mapState} from 'vuex'
 
 export default {
@@ -86,6 +72,7 @@ export default {
 
   components: {
     Keyboard,
+    Webcam,
     WebcamToggle
   },
 
@@ -96,30 +83,6 @@ export default {
 
   data () {
     return {
-      // Collection of demos
-      demos: [
-        {
-          title: 'YouTube Client',
-          to: {name: "youtubeLanding"},
-          icon: 'ondemand_video'
-        },
-        {
-          title: '"VR Display"',
-          to: {name: "holodeckLanding"},
-          icon: 'blur_on'
-        },
-        // {
-        //   title: 'Kinematics',
-        //   to: {name: "kinematicsLanding"},
-        //   icon: 'android'
-        // },
-        {
-          title: 'Space Whales',
-          to: {name: "spaceWhalesLanding"},
-          icon: 'blur_on'
-        }
-      ],
-      
       // The favicon next to the title
       favicon: '/favicon.png',
       
