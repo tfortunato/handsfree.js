@@ -41,11 +41,10 @@
                 h2 Cursor Position
               v-card-text
                 p Each row represents one tracked <code>pose[n]</code>. Access them with:
-                pre
-                  code.mb-3.javascript.
-                   handsfree.pose[n].cursor.position.x
-                    handsfree.pose[n].cursor.position.y
-                    handsfree.pose[n].cursor.position.$target
+                code.mb-3.
+                 handsfree.pose[n].cursor.position.x
+                  handsfree.pose[n].cursor.position.y
+                  handsfree.pose[n].cursor.position.$target
                 v-data-table.elevation-1(hide-actions :items='table.values.current' :headers='table.headers.cursor')
                   template(slot='items' slot-scope='prop')
                     td {{prop.item.cursor.x.toFixed(2)}}
@@ -58,11 +57,10 @@
                 h2 Cursor State
               v-card-text
                 p Each row represents one tracked <code>pose[n]</code>. Access them with:
-                pre
-                  code.mb-3.javascript.
-                   handsfree.pose[n].cursor.state.mouseDown
-                    handsfree.pose[n].cursor.state.mouseDrag
-                    handsfree.pose[n].cursor.state.mouseUp
+                code.mb-3.
+                 handsfree.pose[n].cursor.state.mouseDown
+                  handsfree.pose[n].cursor.state.mouseDrag
+                  handsfree.pose[n].cursor.state.mouseUp
                 v-data-table.elevation-1(hide-actions :items='table.values.current' :headers='table.headers.cursorStates')
                   template(slot='items' slot-scope='prop')
                     td {{prop.item.cursor.state.mouseDown}}
@@ -116,6 +114,17 @@ export default {
    * - Listen to states
    */
   mounted () {
+    const stats = new Stats()
+    const perf = function () {
+      stats.end()
+      requestAnimationFrame(perf)
+      stats.begin()
+    }
+    stats.showPanel(0)
+    this.$refs.stats.appendChild(stats.dom)
+    perf()
+
+    
     this.$store.dispatch('syntaxHighlight')
     this.$store.dispatch('onReady', () => {
       window.handsfree.on('trackPoses', this.trackPoses)
