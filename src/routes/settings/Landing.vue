@@ -1,82 +1,145 @@
 <template lang="pug">
-  div
-    v-container(grid-list-md)
-      v-layout(wrap)
-        v-flex(xs12 md6 lg8)
-          v-card
-            v-card-title
-              h2 Settings
-            v-card-text
-              v-alert(type='warning' value=1 style='color: #444') These settings are a work in progress and don't get saved yet. They work, but will be reset when you refresh the page.
-              h3.mt-5 Cursor
-              v-layout(row)
-                v-flex
-                  v-slider(min=0.05 max=1.5 step=0.025 label='Sensitivity' v-model='sensitivity')
-                v-flex(shrink style='width: 80px')
-                  v-text-field(v-model='sensitivity')
-              v-layout(row)
-                v-flex
-                  v-slider(min=-0.5 max=0.5 step=0.05 label='Smile-Click Sensitivity' v-model='smileClickSensitivity')
-                v-flex(shrink style='width: 80px')
-                  v-text-field(v-model='smileClickSensitivity')
+  v-container(grid-list-md flex)
+    v-layout(wrap)
+      v-flex(xs12 md6 lg4)
+        v-card.mb-2.primary
+          v-card-text
+            div.mr-1 🚧 Not all settings are covered here yet.
 
-              h3.mt-5 Stabilizer
-              v-layout(row)
-                v-flex
-                  v-slider(label='Factor' min=0 max=3 step=1 v-model='stabilizerFactor')
-                v-flex(shrink style='width: 80px')
-                  v-text-field(v-model='stabilizerFactor')
-              v-layout(row)
-                v-flex
-                  v-slider(label='Buffer' min=0 max=100 step=10 v-model='stabilizerBuffer')
-                v-flex(shrink style='width: 80px')
-                  v-text-field(v-model='stabilizerBuffer')
+        v-card.mb-2.primary.lighten-1
+          v-card-title
+            h2 Settings
+          v-card-text
+            p Use this page to test different settings. Check out the <router-link :to='{name: "docsConfig"}'>Settings Docs</router-link> for more information. These settings are not persisted and reset on each visit.
+        v-card.mb-2.primary.lighten-2
+          v-card-title
+            h2 Multi User Support
+          v-card-text
+            p Set the maximum number of users to track below. Note that adding multiple users will decrease performance.
+            pre
+              code.javascript.
+               // Initialize
+                handsfree = new Handsfree({maxPoses: 1})
+                // Update
+                handsfree.settings.maxPoses = 2
+            v-layout(row)
+              v-flex
+                v-slider(color='white' thumb-color='white' track-color='white' label='Max Poses (users)' max=20 min=1 step=1 v-model='maxPoses')
+              v-flex(shrink style='width: 80px')
+                v-text-field(v-model='maxPoses' color='white')
+    
+      v-flex(xs12 md6 lg4)
+        v-card.mb-2
+          v-card-title
+            h2 Cursor
+          v-card-text
+            p Here you can change global cursor settings (they affect all tracked users):
 
-              h3.mt-5 Multi User
-              v-layout(row)
-                v-flex
-                  v-slider(label='Max Poses (users)' max=20 min=1 step=1 v-model='maxPoses')
-                v-flex(shrink style='width: 80px')
-                  v-text-field(v-model='maxPoses')
+            pre
+              code.javascript.
+               // Initialize
+               handsfree = new Handsfree({
+                  sensitivity: {
+                    // A factor to adjust the cursors move speed by
+                    xy: 0.7,
+                    // How wide (> 0) or narrow (< 0) a smile needs to be
+                    click: 0
+                  }
+                })
+               
+                // Update
+                handsfree.settings.sensitivity.xy = 0.7
+                handsfree.settings.sensitivity.click = 0
 
-        v-flex(xs12 md6 lg4)
-          v-card.mb-2
-            v-card-text
-              p Click this Stats Panel to view different performance metrics:
-              p.statsjs(ref='stats' @click='updateStatsDescription')
-              p(v-if='statsMode === 0') <strong>FPS</strong>: Frames rendered in the last second. The higher the number the better.
-              p(v-if='statsMode === 1') <strong>MS</strong>: Milliseconds needed to render a frame. The lower the number the better.
-              p(v-if='statsMode === 2') <strong>MB</strong>: MBytes of allocated memory
-        
-          v-card.mb-2
-            v-card-title
-              h2 Quick Settings
-            v-card-text
-              v-checkbox(label='Show webcam with debug mask?' v-model='isWebcamVisible')
-        
-          v-card
-            v-card-title
-              h2 Models
-            v-card-text
-              v-checkbox(label='Use head tracking (via BRFv4)?' v-model='useBRF')
-              v-checkbox(label='Use full body pose estimation (via PoseNet)?' v-model='usePoseNet')
+            v-layout(row)
+              v-flex
+                v-slider(min=0.05 max=1.5 step=0.025 label='sensitivity.xy' v-model='sensitivity')
+              v-flex(shrink style='width: 80px')
+                v-text-field(v-model='sensitivity')
+            v-layout(row)
+              v-flex
+                v-slider(min=-0.5 max=0.5 step=0.05 label='sensitivity.click' v-model='smileClickSensitivity')
+              v-flex(shrink style='width: 80px')
+                v-text-field(v-model='smileClickSensitivity')
+
+        v-card
+          v-card-title
+            h2 Stabilizer
+          v-card-text
+            p These are experimental settings to help compensate for tremors or shaky environments.
+            pre
+              code.javascript.
+               // Initialize
+                handsfree = new Handsfree({
+                  stabilizer: {
+                    // How much stabilization to use: 0 = none, 3 = heavy
+                    factor: 1,
+                    // Number of frames to stabilizer over
+                    buffer: 30
+                  }
+                })
+               
+                // Update
+                handsfree.settings.stabilizer.factor = 0.7
+                handsfree.settings.stabilizer.buffer = 0
+
+            v-layout(row)
+              v-flex
+                v-slider(label='Factor' min=0 max=3 step=1 v-model='stabilizerFactor')
+              v-flex(shrink style='width: 80px')
+                v-text-field(v-model='stabilizerFactor')
+            v-layout(row)
+              v-flex
+                v-slider(label='Buffer' min=0 max=100 step=10 v-model='stabilizerBuffer')
+              v-flex(shrink style='width: 80px')
+                v-text-field(v-model='stabilizerBuffer')
+
+      v-flex(xs12 md6 lg4)      
+        v-card
+          v-card-title
+            h2 Models
+          v-card-text
+            p These are the available computer vision models, and more will be added soon! You can mix and match models to explore new interactions.
+
+            p We currently have:
+            ul
+              li
+                | BRFv4 - A face tracker (
+                a(href='https://github.com/Tastenkunst/brfv4_javascript_examples') View on Github
+                | )
+              li
+                | PoseNet - A full body pose estimator (
+                a(href='https://github.com/tensorflow/tfjs-models/tree/master/posenet') View on GitHub
+                | )
+            pre
+              code.javascript.
+               // Initialize
+                handsfree = new Handsfree({
+                  tracker: {
+                    // Face tracker
+                    brf: {enabled: true},
+                    // Body tracker
+                    posenet: {enabled: false}
+                  }
+                })
+               
+                // Update
+                handsfree.toggleBodyTracker(true|false|null)
+                handsfree.toggleFaceTracker(true|false|null)
+
+            v-img(src='https://media.giphy.com/media/LX0JdCeSE9hPpoG39P/giphy.gif')
+
+            v-checkbox(label='Use BRFv4 - a face tracker' v-model='useBRF')
+            v-checkbox(label='Use PoseNet - a full body pose estimator' v-model='usePoseNet')
 </template>
 
 <script>
-import Stats from 'stats.js'
 import {debounce} from 'lodash'
 
 export default {
   name: 'Settings',
 
   watch: {
-    /**
-     * Checkboxes
-     */
-    isWebcamVisible () {
-      window.handsfree.debug.isEnabled = this.isWebcamVisible
-      window.handsfree.toggleDebugger(this.isWebcamVisible)
-    },
     usePoseNet () {window.handsfree.toggleBodyTracker(!this.usePoseNet)},
     useBRF () {window.handsfree.toggleFaceTracker(!this.useBRF)},
 
@@ -107,11 +170,9 @@ export default {
 
       // BRFv4
       smileClickSensitivity: 0,
-      statsMode: 0,
       sensitivity: 0.7,
       stabilizerFactor: 1,
       stabilizerBuffer: 30,
-      isWebcamVisible: false,
 
       // Models
       usePoseNet: false,
@@ -123,34 +184,16 @@ export default {
    * Add stats
    */
   mounted () {
-    const stats = new Stats()
-    const perf = function () {
-      stats.end()
-      requestAnimationFrame(perf)
-      stats.begin()
-    }
-    stats.showPanel(0)
-    this.$refs.stats.appendChild(stats.dom)
-    perf()
-
     this.syncSettings()
+    this.$store.dispatch('syntaxHighlight')
 
     this.$store.dispatch('onReady', () => {
       this.usePoseNet = window.handsfree.settings.tracker.posenet.enabled
       this.useBRF = window.handsfree.settings.tracker.brf.enabled
-      this.isWebcamVisible = window.handsfree.debug.isEnabled
     })
   },
 
   methods: {
-    /**
-     * Update the stats description
-     */
-    updateStatsDescription () {
-      this.statsMode++
-      if (this.statsMode > 2) this.statsMode = 0
-    },
-
     /**
      * Syncs settings with handsfree.js
      */

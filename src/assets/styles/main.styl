@@ -39,7 +39,19 @@ img
 .v-card.theme--light.primary
   color: #fff
 
-// Overrides
+  a
+    color: #FFCDD2
+    font-weight: bold
+    text-decoration: underline
+
+  .v-label.theme--light,
+  .theme--light.v-input:not(.v-input--is-disabled) input, .theme--light.v-input:not(.v-input--is-disabled) textarea
+    color: #fff !important
+
+  .theme--light.v-input--slider:not(.v-input--is-dirty) .v-slider__thumb,
+    border-color: #fff
+    background: #fff
+
 .v-list__group__items
   box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.35)
   background: #f4f4f4
@@ -60,6 +72,25 @@ img
 
 ul
   margin-bottom: 16px
+
+// BOIDS
+// @todo Move this into the boids component
+.handsfree-boids-debugger-wrap
+  position: fixed
+  top: 0
+  left: 0
+  z-index: 0
+
+.handsfree-boids-debugger-primary-canvas,
+.handsfree-boids-debugger-secondary-canvas
+  position: relative
+  top: 0
+  left: 0
+  transform: scale(-1, 1)
+  pointer-events: none
+
+.handsfree-boids-debugger-secondary-canvas
+  position: absolute
 
 /**
  * Responsive
