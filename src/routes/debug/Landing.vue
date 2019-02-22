@@ -33,16 +33,6 @@
               li Turning head beyond +/- 30°
             p We'll be providing benchmarks for these soon!
 
-        v-card.mb-2.primary.lighten-3
-          v-card-title
-            h2 Performance
-          v-card-text
-            p Click this Stats Panel to view different performance metrics.
-            p(v-if='statsMode === 0') <strong>FPS</strong>: Frames rendered in the last second. The higher the number the better.
-            p(v-if='statsMode === 1') <strong>MS</strong>: Milliseconds needed to render a frame. The lower the number the better.
-            p(v-if='statsMode === 2') <strong>MB</strong>: MBytes of allocated memory
-            p.statsjs(ref='stats' @click='updateStatsDescription')
-
       v-flex(xs12 md6 lg8)
         v-layout(wrap)
           v-flex(xs12 lg6)
@@ -117,27 +107,15 @@
 
 <script>
 import {cloneDeep} from 'lodash'
-import Stats from 'stats.js'
 
 export default {
   name: 'debugLanding',
 
   /**
-   * - Start performance monitoring
    * - Turn on the webcam for this route
    * - Listen to states
    */
   mounted () {
-    const stats = new Stats()
-    const perf = function () {
-      stats.end()
-      requestAnimationFrame(perf)
-      stats.begin()
-    }
-    stats.showPanel(0)
-    this.$refs.stats.appendChild(stats.dom)
-    perf()
-
     this.$store.dispatch('syntaxHighlight')
     this.$store.dispatch('onReady', () => {
       window.handsfree.on('trackPoses', this.trackPoses)
@@ -157,9 +135,6 @@ export default {
       // Whether we are previewing or not
       isPreviewing: false,
       
-      // The Stats.js mode
-      statsMode: 0,
-
       // Data tables for representing handsfree states
       table: {
         headers: {
@@ -200,14 +175,6 @@ export default {
   },
 
   methods: {
-    /**
-     * Update the stats description
-     */
-    updateStatsDescription () {
-      this.statsMode++
-      if (this.statsMode > 2) this.statsMode = 0
-    },
-
     /**
      * Called via the handsfree:trackPoses event
      * @see Handsfree.on()
