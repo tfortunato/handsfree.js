@@ -1,13 +1,35 @@
 <template lang="pug">
-  v-container(grid-list-md)
+  v-container(grid-list-md flex)
     v-layout(wrap)
-      v-flex(xs12 md6 lg8)
-        v-card
+      v-flex(xs12 md6 lg4)
+        v-card.mb-2.primary
+          v-card-text
+            div.mr-1 🚧 Not all settings are covered here yet. Check out the <router-link :to='{name: "docsConfig"}'>Settings page</router-link> for more information. These settings are reset on each visit.
+
+        v-card.mb-2.primary.lighten-1
           v-card-title
             h2 Settings
           v-card-text
-            v-alert(type='warning' value=1 style='color: #444') These settings are a work in progress and don't get saved yet. They work, but will be reset when you refresh the page.
-            h3.mt-5 Cursor
+            p Use this page to test different settings. 
+            p Each of these can be set during instantiation: <code>const handsfree = new Handsfree(mySettings)</code>
+            p You can update them later with: <code>handsfree.settings['my.setting'] = newValue</code>
+      
+        v-card.mb-2.primary.lighten-2
+          v-card-title
+            h2 Multi User Support
+          v-card-text
+            p Set the maximum number of users to track below. Note that adding multiple users will decrease performance.
+            v-layout(row)
+              v-flex
+                v-slider(color='white' thumb-color='white' track-color='white' label='Max Poses (users)' max=20 min=1 step=1 v-model='maxPoses')
+              v-flex(shrink style='width: 80px')
+                v-text-field(v-model='maxPoses' color='white')
+    
+      v-flex(xs12 md6 lg4)
+        v-card.mb-2
+          v-card-title
+            h2 Cursor
+          v-card-text
             v-layout(row)
               v-flex
                 v-slider(min=0.05 max=1.5 step=0.025 label='Sensitivity' v-model='sensitivity')
@@ -19,7 +41,10 @@
               v-flex(shrink style='width: 80px')
                 v-text-field(v-model='smileClickSensitivity')
 
-            h3.mt-5 Stabilizer
+        v-card
+          v-card-title
+            h2 Stabilizer
+          v-card-text
             v-layout(row)
               v-flex
                 v-slider(label='Factor' min=0 max=3 step=1 v-model='stabilizerFactor')
@@ -30,13 +55,6 @@
                 v-slider(label='Buffer' min=0 max=100 step=10 v-model='stabilizerBuffer')
               v-flex(shrink style='width: 80px')
                 v-text-field(v-model='stabilizerBuffer')
-
-            h3.mt-5 Multi User
-            v-layout(row)
-              v-flex
-                v-slider(label='Max Poses (users)' max=20 min=1 step=1 v-model='maxPoses')
-              v-flex(shrink style='width: 80px')
-                v-text-field(v-model='maxPoses')
 
       v-flex(xs12 md6 lg4)      
         v-card

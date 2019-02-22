@@ -44,7 +44,14 @@ img
     font-weight: bold
     text-decoration: underline
 
-// Overrides
+  .v-label.theme--light,
+  .theme--light.v-input:not(.v-input--is-disabled) input, .theme--light.v-input:not(.v-input--is-disabled) textarea
+    color: #fff !important
+
+  .theme--light.v-input--slider:not(.v-input--is-dirty) .v-slider__thumb,
+    border-color: #fff
+    background: #fff
+
 .v-list__group__items
   box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.35)
   background: #f4f4f4

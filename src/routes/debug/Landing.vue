@@ -1,16 +1,12 @@
 <template lang="pug">
-div
   v-container(grid-list-md flex)
     v-layout(wrap)
       v-flex(xs12 md6 lg4)
-        v-card.mb-2(color='primary')
+        v-card.mb-2.primary
           v-card-title
             h2 Debug
           v-card-text
-            p
-              | 🚧 
-              em This page is currently being updated (<a href="https://github.com/labofoz/handsfree.js/issues/67">see tasks</a>)
-            p Use this route to debug Handsfree.js while it's running, as well as for gauging different metrics that can help you while developing your plugins.
+            p Use this page to debug Handsfree.js while it's running. It's not terribly useful yet other than for activating the previewer below.
 
         v-card.mb-2.primary.lighten-1
           v-card-title
@@ -26,16 +22,6 @@ div
 
         v-card.mb-2.primary.lighten-2
           v-card-title
-            h2 Performance
-          v-card-text
-            p Click this Stats Panel to view different performance metrics.
-            p(v-if='statsMode === 0') <strong>FPS</strong>: Frames rendered in the last second. The higher the number the better.
-            p(v-if='statsMode === 1') <strong>MS</strong>: Milliseconds needed to render a frame. The lower the number the better.
-            p(v-if='statsMode === 2') <strong>MB</strong>: MBytes of allocated memory
-            p.statsjs(ref='stats' @click='updateStatsDescription')
-
-        v-card.mb-2.primary.lighten-3
-          v-card-title
             h2 Troubleshooting
           v-card-text
             p There are a few things that can throw off the trackers, including:
@@ -47,8 +33,50 @@ div
               li Turning head beyond +/- 30°
             p We'll be providing benchmarks for these soon!
 
+        v-card.mb-2.primary.lighten-3
+          v-card-title
+            h2 Performance
+          v-card-text
+            p Click this Stats Panel to view different performance metrics.
+            p(v-if='statsMode === 0') <strong>FPS</strong>: Frames rendered in the last second. The higher the number the better.
+            p(v-if='statsMode === 1') <strong>MS</strong>: Milliseconds needed to render a frame. The lower the number the better.
+            p(v-if='statsMode === 2') <strong>MB</strong>: MBytes of allocated memory
+            p.statsjs(ref='stats' @click='updateStatsDescription')
+
       v-flex(xs12 md6 lg8)
         v-layout(wrap)
+          v-flex(xs12 lg6)
+            v-card.mb-2
+              v-card-title
+                h2 Cursor Position
+              v-card-text
+                p Each row represents one tracked <code>pose[n]</code>. Access them with:
+                code.mb-3.
+                 handsfree.pose[n].cursor.position.x
+                  handsfree.pose[n].cursor.position.y
+                  handsfree.pose[n].cursor.position.$target
+                v-data-table.elevation-1(hide-actions :items='table.values.current' :headers='table.headers.cursor')
+                  template(slot='items' slot-scope='prop')
+                    td {{prop.item.cursor.x.toFixed(2)}}
+                    td {{prop.item.cursor.y.toFixed(2)}}
+                    td {{prop.item.cursor.$target && prop.item.cursor.$target.toString()}}
+
+          v-flex(xs12 lg6)
+            v-card.mb-2
+              v-card-title
+                h2 Cursor State
+              v-card-text
+                p Each row represents one tracked <code>pose[n]</code>. Access them with:
+                code.mb-3.
+                 handsfree.pose[n].cursor.state.mouseDown
+                  handsfree.pose[n].cursor.state.mouseDrag
+                  handsfree.pose[n].cursor.state.mouseUp
+                v-data-table.elevation-1(hide-actions :items='table.values.current' :headers='table.headers.cursorStates')
+                  template(slot='items' slot-scope='prop')
+                    td {{prop.item.cursor.state.mouseDown}}
+                    td {{prop.item.cursor.state.mouseDrag}}
+                    td {{prop.item.cursor.state.mouseUp}}
+        
           v-flex(xs12)
             v-card.mb-2
               v-card-title
@@ -83,38 +111,6 @@ div
                     td {{prop.item.face.rotationX.toFixed(4)}} ({{(prop.item.face.rotationX * 180 / Math.PI).toFixed(2)}}°)
                     td {{prop.item.face.rotationY.toFixed(4)}} ({{(prop.item.face.rotationY * 180 / Math.PI).toFixed(2)}}°)
                     td {{prop.item.face.rotationZ.toFixed(4)}} ({{(prop.item.face.rotationZ * 180 / Math.PI).toFixed(2)}}°)
-
-          v-flex(xs12 lg6)
-            v-card.mb-2
-              v-card-title
-                h2 Cursor Position
-              v-card-text
-                p Each row represents one tracked <code>pose[n]</code>. Access them with:
-                code.mb-3.
-                 handsfree.pose[n].cursor.position.x
-                  handsfree.pose[n].cursor.position.y
-                  handsfree.pose[n].cursor.position.$target
-                v-data-table.elevation-1(hide-actions :items='table.values.current' :headers='table.headers.cursor')
-                  template(slot='items' slot-scope='prop')
-                    td {{prop.item.cursor.x.toFixed(2)}}
-                    td {{prop.item.cursor.y.toFixed(2)}}
-                    td {{prop.item.cursor.$target && prop.item.cursor.$target.toString()}}
-
-          v-flex(xs12 lg6)
-            v-card.mb-2
-              v-card-title
-                h2 Cursor State
-              v-card-text
-                p Each row represents one tracked <code>pose[n]</code>. Access them with:
-                code.mb-3.
-                 handsfree.pose[n].cursor.state.mouseDown
-                  handsfree.pose[n].cursor.state.mouseDrag
-                  handsfree.pose[n].cursor.state.mouseUp
-                v-data-table.elevation-1(hide-actions :items='table.values.current' :headers='table.headers.cursorStates')
-                  template(slot='items' slot-scope='prop')
-                    td {{prop.item.cursor.state.mouseDown}}
-                    td {{prop.item.cursor.state.mouseDrag}}
-                    td {{prop.item.cursor.state.mouseUp}}
 </template>
 
 <script>
