@@ -2,13 +2,13 @@
   v-container(grid-list-md flex)
     v-layout(wrap)
       v-flex(xs12 md6 lg4)
-        v-card.mb-2.primary
+        v-card.mb-2.amber.lighten-1
           v-card-title
             h2 Debug
           v-card-text
             p Use this page to debug Handsfree.js while it's running. It's not terribly useful yet other than for activating the previewer below.
 
-        v-card.mb-2.primary.lighten-1
+        v-card.mb-2.orange.darken-1
           v-card-title
             h2 The Previewer
           v-card-text
@@ -16,11 +16,11 @@
             v-img(src='https://media.giphy.com/media/mRmNNQNKed2ExuSoob/source.gif')
 
           v-card-actions
-            v-btn.primary(flat block @click='toggleDebugger')
+            v-btn.orange.accent-1(flat block @click='toggleDebugger')
               | Toggle Previewer
               span.ml-1.handsfree-show-when-stopped and start webcam
 
-        v-card.mb-2.primary.lighten-2
+        v-card.mb-2.pink.darken-1
           v-card-title
             h2 Troubleshooting
           v-card-text
@@ -33,7 +33,7 @@
               li Turning head beyond +/- 30°
             p We'll be providing benchmarks for these soon!
 
-        v-card.mb-2.primary.lighten-3
+        v-card.mb-2.purple.accent-2
           v-card-title
             h2 Performance
           v-card-text

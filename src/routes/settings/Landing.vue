@@ -2,16 +2,16 @@
   v-container(grid-list-md flex)
     v-layout(wrap)
       v-flex(xs12 md6 lg4)
-        v-card.mb-2.primary
+        v-card.mb-2.amber.lighten-1
           v-card-text
             div.mr-1 🚧 Not all settings are covered here yet.
 
-        v-card.mb-2.primary.lighten-1
+        v-card.mb-2.orange.darken-1
           v-card-title
             h2 Settings
           v-card-text
             p Use this page to test different settings. Check out the <router-link :to='{name: "docsConfig"}'>Settings Docs</router-link> for more information. These settings are not persisted and reset on each visit.
-        v-card.mb-2.primary.lighten-2
+        v-card.mb-2.pink.darken-1
           v-card-title
             h2 Multi User Support
           v-card-text
