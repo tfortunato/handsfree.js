@@ -38,15 +38,7 @@
               v-flex(shrink style='width: 80px')
                 v-text-field(v-model='maxPoses')
 
-      v-flex(xs12 md6 lg4)
-        v-card.mb-2
-          v-card-text
-            p Click this Stats Panel to view different performance metrics:
-            p.statsjs(ref='stats' @click='updateStatsDescription')
-            p(v-if='statsMode === 0') <strong>FPS</strong>: Frames rendered in the last second. The higher the number the better.
-            p(v-if='statsMode === 1') <strong>MS</strong>: Milliseconds needed to render a frame. The lower the number the better.
-            p(v-if='statsMode === 2') <strong>MB</strong>: MBytes of allocated memory
-      
+      v-flex(xs12 md6 lg4)      
         v-card
           v-card-title
             h2 Models
@@ -56,7 +48,6 @@
 </template>
 
 <script>
-import Stats from 'stats.js'
 import {debounce} from 'lodash'
 
 export default {
@@ -93,7 +84,6 @@ export default {
 
       // BRFv4
       smileClickSensitivity: 0,
-      statsMode: 0,
       sensitivity: 0.7,
       stabilizerFactor: 1,
       stabilizerBuffer: 30,
@@ -108,16 +98,6 @@ export default {
    * Add stats
    */
   mounted () {
-    const stats = new Stats()
-    const perf = function () {
-      stats.end()
-      requestAnimationFrame(perf)
-      stats.begin()
-    }
-    stats.showPanel(0)
-    this.$refs.stats.appendChild(stats.dom)
-    perf()
-
     this.syncSettings()
 
     this.$store.dispatch('onReady', () => {
@@ -127,14 +107,6 @@ export default {
   },
 
   methods: {
-    /**
-     * Update the stats description
-     */
-    updateStatsDescription () {
-      this.statsMode++
-      if (this.statsMode > 2) this.statsMode = 0
-    },
-
     /**
      * Syncs settings with handsfree.js
      */

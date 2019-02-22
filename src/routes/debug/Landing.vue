@@ -11,12 +11,12 @@ div
               | 🚧 
               em This page is currently being updated (<a href="https://github.com/labofoz/handsfree.js/issues/67">see tasks</a>)
             p Use this route to debug Handsfree.js while it's running, as well as for gauging different metrics that can help you while developing your plugins.
-        
+
         v-card.mb-2.primary.lighten-1
           v-card-title
             h2 The Previewer
           v-card-text
-            p Enabling/Disabling the Debug Previewer is done using <code>handsfree.togglePreviwer()</code>. On this site, you can move it by drag from the center or resize it by dragging from the edges. It'll also follow you between pages:
+            p Enabling/Disabling the Debug Previewer is done using <code>handsfree.toggleDebugger()</code>. On this site, you can move it by drag from the center or resize it by dragging from the edges. It'll also follow you between pages:
             v-img(src='https://media.giphy.com/media/mRmNNQNKed2ExuSoob/source.gif')
 
           v-card-actions
@@ -26,22 +26,26 @@ div
 
         v-card.mb-2.primary.lighten-2
           v-card-title
-            h2 What throws off the face tracker?
+            h2 Performance
           v-card-text
-            ul
-              li Poor lighting and overexposed feeds
-              li Being at +/- 20°
-              li Reflective glasses
-              li Thick/long beards
-              li Being too close/far
+            p Click this Stats Panel to view different performance metrics.
+            p(v-if='statsMode === 0') <strong>FPS</strong>: Frames rendered in the last second. The higher the number the better.
+            p(v-if='statsMode === 1') <strong>MS</strong>: Milliseconds needed to render a frame. The lower the number the better.
+            p(v-if='statsMode === 2') <strong>MB</strong>: MBytes of allocated memory
+            p.statsjs(ref='stats' @click='updateStatsDescription')
 
         v-card.mb-2.primary.lighten-3
           v-card-title
-            h2 What throws off the body tracker?
+            h2 Troubleshooting
           v-card-text
+            p There are a few things that can throw off the trackers, including:
             ul
-              li Being at +/- 30°
-              li Being too close/far
+              li Poor lighting and overexposed feeds
+              li Being too close or far
+              li Reflective glasses
+              li Thick/long beards and glasses
+              li Turning head beyond +/- 30°
+            p We'll be providing benchmarks for these soon!
 
       v-flex(xs12 md6 lg8)
         v-layout(wrap)
@@ -115,15 +119,28 @@ div
 
 <script>
 import {cloneDeep} from 'lodash'
+import Stats from 'stats.js'
 
 export default {
   name: 'debugLanding',
 
   /**
+   * - Start performance monitoring
    * - Turn on the webcam for this route
    * - Listen to states
    */
   mounted () {
+    const stats = new Stats()
+    const perf = function () {
+      stats.end()
+      requestAnimationFrame(perf)
+      stats.begin()
+    }
+    stats.showPanel(0)
+    this.$refs.stats.appendChild(stats.dom)
+    perf()
+
+    
     this.$store.dispatch('onReady', () => {
       window.handsfree.on('trackPoses', this.trackPoses)
       this.isPreviewing = window.handsfree.debug.isDebugging
@@ -142,6 +159,10 @@ export default {
       // Whether we are previewing or not
       isPreviewing: false,
       
+      // The Stats.js mode
+      statsMode: 0,
+
+      // Data tables for representing handsfree states
       table: {
         headers: {
           cursor: [
@@ -181,6 +202,14 @@ export default {
   },
 
   methods: {
+    /**
+     * Update the stats description
+     */
+    updateStatsDescription () {
+      this.statsMode++
+      if (this.statsMode > 2) this.statsMode = 0
+    },
+
     /**
      * Called via the handsfree:trackPoses event
      * @see Handsfree.on()
