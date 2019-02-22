@@ -9,7 +9,7 @@
             strong Handsfree
             small .js.org
       v-spacer
-      .statsjs(ref='stats')
+
       span.hidden-sm-and-down
         WebcamToggle
       span.hidden-md-and-up
@@ -66,7 +66,6 @@
 import Keyboard from './components/Keyboard'
 import WebcamToggle from './components/WebcamToggle'
 import Webcam from './components/Webcam'
-import Stats from 'stats.js'
 import {mapState} from 'vuex'
 
 export default {
@@ -82,21 +81,6 @@ export default {
     'isHandsfreeLoading',
     'loading'
   ]),
-
-  /**
-   * - Start performance monitoring
-   */
-  mounted () {
-    const stats = new Stats()
-    const perf = function () {
-      stats.end()
-      requestAnimationFrame(perf)
-      stats.begin()
-    }
-    stats.showPanel(0)
-    this.$refs.stats.appendChild(stats.dom)
-    perf()
-  },
 
   data () {
     return {

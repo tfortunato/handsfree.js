@@ -33,6 +33,16 @@
               li Turning head beyond +/- 30°
             p We'll be providing benchmarks for these soon!
 
+        v-card.mb-2.primary.lighten-3
+          v-card-title
+            h2 Performance
+          v-card-text
+            p Click this Stats Panel to view different performance metrics.
+            p(v-if='statsMode === 0') <strong>FPS</strong>: Frames rendered in the last second. The higher the number the better.
+            p(v-if='statsMode === 1') <strong>MS</strong>: Milliseconds needed to render a frame. The lower the number the better.
+            p(v-if='statsMode === 2') <strong>MB</strong>: MBytes of allocated memory
+            p.statsjs(ref='stats' @click='updateStatsDescription')
+
       v-flex(xs12 md6 lg8)
         v-layout(wrap)
           v-flex(xs12 lg6)
@@ -41,10 +51,11 @@
                 h2 Cursor Position
               v-card-text
                 p Each row represents one tracked <code>pose[n]</code>. Access them with:
-                code.mb-3.
-                 handsfree.pose[n].cursor.position.x
-                  handsfree.pose[n].cursor.position.y
-                  handsfree.pose[n].cursor.position.$target
+                pre
+                  code.mb-3.javascript.
+                   handsfree.pose[n].cursor.position.x
+                    handsfree.pose[n].cursor.position.y
+                    handsfree.pose[n].cursor.position.$target
                 v-data-table.elevation-1(hide-actions :items='table.values.current' :headers='table.headers.cursor')
                   template(slot='items' slot-scope='prop')
                     td {{prop.item.cursor.x.toFixed(2)}}
@@ -57,10 +68,11 @@
                 h2 Cursor State
               v-card-text
                 p Each row represents one tracked <code>pose[n]</code>. Access them with:
-                code.mb-3.
-                 handsfree.pose[n].cursor.state.mouseDown
-                  handsfree.pose[n].cursor.state.mouseDrag
-                  handsfree.pose[n].cursor.state.mouseUp
+                pre
+                  code.mb-3.javascript.
+                   handsfree.pose[n].cursor.state.mouseDown
+                    handsfree.pose[n].cursor.state.mouseDrag
+                    handsfree.pose[n].cursor.state.mouseUp
                 v-data-table.elevation-1(hide-actions :items='table.values.current' :headers='table.headers.cursorStates')
                   template(slot='items' slot-scope='prop')
                     td {{prop.item.cursor.state.mouseDown}}
@@ -105,6 +117,7 @@
 
 <script>
 import {cloneDeep} from 'lodash'
+import Stats from 'stats.js'
 
 export default {
   name: 'debugLanding',
@@ -124,7 +137,6 @@ export default {
     this.$refs.stats.appendChild(stats.dom)
     perf()
 
-    
     this.$store.dispatch('syntaxHighlight')
     this.$store.dispatch('onReady', () => {
       window.handsfree.on('trackPoses', this.trackPoses)
@@ -144,6 +156,9 @@ export default {
       // Whether we are previewing or not
       isPreviewing: false,
       
+      // The Stats.js mode
+      statsMode: 0,
+
       // Data tables for representing handsfree states
       table: {
         headers: {
@@ -184,6 +199,14 @@ export default {
   },
 
   methods: {
+    /**
+     * Update the stats description
+     */
+    updateStatsDescription () {
+      this.statsMode++
+      if (this.statsMode > 2) this.statsMode = 0
+    },
+
     /**
      * Called via the handsfree:trackPoses event
      * @see Handsfree.on()
