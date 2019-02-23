@@ -132,10 +132,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Start boid loop
       setTimeout(() => BoidsDebugger.createInitialBoids(), 0)
-      setTimeout(() => {
-        BoidsDebugger.rateOfChange = 0.98
-        BoidsDebugger.doYourOwnThingTimer = 0
-      }, 3000)
+
+      // Start after handsfree is ready
+      // - Wait one second for the navbar progress to change (@todo make this a variable)
+      handsfree.on('ready', () => {
+        setTimeout(() => {
+          BoidsDebugger.rateOfChange = 0.98
+          BoidsDebugger.doYourOwnThingTimer = 0
+        }, 1000)
+      })
     },
 
     /**
